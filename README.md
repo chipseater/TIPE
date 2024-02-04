@@ -17,6 +17,7 @@ Les **batiments** sont organisés en **villages**, connectés par des **routes**
 - **Route**: n'est pas un batiment à part entière, emploie 0.1 personnes pour sa maintenance. Fait le lien entre les batiments pour qu'ils puissent interagir entre eux.
 - **Maison**: fait apparaître 5 habitants dans le village, emploie 0.25 personnes pour sa maintenance. A besoin de 5 nouriture par tour.
 - **Champ**: fait apparaître 5 grain dans le village, emploie 2 personnes. Le grain doit être transmis au moulin pour être transformé en nouriture.
+- **Moulin**: fait apparaître 5 nourriture dans le village, emploie 2 personnes. Un nourriture permet de faire survivre une personne pour un tour.
 - **Mine**: fait apparaître 5 minerais dans le village, emploie 2 personnes. Le minerai doit être transmis à une usine pour être transformée en machines.
 - **Usine**: fait apparaître 1 machine qui sert de "boost" au batiment qui lui est assigné.
 
