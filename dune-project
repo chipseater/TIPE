@@ -5,22 +5,17 @@
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github chipseater/TIPE))
 
-(authors "Author Name")
+(authors "Eric de Malet (@chipseater)" "Sylvain Drault (@Astatre)")
 
-(maintainers "Maintainer Name")
-
-(license LICENSE)
-
-(documentation https://url/to/documentation)
+(license Fair License)
 
 (package
  (name TIPE)
- (synopsis "A short synopsis")
- (description "A longer description")
+ (synopsis "TIPE project - describing urban evolution using natural selection")
+ (description "This personnal initiative project is meant to play around with a natural selection algotithm.")
  (depends ocaml dune)
  (tags
-  (topics "to describe" your project)))
+  ("TIPE") ("natural evolution") ("modelisation") ("school project")))
 
-; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project

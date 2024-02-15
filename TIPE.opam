@@ -2,7 +2,6 @@
 opam-version: "2.0"
 synopsis: "TIPE project - describing urban evolution using natural selection"
 description: "This personnal initiative project is meant to play around with a natural selection algotithm."
-maintainer: ["Maintainer Name"]
 authors: ["Eric de Malet (@chipseater)" "Sylvain Drault (@Astatre)"]
 license: "Fair License"
 tags: ["TIPE" "natural evolution" "modelisation" "school project"]
