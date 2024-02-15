@@ -13,19 +13,24 @@ Rien n'a vraiment été implémenté, il faudra utiliser à l'avenir pour exécu
 dune exec main.ml
 ```
 
-## Règles
 
-### Fonctionnement de la simulation
+## L'espace de la simulation et les biomes
 
-Une simulation est constitué de tours qui aboutissent ou non à la destruction ou à la survie d'un village. 
+La simulation se déroule au sein d'un carré fini de taille $n$, constitué de cases repérés par des coordonnées entières positives. Les villages sont initialement séparés par une distance $d$ arbitraire. L'espace de simulation est constitué de différents biomes aux paramètres d'évolution distincts. Un biome est un *chunk* de taille $m$ (*À adapter selon* $n$ *et* $d$).
 
-Au début d'une, l'algorithme génère un village qui consiste en une permutation aléatoire de $n$ bâtiments connectés par des routes. À chaque tour, l'algorithme calcule si un village survit ou doit être détruit. Les villages sans population sont supprimés, tandis que les deux villages les moins peuplés sont détruits. Les villages subissent une mutation à chaque tour, ce qui consiste à l'ajout, au retrait ou au changement d'affectation d'une usine.
+Par exemple, une forêt sera peu vulnérable aux sécheresses mais aura un taux de mortalité plus élevé à cause de la faune locale.
+
+### Mode de génération des biomes
+
+Au départ de la simulation, l'algorithme génère deux [bruits de Perlin](https://fr.wikipedia.org/wiki/Bruit_de_Perlin) de taille $\frac{n}{m}$ puis les combine afin d'obtenir deux valeurs $(h, c)$ par chunk. La première valeur $h$ est un indicateur d'humidité locale, tandis que la deuxième valeur $c$ est un indicateur de climat. Les biomes sont définis par le tableau ci-dessous.
+
+(*Work in progress*)
 
 ### Villages
 
-Les villages sont situés dans $\mathbb{Z}^2$ et ont leur coordonnées de départ propres. Ils ont leur météo et leur environnement respectifs. Ils pourront à l'avenir interagir en se faisant la guerre et en commerçant;
+(*En cours de réécriture*)
 
-### Bâtiments
+## Bâtiments
 
 Les **bâtiments** sont organisés en **villages**. Chaque bâtiment nécessite un certain nombre d'habitants pour son fonctionnement. Les habitants ont besoin lors de chaque tour pour survivre d'une ressource **logement** et d'une ressource **nourriture**. Un bâtiment est détruit s'il n'y a pas assez d'habitants pour le maintenir. Certains bâtiments ont aussi besoin de **matières premières** pour produire les ressources associés lors du tour.
 
