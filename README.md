@@ -34,7 +34,7 @@ Au départ de la simulation, l'algorithme génère deux [bruits de Perlin](https
 
 ### Villages
 
-(*En cours de réécriture*)
+Au début de la simulation, l'algorithme génère des permutations aléatoires de villages et les place sur la grille de simulation. Ensuite, l'algorithme crée un graphe d'adjacence: chaque village est un noeud connecté à ses voisins ayant des bâtiments situés à $d$ de leur épicentre.
 
 ## Bâtiments
 
