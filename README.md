@@ -28,7 +28,7 @@ Au départ de la simulation, l'algorithme génère deux [bruits de Perlin](https
 
 |                 | **0 (sec)**  | **1 (tempéré)** | **2 (humide)** |
 |-----------------|--------------|-----------------|----------------|
-| **0 (froid)**   | désert froid | montagne        | tundra         |
+| **0 (froid)**   | désert froid | tundra          | taïga          |
 | **1 (tempéré)** | steppe       | plaine          | forêt          |
 | **2 (chaud)**   | désert chaud | savane          | jungle         |
 
