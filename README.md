@@ -2,11 +2,11 @@
 
 **Problématique**: *Comment modéliser le développement des espaces productifs à travers une approche évolutionniste*
 
-### Principe
+## Principe
 
 Le but de ce TIPE est d'étudier l'évolution d'un système semi-urbain à travers un modèle simplifié. La modélisation s'effectue sur la base d'un algorithme évolutionniste, qui ne conserve que les systèmes les plus performants.
 
-### Utilisation du projet
+## Utilisation du projet
 
 Rien n'a vraiment été implémenté, il faudra utiliser à l'avenir pour exécuter le projet
 ```
@@ -14,7 +14,9 @@ dune exec main.ml
 ```
 
 
-## L'espace de la simulation et les biomes
+## Cadre de la simulation
+
+### L'espace de simulation
 
 La simulation se déroule au sein d'un carré fini de taille $n$, constitué de cases repérés par des coordonnées entières positives. Les villages sont initialement séparés par une distance $d$ arbitraire. L'espace de simulation est constitué de différents biomes aux paramètres d'évolution distincts. Un biome est un *chunk* de taille $m$ (*À adapter selon* $n$ *et* $d$).
 
@@ -22,9 +24,13 @@ Par exemple, une forêt sera peu vulnérable aux sécheresses mais aura un taux 
 
 ### Mode de génération des biomes
 
-Au départ de la simulation, l'algorithme génère deux [bruits de Perlin](https://fr.wikipedia.org/wiki/Bruit_de_Perlin) de taille $\frac{n}{m}$ puis les combine afin d'obtenir deux valeurs $(h, c)$ par chunk. La première valeur $h$ est un indicateur d'humidité locale, tandis que la deuxième valeur $c$ est un indicateur de climat. Les biomes sont définis par le tableau ci-dessous.
+Au départ de la simulation, l'algorithme génère deux [bruits de Perlin](https://fr.wikipedia.org/wiki/Bruit_de_Perlin) de taille $\frac{n}{m}$ puis les combine afin d'obtenir deux valeurs $(h, c)$ par chunk. La première valeur $h$ est un indicateur d'humidité locale, tandis que la deuxième valeur $c$ est un indicateur de chaleur. Les biomes sont définis par le tableau ci-dessous. La valeur en abscisse est $h$, tandis que la valeur en ordonnée est $c$.
 
-(*Work in progress*)
+|                 | **0 (sec)**  | **1 (tempéré)** | **2 (humide)** |
+|-----------------|--------------|-----------------|----------------|
+| **0 (froid)**   | désert froid | montagne        | tundra         |
+| **1 (tempéré)** | steppe       | plaine          | forêt          |
+| **2 (chaud)**   | désert chaud | savane          | jungle         |
 
 ### Villages
 
