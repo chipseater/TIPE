@@ -41,7 +41,7 @@ L'altitude d'un chunk est notée $z$ et est générée à partir d'un bruit de P
 ### Accessibilité
 
 L'accessibilité est noté $a$ et est calculée à partir de la formule suivante
-$$a = \frac{1}{(\abs{h - 1} + 1) (\abs{q - 1} + 1)\sqrt{z}}$$
+$$a = \frac{1}{(|h - 1| + 1) (|q - 1| + 1)\sqrt{z}}$$
 
 ## Villages
 
