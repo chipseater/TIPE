@@ -15,13 +15,13 @@ dune exec main.ml
 
 ## Cadre de la simulation
 
-La simulation se déroule au sein d'un carré fini (appelée carte) de coté $L$, constitué de cases repérés par des coordonnées entières positives. Elle est découpée en chunks notés de 4x4 cases. On note $c_{i,j}$ le chunk contenant la case de coordonée $(4i, 4j)$. Autrement dit, $c_{i,j}$ est le $i$-eme chunk horizontal et le $j$-eme chunk vertical.
+La simulation se déroule au sein d'un carré fini (appelée carte) de coté $L$, constitué de cases repérés par des coordonnées entières positives. Elle est découpée en chunks notés de 4x4 cases. On note $c_{i,j}$ le chunk contenant la case de coordonnée $(4i, 4j)$. Autrement dit, $c_{i,j}$ est le $i$-eme chunk horizontal et le $j$-eme chunk vertical.
 
 ## Biomes, altitude et accessibilité
 
 ### Définition d'un biome
 
-On associe à chaque chunk un biome *(cf. Mode de génération des biomes)* qui modifie la production des batiments, l'accessibilité et les aléas qui peuvent frapper la région. Chaque biome possède aussi une altitude qui modifie le coût de construction des batiments, l'accessibilité et les distances entre les villes.
+On associe à chaque chunk un biome *(cf. Mode de génération des biomes)* qui modifie la production des bâtiments, l'accessibilité et les aléas qui peuvent frapper la région. Chaque biome possède aussi une altitude qui modifie le coût de construction des bâtiments, l'accessibilité et les distances entre les villes.
 
 Par exemple, une forêt sera peu vulnérable aux sécheresses mais aura un taux de mortalité plus élevé à cause de la faune locale.
 On ne pourra pas produire de grain dans un désert froid ou chaud mais on pourra y implanter des mines qui auront une production accrue.
@@ -29,7 +29,7 @@ On ne pourra pas produire de grain dans un désert froid ou chaud mais on pourra
 ### Mode de génération des biomes
 
 Au départ de la simulation, l'algorithme génère deux [bruits de Perlin](https://fr.wikipedia.org/wiki/Bruit_de_Perlin) de taille $\frac{L}{4}$ puis les combine afin d'obtenir deux valeurs $(h, q)$ par chunk. La première valeur $h$ est un indicateur d'humidité locale, tandis que la deuxième valeur $q$ est un indicateur de chaleur. Les biomes sont définis par le tableau ci-dessous. La valeur en abscisse est $h$, tandis que la valeur en ordonnée est $q$.
-On considère que $h$ et $q$ sont des grandeurs adimentionés.
+On considère que $h$ et $q$ sont des grandeurs adimentionné.
 
 |                 | **0 (sec)**  | **1 (tempéré)** | **2 (humide)** |
 |-----------------|--------------|-----------------|----------------|
@@ -45,7 +45,7 @@ $$\forall x \in \mathbb{R}, \sigma_m(x) = \frac{1}{1 + e^{m-x}}$$
 
 Cette fonction strictement croissante "contracte" toutes les valeurs de $\mathbb{R}$ dans $\left]0, 1 \right[$ et associe à l'antécédent $m$ la valeur $\frac{1}{2}$. 
 
-Ainsi, si on pose pour $n \in \N$ la famille $(x_1, ..., x_n) \in \R^n$ et $x_0$ sa valeur moyenne, il est préférable de choisir $m$ tel que $m = x_0$ pour que les valeurs supérieures à $x_0$ soient supérieures à $\frac{1}{2}$et les valeurs inférieure à $x_0$ soient inférieures à $\frac{1}{2}$.
+Ainsi, si on pose pour $n \in \N$ la famille $(x_1, ..., x_n) \in \R^n$ et $x_0$ sa valeur moyenne, il est préférable de choisir $m$ tel que $m = x_0$ pour que les valeurs supérieures à $x_0$ soient supérieures à $\frac{1}{2}$ et les valeurs inférieure à $x_0$ soient inférieures à $\frac{1}{2}$.
 
 [En savoir plus](https://fr.wikipedia.org/wiki/Sigmo%C3%AFde_(math%C3%A9matiques))
 
@@ -69,9 +69,9 @@ $$e_b = (|h - 1| + 1) (|q - 1| + 1)$$
 
 **Remarque**: On a $0 \le h, q \le 2$, donc $e_b \in \{1,2,4\}$ et $[e_b] = 1$
 
-### Coeficient d'accessibilité
+### Coefficient d'accessibilité
 
-Le coeficient d'accessibilité d'un chunk $c$ est noté $a(c)$ et est calculée à partir de la formule suivante
+Le coefficient d'accessibilité d'un chunk $c$ est noté $a(c)$ et est calculée à partir de la formule suivante
 
 $$a_c = e_b \times \sigma_{z_{\text {rmc}}}\left(\frac{z_r(c)}{z_{\text{rmc}}}\right)$$
 
