@@ -15,7 +15,7 @@ dune exec main.ml
 
 ## Cadre de la simulation
 
-La simulation se déroule au sein d'un carré fini (appelée une carte) de coté $L$, constitué de cases repérés par des coordonnées entières positives. Elle est découpée en chunks de 4x4 cases. 
+La simulation se déroule au sein d'un carré fini (appelée carte) de coté $L$, constitué de cases repérés par des coordonnées entières positives. Elle est découpée en chunks notés de 4x4 cases. On note $c_{i,j}$ le chunk contenant la case de coordonée $(4i, 4j)$. Autrement dit, $c_{i,j}$ est le $i$-eme chunk horizontal et le $j$-eme chunk vertical.
 
 ## Biomes, altitude et accessibilité
 
@@ -26,9 +26,10 @@ On associe à chaque chunk un biome *(cf. Mode de génération des biomes)* qui 
 Par exemple, une forêt sera peu vulnérable aux sécheresses mais aura un taux de mortalité plus élevé à cause de la faune locale.
 On ne pourra pas produire de grain dans un désert froid ou chaud mais on pourra y implanter des mines qui auront une production accrue.
 
-### Mode de génération des biomes et de l'altitude
+### Mode de génération des biomes
 
 Au départ de la simulation, l'algorithme génère deux [bruits de Perlin](https://fr.wikipedia.org/wiki/Bruit_de_Perlin) de taille $\frac{L}{4}$ puis les combine afin d'obtenir deux valeurs $(h, q)$ par chunk. La première valeur $h$ est un indicateur d'humidité locale, tandis que la deuxième valeur $q$ est un indicateur de chaleur. Les biomes sont définis par le tableau ci-dessous. La valeur en abscisse est $h$, tandis que la valeur en ordonnée est $q$.
+On considère que $h$ et $q$ sont des grandeurs adimentionés.
 
 |                 | **0 (sec)**  | **1 (tempéré)** | **2 (humide)** |
 |-----------------|--------------|-----------------|----------------|
@@ -36,12 +37,48 @@ Au départ de la simulation, l'algorithme génère deux [bruits de Perlin](https
 | **1 (tempéré)** | steppe       | plaine          | forêt          |
 | **2 (chaud)**   | désert chaud | savane          | jungle  |
 
-L'altitude d'un chunk est notée $z$ et est générée à partir d'un bruit de Perlin de façon similaire aux biomes. On note $z_0$ l'altitude minimale de la carte.
+### Fonction sigmoïde
 
-### Accessibilité
+On pose pour tout $m \in \mathbb{R}$ la fonction $\sigma_m: \mathbb{R} \to \left]0, 1 \right[$ telle que
 
-L'accessibilité est noté $a$ et est calculée à partir de la formule suivante
-$$a = \frac{1}{(|h - 1| + 1) (|q - 1| + 1)\sqrt{z}}$$
+$$\forall x \in \mathbb{R}, \sigma_m(x) = \frac{1}{1 + e^{m-x}}$$
+
+Cette fonction strictement croissante "contracte" toutes les valeurs de $\mathbb{R}$ dans $\left]0, 1 \right[$ et associe à l'antécédent $m$ la valeur $\frac{1}{2}$. 
+
+Ainsi, si on pose pour $n \in \N$ la famille $(x_1, ..., x_n) \in \R^n$ et $x_0$ sa valeur moyenne, il est préférable de choisir $m$ tel que $m = x_0$ pour que les valeurs supérieures à $x_0$ soient supérieures à $\frac{1}{2}$et les valeurs inférieure à $x_0$ soient inférieures à $\frac{1}{2}$.
+
+[En savoir plus](https://fr.wikipedia.org/wiki/Sigmo%C3%AFde_(math%C3%A9matiques))
+
+### Altitude
+
+L'altitude d'un chunk $c$ est notée $z(c)$ et est générée à partir d'un bruit de Perlin de façon similaire aux biomes.
+
+On pose $z_r(c)$ l'altitude relative du chunk $c$, ç-à-d la différence de l'altitude du chunk et de la moyenne des altitudes des 8 chunks adjacents telle que:
+
+$$z_r(c) = z(c) - \frac{1}{8} \sum_{c_a\text{ adjacent}} z(c_a)$$
+
+On pose aussi $z_{\text{rmc}}$ l'altitude relative moyenne de la carte définie par
+
+$$z_{\text{rmc}} = \frac{1}{L}\sum_{0 \le i,j \le L} z_r(c_{i,j})$$
+
+### Accessibilité environnementale
+
+Pour tout biome $b$, on note $e_b$ l'accessibilité environnementale de $b$ définie selon $h_b$ et $q_b$, respectivement l'humidité du biome $b$ et sa chaleur tel que
+
+$$e_b = (|h - 1| + 1) (|q - 1| + 1)$$
+
+**Remarque**: On a $0 \le h, q \le 2$, donc $e_b \in \{1,2,4\}$ et $[e_b] = 1$
+
+### Coeficient d'accessibilité
+
+Le coeficient d'accessibilité d'un chunk $c$ est noté $a(c)$ et est calculée à partir de la formule suivante
+
+$$a_c = e_b \times \sigma_{z_{\text {rmc}}}\left(\frac{z_r(c)}{z_{\text{rmc}}}\right)$$
+
+**Remarques**:
+- On a $0 \le a_c \le 4$
+- Si $z_r(c) = z_{\text{rmc}}$, alors $a_c = e_b$
+- L'accessibilité est adimentionné, en effet $[z_r(c)] = [z_{\text{rmc}}] = \text{L}$, donc $\left[\frac{z_r(c)}{z_{\text{rmc}}}\right] = 1$, d'où $[a_c] = 1$
 
 ## Villages
 
