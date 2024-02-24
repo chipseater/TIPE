@@ -45,7 +45,7 @@ $$\forall x \in \mathbb{R}, \sigma_m(x) = \frac{1}{1 + e^{m-x}}$$
 
 Cette fonction strictement croissante "contracte" toutes les valeurs de $\mathbb{R}$ dans $\left]0, 1 \right[$ et associe à l'antécédent $m$ la valeur $\frac{1}{2}$. 
 
-Ainsi, si on pose pour $n \in \N$ la famille $(x_1, ..., x_n) \in \R^n$ et $x_0$ sa valeur moyenne, il est préférable de choisir $m$ tel que $m = x_0$ pour que les valeurs supérieures à $x_0$ soient supérieures à $\frac{1}{2}$ et les valeurs inférieure à $x_0$ soient inférieures à $\frac{1}{2}$.
+Ainsi, si on pose pour $n \in \mathbb{N}$ la famille $(x_1, ..., x_n) \in \mathbb{R}^n$ et $x_0$ sa valeur moyenne, il est préférable de choisir $m$ tel que $m = x_0$ pour que les valeurs supérieures à $x_0$ soient supérieures à $\frac{1}{2}$ et les valeurs inférieure à $x_0$ soient inférieures à $\frac{1}{2}$.
 
 [En savoir plus](https://fr.wikipedia.org/wiki/Sigmo%C3%AFde_(math%C3%A9matiques))
 
@@ -90,7 +90,7 @@ Chaque village possède des ressources qu'elle peut stocker indéfiniment sans l
 
 ### Matrice de décision, vecteur d'état et vecteur de décision
 
-Les informations propres aux villages sont stockés dans un vecteur d'état $v\begin{pmatrix}p\\r_1\\...\\r_n\end{pmatrix}$ avec $n$ le nombre de ressouces stockés.
+Les informations propres aux villages sont stockés dans un vecteur d'état $v\begin{pmatrix}p\\mathbb{R}_1\\...\\mathbb{R}_n\end{pmatrix}$ avec $n$ le nombre de ressouces stockés.
 
 Le vecteur décision $d$ contient les 
 
