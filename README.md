@@ -37,18 +37,6 @@ On considère que $h$ et $q$ sont des grandeurs adimentionné.
 | **1 (tempéré)** | steppe       | plaine          | forêt          |
 | **2 (chaud)**   | désert chaud | savane          | jungle  |
 
-### Fonction sigmoïde
-
-On pose pour tout $m \in \mathbb{R}$ la fonction $\sigma_m: \mathbb{R} \to \left]0, 1 \right[$ telle que
-
-$$\forall x \in \mathbb{R}, \sigma_m(x) = \frac{1}{1 + e^{m-x}}$$
-
-Cette fonction strictement croissante "contracte" toutes les valeurs de $\mathbb{R}$ dans $\left]0, 1 \right[$ et associe à l'antécédent $m$ la valeur $\frac{1}{2}$. 
-
-Ainsi, si on pose pour $n \in \mathbb{N}$ la famille $(x_1, ..., x_n) \in \mathbb{R}^n$ et $x_0$ sa valeur moyenne, il est préférable de choisir $m$ tel que $m = x_0$ pour que les valeurs supérieures à $x_0$ soient supérieures à $\frac{1}{2}$ et les valeurs inférieure à $x_0$ soient inférieures à $\frac{1}{2}$.
-
-[En savoir plus](https://fr.wikipedia.org/wiki/Sigmo%C3%AFde_(math%C3%A9matiques))
-
 ### Altitude
 
 L'altitude d'un chunk $c$ est notée $z(c)$ et est générée à partir d'un bruit de Perlin de façon similaire aux biomes.
@@ -57,9 +45,9 @@ On pose $z_r(c)$ l'altitude relative du chunk $c$, ç-à-d la différence de l'a
 
 $$z_r(c) = z(c) - \frac{1}{8} \sum_{c_a\text{ adjacent}} z(c_a)$$
 
-On pose aussi $z_{\text{rmc}}$ l'altitude relative moyenne de la carte définie par
+On pose aussi $\overline{z_r}$ l'altitude relative moyenne de la carte et $\sigma$ l'écart-type de l'altitude relative de la carte.
 
-$$z_{\text{rmc}} = \frac{1}{L^2}\sum_{0 \le i,j \le L} z_r(c_{i,j})$$
+$$ \overline{z_r} = \frac{1}{N^2} \sum_{0 \le i, j < N} z_r(c_{i,j}) \quad \text{et} \quad \sigma = \sqrt{\frac{1}{N^2}\left(\sum_{0 \le i,j < N}{(z_r(c_{i,j}))}\right) - \overline{z_r}^2}$$
 
 ### Coefficient d'hostilité environnementale
 
@@ -73,12 +61,9 @@ $$e_b = (|h - 1| + 1) (|q - 1| + 1)$$
 
 Le coefficient d'accessibilité ou accessibilité d'un chunk $c$ est noté $a(c)$ et est calculée à partir de la formule suivante
 
-$$a_c = e_b \times \sigma_1\left(\frac{z_r(c)}{z_{\text{rmc}}}\right)$$
+$$a_c = e_b \frac{|\overline{z_r} - z_r(c)|}{\sigma}$$
 
-**Remarques**:
-- On a $0 \le a_c \le 4$
-- Si $z_r(c) = z_{\text{rmc}}$, alors $a_c = e_b$
-- L'accessibilité est adimentionné, en effet $[z_r(c)] = [z_{\text{rmc}}] = \text{L}$, donc $\left[\frac{z_r(c)}{z_{\text{rmc}}}\right] = 1$ et $[e_b] = 1$, d'où $[a_c] = 1$
+**Remarque**: $[a_c] = 1$ et $\frac{|\overline{z_r} - z_r(c)|}{\sigma}$ représente l'éloignement de $z_r(c)$ par rapport à $\overline{z_r}$
 
 ## Villages
 
@@ -88,15 +73,33 @@ Au début de la simulation, l'algorithme place des villages tout les $d_0$ chunk
 
 Chaque village possède des ressources qu'elle peut stocker indéfiniment sans limite de quantité. Chaque village est possède également une population $p$ qui varie.
 
+Le village peut effectuer $n$ actions de façon autonome, rassemblés dans une famille $(\alpha_i)_{i < n} \in \R^n$ de taille $n$.
+
 ### Matrice de décision, vecteur d'état et vecteur de décision
 
-Les informations propres aux villages sont stockés dans un vecteur d'état $v\begin{pmatrix}p\\mathbb{R}_1\\...\\mathbb{R}_n\end{pmatrix}$ avec $n$ le nombre de ressources stockés.
+Les informations propres aux villages sont stockés dans un vecteur d'état $r(r_1, ..., r_2)$ avec $n$ le nombre de ressources stockés et pour tout $i < n$, $r_i$ la quantité de la $i$-ème ressource stockée, en comptant la population comme une ressource.
 
-Le vecteur décision $d$ contient les 
+Pour $m \in \mathbb{N}$ , on pose $\Delta(\delta_1, ..., \delta_n) \in \mathbb{R}^n$ le vecteur décision.
 
-Chaque village possède aussi une matrice décisionnelle $\mathcal{D}$ qui lui permet de prendre des décisions de façon autonome. $\mathcal{D}$ est généré de façon aléatoire en début de simulation. 
+$\forall i < m$, si $\delta_i > 1$, alors la décision $\alpha_i$ sera prise par le village.
 
+Chaque village possède aussi une matrice décisionnelle $\mathcal{D}$ qui lui permet de prendre des décisions de façon autonome. $\mathcal{D}$ est généré de façon aléatoire en début de simulation.
 
+Ces grandeurs sont reliés par la relation:
+
+$$r \times \mathcal{D} = \Delta$$
+
+D'où
+
+$$
+    \begin{pmatrix} r_1\\ \vdots \\ r_n \end{pmatrix}
+    \begin{pmatrix}
+        D_{0,0} \ \cdots \ D_{0,m} \\
+        \vdots \ \ddots \ \vdots \\
+        D_{n, 0} \ \cdots \ D_{n,m}
+    \end{pmatrix}
+    = \begin{pmatrix} \delta_1 \\ \vdots \\ \delta_n \end{pmatrix}
+$$
 
 ### Bâtiments
 
