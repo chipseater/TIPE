@@ -114,9 +114,13 @@ $$
 
 ## Bâtiments
 
-Les **bâtiments** sont organisés en **villages**. Chaque bâtiment nécessite un certain nombre d'habitants pour son fonctionnement. Les habitants ont besoin lors de chaque tour pour survivre d'une ressource **logement** et d'une ressource **nourriture**. Un bâtiment est détruit s'il n'y a pas assez d'habitants pour le maintenir. Certains bâtiments ont aussi besoin de **matières premières** pour produire les ressources associés lors du tour.
+Un village est constitué de bâtiments. Chaque bâtiment nécessite un certain nombre d'habitants pour son fonctionnement. Les habitants ont besoin lors de chaque tour pour survivre d'une ressource **logement** et d'une ressource **nourriture**. Un bâtiment est détruit s'il n'y a pas assez d'habitants pour le maintenir. Certains bâtiments ont aussi besoin de **matières premières** pour produire les ressources associés lors du tour.
 
-## Types de bâtiments
+### Mode d'apparition
+
+Au début de la simulation, l'algorithme muni chaque village de $4$ bâtiments. Le village est également muni d'actions  de construction géré par la matrice de décisions. Construire un bâtiment requiert de d'acquitter son coût de construction associé.
+
+### Types de bâtiments
 
 - **Maison**: fait apparaître 20 habitants dans le village.
 - **Champ**: fait apparaître 20 grain dans le village, emploie 8 personnes. Le grain doit être transmis au moulin pour être transformé en nourriture.
@@ -126,12 +130,12 @@ Les **bâtiments** sont organisés en **villages**. Chaque bâtiment nécessite 
 
 ## Tableau récapitulatif
 
-|        |  production   | emploi | matières premières |
-|--------|---------------|--------|--------------------|
-| Maison | 20 logement   |  0     |  -                 |
-| Champ  | 20 grain      |  8     |  -                 |
-| Moulin | 20 nourriture |  4     |  5 grain           |
-| Mine   | 20 minerai    |  8     |  -                 |
-| Usine  | $\times$ 1.1  |  4     |  8 minerais        |
+|        |  production   | emploi | matières premières | coût de construction |
+|--------|---------------|--------|--------------------|----------------------|
+| Maison | 20 logement   |  0     |  -                 | 20 grain             |
+| Champ  | 20 grain      |  8     |  -                 | 40 nourriture        |
+| Moulin | 20 nourriture |  4     |  10 grain          | 60 grain             |
+| Mine   | 20 minerai    |  8     |  -                 | 40 minerais          |
+| Usine  | $\times$ 1.1  |  4     |  20 minerais       | 80 minerais          |
 
 *Disclaimer*: Les valeurs sont indicatives et varient selon les environnements
