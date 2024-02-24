@@ -73,7 +73,7 @@ $$e_b = (|h - 1| + 1) (|q - 1| + 1)$$
 
 Le coefficient d'accessibilité d'un chunk $c$ est noté $a(c)$ et est calculée à partir de la formule suivante
 
-$$a_c = e_b \times \sigma_{z_{\text {rmc}}}\left(\frac{z_r(c)}{z_{\text{rmc}}}\right)$$
+$$a_c = e_b \times \sigma_1\left(\frac{z_r(c)}{z_{\text{rmc}}}\right)$$
 
 **Remarques**:
 - On a $0 \le a_c \le 4$
