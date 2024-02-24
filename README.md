@@ -47,7 +47,7 @@ $$z_r(c) = z(c) - \frac{1}{8} \sum_{c_a\text{ adjacent}} z(c_a)$$
 
 On pose aussi $\overline{z_r}$ l'altitude relative moyenne de la carte et $\sigma$ l'écart-type de l'altitude relative de la carte.
 
-$$ \overline{z_r} = \frac{1}{N^2} \sum_{0 \le i, j < N} z_r(c_{i,j}) \quad \text{et} \quad \sigma = \sqrt{\frac{1}{N^2}\left(\sum_{0 \le i,j < N}{(z_r(c_{i,j}))}\right) - \overline{z_r}^2}$$
+$$ \overline{z_r} = \frac{1}{N^2} \sum_{0 \le i, j < N} z_r(c_{i,j}) \quad \text{et} \quad \sigma = \sqrt{\frac{1}{N^2}\left(\sum_{0 \le i,j < N}{(z_r(c_{i,j}))^2}\right) - \overline{z_r}^2}$$
 
 ### Coefficient d'hostilité environnementale
 
@@ -55,7 +55,7 @@ Pour tout biome $b$, on note $e_b$ le coefficient d'hostilité environnementale 
 
 $$e_b = (|h - 1| + 1) (|q - 1| + 1)$$
 
-**Remarque**: On a $0 \le h, q \le 2$, donc $e_b \in \{1,2,4\}$ et $[e_b] = 1$
+**Remarque**: On a $0 \le h, q \le 2$, donc $e_b \in \{1,2,4\}$
 
 ### Coefficient d'accessibilité
 
@@ -63,7 +63,7 @@ Le coefficient d'accessibilité ou accessibilité d'un chunk $c$ est noté $a(c)
 
 $$a_c = e_b \frac{|\overline{z_r} - z_r(c)|}{\sigma}$$
 
-**Remarque**: $[a_c] = 1$ et $\frac{|\overline{z_r} - z_r(c)|}{\sigma}$ représente l'éloignement de $z_r(c)$ par rapport à $\overline{z_r}$
+**Remarque**: $\frac{|\overline{z_r} - z_r(c)|}{\sigma}$ représente l'éloignement de $z_r(c)$ par rapport à $\overline{z_r}$
 
 ## Villages
 
@@ -73,32 +73,40 @@ Au début de la simulation, l'algorithme place des villages tout les $d_0$ chunk
 
 Chaque village possède des ressources qu'elle peut stocker indéfiniment sans limite de quantité. Chaque village est possède également une population $p$ qui varie.
 
-Le village peut effectuer $n$ actions de façon autonome, rassemblés dans une famille $(\alpha_i)_{i < n} \in \R^n$ de taille $n$.
+Le village peut effectuer $n$ actions de façon autonome, rassemblés dans une famille $(\alpha_i)_{i < n} \in \mathbb{R}^n$ de taille $n$.
 
 ### Matrice de décision, vecteur d'état et vecteur de décision
 
-Les informations propres aux villages sont stockés dans un vecteur d'état $r(r_1, ..., r_2)$ avec $n$ le nombre de ressources stockés et pour tout $i < n$, $r_i$ la quantité de la $i$-ème ressource stockée, en comptant la population comme une ressource.
+Les informations propres aux villages sont stockés dans un vecteur d'état $r(r_1, ..., r_n)$ avec $n$ le nombre de ressources stockés et pour tout $i < n$, $r_i$ la quantité de la $i$-ème ressource stockée, en comptant la population comme une ressource.
 
-Pour $m \in \mathbb{N}$ , on pose $\Delta(\delta_1, ..., \delta_n) \in \mathbb{R}^n$ le vecteur décision.
+Pour $m \in \mathbb{N}$, on pose $\Delta(\delta_1, ..., \delta_m) \in \mathbb{R}^m$ le vecteur décision.
 
 $\forall i < m$, si $\delta_i > 1$, alors la décision $\alpha_i$ sera prise par le village.
 
-Chaque village possède aussi une matrice décisionnelle $\mathcal{D}$ qui lui permet de prendre des décisions de façon autonome. $\mathcal{D}$ est généré de façon aléatoire en début de simulation.
+Chaque village possède aussi une matrice décisionnelle $D$ qui lui permet de prendre des décisions de façon autonome. $\mathcal{D}$ est généré de façon aléatoire en début de simulation.
 
 Ces grandeurs sont reliés par la relation:
 
-$$r \times \mathcal{D} = \Delta$$
+$$r \times D = \Delta$$
 
 D'où
 
 $$
-    \begin{pmatrix} r_1\\ \vdots \\ r_n \end{pmatrix}
     \begin{pmatrix}
-        D_{0,0} \ \cdots \ D_{0,m} \\
-        \vdots \ \ddots \ \vdots \\
-        D_{n, 0} \ \cdots \ D_{n,m}
+        r_1 \\
+        \vdots \\
+        r_n
     \end{pmatrix}
-    = \begin{pmatrix} \delta_1 \\ \vdots \\ \delta_n \end{pmatrix}
+    \begin{pmatrix}
+        D_{0,0} \ \ldots \ D_{n,m} \\
+        \vdots \ \ddots \ \vdots \\
+        D_{n, 0} \ \ldots \ D_{n,m}
+    \end{pmatrix}
+    = \begin{pmatrix}
+        \delta_1 \\
+        \vdots \\
+        \delta_n
+    \end{pmatrix}
 $$
 
 ### Bâtiments
