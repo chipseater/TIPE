@@ -59,11 +59,11 @@ $$z_r(c) = z(c) - \frac{1}{8} \sum_{c_a\text{ adjacent}} z(c_a)$$
 
 On pose aussi $z_{\text{rmc}}$ l'altitude relative moyenne de la carte définie par
 
-$$z_{\text{rmc}} = \frac{1}{L}\sum_{0 \le i,j \le L} z_r(c_{i,j})$$
+$$z_{\text{rmc}} = \frac{1}{L^2}\sum_{0 \le i,j \le L} z_r(c_{i,j})$$
 
-### Accessibilité environnementale
+### Coeficient d'hostilité environnementale
 
-Pour tout biome $b$, on note $e_b$ l'accessibilité environnementale de $b$ définie selon $h_b$ et $q_b$, respectivement l'humidité du biome $b$ et sa chaleur tel que
+Pour tout biome $b$, on note $e_b$ le coeficient d'hostilité environnementale de $b$ définie selon $h_b$ et $q_b$, respectivement l'humidité et la chaleur du biome $b$ que
 
 $$e_b = (|h - 1| + 1) (|q - 1| + 1)$$
 
@@ -71,18 +71,32 @@ $$e_b = (|h - 1| + 1) (|q - 1| + 1)$$
 
 ### Coefficient d'accessibilité
 
-Le coefficient d'accessibilité d'un chunk $c$ est noté $a(c)$ et est calculée à partir de la formule suivante
+Le coefficient d'accessibilité ou accessibilité d'un chunk $c$ est noté $a(c)$ et est calculée à partir de la formule suivante
 
 $$a_c = e_b \times \sigma_1\left(\frac{z_r(c)}{z_{\text{rmc}}}\right)$$
 
 **Remarques**:
 - On a $0 \le a_c \le 4$
 - Si $z_r(c) = z_{\text{rmc}}$, alors $a_c = e_b$
-- L'accessibilité est adimentionné, en effet $[z_r(c)] = [z_{\text{rmc}}] = \text{L}$, donc $\left[\frac{z_r(c)}{z_{\text{rmc}}}\right] = 1$, d'où $[a_c] = 1$
+- L'accessibilité est adimentionné, en effet $[z_r(c)] = [z_{\text{rmc}}] = \text{L}$, donc $\left[\frac{z_r(c)}{z_{\text{rmc}}}\right] = 1$ et $[e_b] = 1$, d'où $[a_c] = 1$
 
 ## Villages
 
-Au début de la simulation, l'algorithme génère des permutations aléatoires de villages et les place sur la grille de simulation. Ensuite, l'algorithme crée un graphe d'adjacence: chaque village est un noeud connecté à ses voisins ayant des bâtiments situés à $d$ de leur épicentre.
+### Concept
+
+Au début de la simulation, l'algorithme place des villages tout les $d_0$ chunks. Un village qui possède au moins un batiment dans une des cases d'un chunk possède celui-ci.
+
+Chaque village possède des ressources qu'elle peut stocker indéfiniment sans limite de quantité. Chaque village est possède également une population $p$ qui varie.
+
+### Matrice de décision, vecteur d'état et vecteur de décision
+
+Les informations propres aux villages sont stockés dans un vecteur d'état $v\begin{pmatrix}p\\r_1\\...\\r_n\end{pmatrix}$ avec $n$ le nombre de ressouces stockés.
+
+Le vecteur décision $d$ contient les 
+
+Chaque village possède aussi une matrice décisionelle $\mathcal{D}$ qui lui permet de prendre des décisions de façon autonome. $\mathcal{D}$ est généré de façon aléatoire en début de simulation. 
+
+
 
 ### Bâtiments
 
