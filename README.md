@@ -87,7 +87,7 @@ Le coefficient d'accessibilité ou accessibilité d'un chunk $c$ est noté $\mat
 
 $$\mathcal{A}(c) = \mathcal{H}(c) \frac{\sigma}{|\overline{z_r} - z_r(c)|}$$
 
-**Remarque**: $\mathcal A \in \overline{\R^+}$, en effet si $\overline z_r = z_r(c)$ alors $\mathcal A = +\infty$
+**Remarque**: $\mathcal A \in \overline{\mathbb{R}^+}$, en effet si $\overline z_r = z_r(c)$ alors $\mathcal A = +\infty$
 
 # Villages
 
@@ -117,7 +117,7 @@ Soit $n_\epsilon$ le nombre de chunks exploitables par village.
 
 On pose $(\epsilon_i)_{i < n_\epsilon} \in \mathbb{R}^{n_\epsilon}$ la famille des chunks adjacentes à tous les bâtiments du village.
 
-On pose $(\beta_i)_{i \le 8} \in \R^9$ tel que
+On pose $(\beta_i)_{i \le 8} \in \mathbb{R}^9$ tel que
 
 $$
     \forall i \le 8, \begin{cases} 
