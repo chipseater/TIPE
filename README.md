@@ -51,12 +51,14 @@ On considère que $h$ et $q$ sont des grandeurs adimentionné.
 | **1 (tempéré)** | steppe       | plaine          | forêt          |
 | **2 (chaud)**   | désert chaud | savane          | jungle  |
 
-On pose $B : \mathcal K \to [\![0, 2]\!]^2$ la fonction qui à tout chunk $c$ associe le couple $(h(c),q(c))$.
+On pose $\mathcal B$ l'ensemble des biomes.
 
-On pose $\mathcal I : [\![ 0, 2 ]\!]^2 \to [\![ 0, 8]\!]$ l'index d'un biome tel que
+On pose $B : \mathcal K \to \mathcal B$ la fonction qui à tout chunk $c$ associe son biome.
+
+On pose $\mathcal I : \mathcal K \to \mathbb{N}$ l'index du biome du chunk tel que
 
 $$
-    \forall (h, q) \in [\![ 0, 2 ]\!]^2, \mathcal I (c) = h(c) + 3q(c)
+    \forall c \in \mathcal K, \mathcal I (c) = h(c) + 3q(c)
 $$
 
 ## Altitude
@@ -95,7 +97,7 @@ Au début de la simulation, l'algorithme place des villages tout les $d_0$ chunk
 
 Chaque village possède des ressources qu'elle peut stocker indéfiniment sans limite de quantité. Chaque village est possède également une population $r_0$ qui varie.
 
-Les informations propres aux villages sont stockés dans le vecteur d'état $r(r_0, ..., r_{n_r})$ avec $n_r$ le nombre de ressources stockés, pour tout $i \in [\![ 1, n_r ]\!]$, $r_i$ la quantité de la $i$-ème ressource stockée et $r_0$ la population du village.
+Les informations propres aux villages sont stockés dans le vecteur d'état $r(r_0, ..., r_{n_r})$ avec $n_r$ le nombre de ressources stockés, pour tout $1 \le i \le n_r$, $r_i$ la quantité de la $i$-ème ressource stockée et $r_0$ la population du village.
 
 ## Décisions
 
@@ -105,7 +107,7 @@ Si la décision $\alpha$ est prise, alors on note $P(\alpha)$, sinon on note $\o
 
 Pour $n_\delta \in \mathbb{N}$, on pose $\delta(\delta_0, ..., \delta_{n_\delta}) \in \mathbb{R}^{n_\delta + 1}$ le vecteur décision.
 
-$\forall i \in [\![ 0, n_\delta ]\!]$, $\delta_i \ge 1 \iff P(\alpha_i)$
+$\forall i < n_\delta$, $\delta_i \ge 1 \iff P(\alpha_i)$
 
 ## Chunks exploitables
 
@@ -115,11 +117,11 @@ Soit $n_\epsilon$ le nombre de chunks exploitables par village.
 
 On pose $(\epsilon_i)_{i < n_\epsilon} \in \mathbb{R}^{n_\epsilon}$ la famille des chunks adjacentes à tous les bâtiments du village.
 
-On pose $(\beta_i)_{i < 9} \in \R^9$ tel que
+On pose $(\beta_i)_{i \le 8} \in \R^9$ tel que
 
 $$
-    \forall i \in [\![ 0, 9 ]\!], \begin{cases} 
-        \beta_i = 1 &\text {si } &\exist j \in [\![ 0, n_\epsilon ]\!], \mathcal I(B(\epsilon_j)) = i \\
+    \forall i \le 8, \begin{cases} 
+        \beta_i = 1 &\text {si } &\exist j < n_\epsilon, i = \mathcal I(\epsilon_j) \\
         \beta_i = 0 &\text {sinon}
     \end{cases}
 $$
