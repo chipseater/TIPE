@@ -1,8 +1,3 @@
----
-title: "TIPE - Eric et Sylvain"
-geometry: margin = 2cm
----
-
 **Problématique**: *Comment modéliser le développement des espaces productifs à travers une approche évolutionniste*
 
 # Principe
@@ -101,7 +96,7 @@ Les informations propres aux villages sont stockés dans le vecteur d'état $r(r
 
 ## Décisions
 
-Chaque village peut effectuer $n_\alpha$ actions de façon autonome, rassemblés dans une famille $(\alpha_i)_{i < n_\alpha} \in \mathbb{R}^n$.
+Chaque village peut effectuer $n_\alpha$ actions de façon autonome, rassemblés dans une famille $(\alpha_i) \in \mathbb{R}^n$.
 
 Si la décision $\alpha$ est prise, alors on note $P(\alpha)$, sinon on note $\overline {P(\alpha)}$
 
@@ -115,7 +110,7 @@ Un chunk exploitable est soit un chunk contenant au moins un bâtiment du villag
 
 Soit $n_\epsilon$ le nombre de chunks exploitables par village.
 
-On pose $(\epsilon_i)_{i < n_\epsilon} \in \mathbb{R}^{n_\epsilon}$ la famille des chunks adjacentes à tous les bâtiments du village.
+On pose $(\epsilon_i) \in \mathbb{R}^{n_\epsilon}$ la famille des chunks adjacentes à tous les bâtiments du village.
 
 On pose $(\beta_i)_{i \le 8} \in \mathbb{R}^9$ tel que
 
