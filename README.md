@@ -121,7 +121,7 @@ On pose $(\beta_i)_{i \le 8} \in \mathbb{R}^9$ tel que
 
 $$
     \forall i \le 8, \begin{cases} 
-        \beta_i = 1 &\text {si } &\exist j < n_\epsilon, i = \mathcal I(\epsilon_j) \\
+        \beta_i = 1 &\text {si } &\exists j < n_\epsilon, i = \mathcal I(\epsilon_j) \\
         \beta_i = 0 &\text {sinon}
     \end{cases}
 $$
