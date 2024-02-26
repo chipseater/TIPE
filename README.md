@@ -17,7 +17,7 @@ La simulation se déroule au sein d'un carré fini (appelée carte) de coté $L$
 
 # Chunks
 
-La carte est découpée en chunks notés de 4x4 cases. On note $c_{i,j}$ le chunk contenant la case de coordonnée $(4i, 4j)$. Autrement dit, $c_{i,j}$ est le $i$-eme chunk horizontal et le $j$-eme chunk vertical. On note $\mathcal K$ l'ensemble des chunks de la carte.
+La carte est découpée en chunks notés de 4x4 cases. On note $c_{i,j}$ le chunk contenant la case de coordonnée $(4i, 4j)$. Autrement dit, $c_{i,j}$ est le $i$-eme chunk horizontal et le $j$-eme chunk vertical. On note $\mathcal C$ l'ensemble des chunks de la carte.
 
 ## Chunks adjacents
 
@@ -48,12 +48,12 @@ On considère que $h$ et $q$ sont des grandeurs adimentionné.
 
 On pose $\mathcal B$ l'ensemble des biomes.
 
-On pose $B : \mathcal K \to \mathcal B$ la fonction qui à tout chunk $c$ associe son biome.
+On pose $B : \mathcal C \to \mathcal B$ la fonction qui à tout chunk $c$ associe son biome.
 
-On pose $\mathcal I : \mathcal K \to \mathbb{N}$ l'index du biome du chunk tel que
+On pose $\mathcal I : \mathcal C \to \mathbb{N}$ l'indice du biome du chunk défini par
 
 $$
-    \forall c \in \mathcal K, \mathcal I (c) = h(c) + 3q(c)
+    \forall c \in \mathcal C, \mathcal I (c) = h(c) + 3q(c)
 $$
 
 ## Altitude
@@ -116,7 +116,7 @@ On pose $(\beta_i)_{i \le 8} \in \mathbb{R}^9$ tel que
 
 $$
     \forall i \le 8, \begin{cases} 
-        \beta_i = 1 &\text {si } &\exists j < n_\epsilon, i = \mathcal I(\epsilon_j) \\
+        \beta_i = 1 &\text {si } \exists j < n_\epsilon, i = \mathcal I(\epsilon_j) \\
         \beta_i = 0 &\text {sinon}
     \end{cases}
 $$
