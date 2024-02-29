@@ -15,5 +15,5 @@ dune exec main.ml
 
 La simulation se déroule au sein d'un carré fini (appelée carte) de coté $L$, constitué de cases repérés par des coordonnées entières positives.
 
-[Documentation du projet](https://github.com/chipseater/TIPE/documentation.pdf)
+[Documentation du projet](documentation.pdf)
 
