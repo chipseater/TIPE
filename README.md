@@ -21,7 +21,7 @@ La carte est découpée en chunks notés de 4x4 cases. On note $c_{i,j}$ le chun
 
 ## Chunks adjacents
 
-Un chunk $c_{a,b}$ est adjacent à un chunk $c_{i,j}$ si $a = i \pm 1$ et $b = j \pm 1$. Ainsi, tout chunk qui n'est pas situé en bordure de carte possède $8$ chunks adjacents.
+Un chunk $c_{a,b}$ est adjacent à un chunk $c_{i,j}$ si $i \le a \le i + 1$ ou $j \le b \le j + 1$. Ainsi, tout chunk qui n'est pas situé en bordure de carte possède $8$ chunks adjacents.
 
 On note $\mathcal V(c)$ l'ensemble des chunks adjacents à $c$ et $n_v(c)$ le nombre de chunks voisins à $c$.
 
@@ -62,11 +62,11 @@ L'altitude d'un chunk $c$ est notée $z(c)$ et est générée à partir d'un bru
 
 On pose $z_r(c)$ l'altitude relative du chunk $c$, ç-à-d la différence de l'altitude du chunk et de la moyenne des altitudes des $n_v(c)$ chunks adjacents telle que:
 
-$$z_r(c) = z(c) - \frac{1}{n_v(c)} \sum_{c_a \in \mathcal V(c)} z(c_a)$$
+$$z_r(c) = \frac{1}{n_v(c)} \sum_{c_a \in \mathcal V(c)} z(c_a) - z_r(c)$$
 
-On pose aussi $\overline{z_r}$ l'altitude relative moyenne de la carte et $\sigma$ l'écart-type de l'altitude relative de la carte.
+On pose aussi $\overline{z_r}$ l'altitude relative moyenne de la carte et $\sigma(z_r)$ l'écart-type de l'altitude relative de la carte.
 
-$$ \overline{z_r} = \frac{1}{N^2} \sum_{0 \le i, j < N} z_r(c_{i,j}) \quad \text{et} \quad \sigma = \sqrt{\frac{1}{N^2}\left(\sum_{0 \le i,j < N}{(z_r(c_{i,j}))^2}\right) - \overline{z_r}^2}$$
+$$ \overline{z_r} = \frac{1}{N^2} \sum_{0 \le i, j < N} z_r(c_{i,j}) \quad \text{et} \quad \sigma(z_r) = \sqrt{\frac{1}{N^2}\left(\sum_{0 \le i,j < N}{(z_r(c_{i,j}))^2}\right) - \overline{z_r}^2}$$
 
 A partir d'une certaine altitude la case sera considéré comme inutilisable et offre un bonus d'humidité au case adjacents. C'est case sont appelés rivières.
 
@@ -82,7 +82,7 @@ $$\mathcal{H}(c) = (|h(c) - 1| + 1) (|q(c) - 1| + 1)$$
 
 Le coefficient d'accessibilité ou accessibilité d'un chunk $c$ est noté $\mathcal{A}(c)$ et est calculée à partir de la formule suivante
 
-$$\mathcal{A}(c) = \mathcal{H}(c) \frac{\sigma}{|\overline{z_r} - z_r(c)|}$$
+$$\mathcal{A}(c) = \frac{\sigma(z_r)}{\mathcal{H}(c)|\overline{z_r} - z_r(c)|}$$
 
 **Remarque**: $\mathcal A \in \overline{\mathbb{R}^+}$, en effet si $\overline z_r = z_r(c)$ alors $\mathcal A = +\infty$
 
