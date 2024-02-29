@@ -1,3 +1,15 @@
+---
+title: TIPE - Sélection naturelle urbaine
+author: Eric et Sylvain
+toc: true
+toc-title: Table des matières
+geometry: margin = 2cm
+include-before:
+- '`\newpage{}`{=latex}'
+---
+
+\pagebreak
+
 # Chunks
 
 La carte est découpée en chunks notés de 4x4 cases. On note $c_{i,j}$ le chunk contenant la case de coordonnée $(4i, 4j)$. Autrement dit, $c_{i,j}$ est le $i$-eme chunk horizontal et le $j$-eme chunk vertical. On note $\mathcal C$ l'ensemble des chunks de la carte.
