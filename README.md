@@ -1,15 +1,3 @@
----
-title: TIPE - Sélection naturelle urbaine
-author: Eric et Sylvain
-toc: true
-toc-title: Table des matières
-geometry: margin = 2cm
-include-before:
-- '`\newpage{}`{=latex}'
----
-
-\pagebreak
-
 # Principe
 
 Le but de ce TIPE est d'étudier l'évolution d'un système urbain à travers un modèle simplifié. La modélisation s'effectue sur la base d'un algorithme évolutionniste, qui ne conserve que les systèmes les plus performants et les reproduit.
