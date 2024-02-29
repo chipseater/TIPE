@@ -1,4 +1,14 @@
-**Problématique**: *Comment modéliser le développement des espaces productifs à travers une approche évolutionniste*
+---
+title: TIPE - Sélection naturelle urbaine
+author: Eric et Sylvain
+toc: true
+toc-title: Table des matières
+geometry: margin = 2cm
+include-before:
+- '`\newpage{}`{=latex}'
+---
+
+\pagebreak
 
 # Principe
 
@@ -11,9 +21,7 @@ Rien n'a vraiment été implémenté, il faudra utiliser à l'avenir pour exécu
 dune exec main.ml
 ```
 
-## Cadre de la simulation
-
-La simulation se déroule au sein d'un carré fini (appelée carte) de coté $L$, constitué de cases repérés par des coordonnées entières positives.
+# Documentation
 
 [Documentation du projet](documentation.pdf)
 
