@@ -33,6 +33,8 @@ include-before:
         - Chaque mairie posséde un code génétique qui possède différente donnée utile à la gestion de son village.
         - Une nature §§§ ... §§§
         - Un arbre avec deux type de noeuds (soit une condtion ou une action), chaque noeud d'action nécessite un noeud père de plus il ne possède pas de fils. 
+        - Un noeud action fait que le village execute quelque chose §§§ ... §§§
+        - Un noeud condition fait que si la condition est respecté alors on applique la suite d'instruction de gauche sinon ceux de droite 
         - §§§ ... §§§
  - ## Procedure d'evolution
     - ### §§§ ... §§§
@@ -43,10 +45,10 @@ include-before:
         - Modifie une condition §§§ ... §§§
         - Ajoute un noeud §§§ ... §§§ 
     - ### Modification
-        - Modification des priorités, une modification des prioritées 
-        
+        - Modification des priorités, une modification des prioritées s'effectue en inversent deux noeuds de conditions.
+        - Modifie une action par une autre.
     - ### Assossiation
-
+        -L'assossiation de deux villes se trouvent pendant les phases de tours, il se produit une fusion de deux villages cette fusion creer un noeud avec une condition simple de random de probabilité définit en fonction de la différence de population entre les deux villages.
 
 # Chunks
 
