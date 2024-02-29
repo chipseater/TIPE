@@ -43,7 +43,8 @@ include-before:
         - Modifie une condition §§§ ... §§§
         - Ajoute un noeud §§§ ... §§§ 
     - ### Modification
-        - Modification des priorités, une modification des prioritées
+        - Modification des priorités, une modification des prioritées 
+        
     - ### Assossiation
 
 
