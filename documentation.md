@@ -9,6 +9,43 @@ include-before:
 ---
 
 \pagebreak
+###### §§§ .... §§§ signifie que je n'ai pas finit
+# Table des Idées
+- ## Structure des donnees 
+    - ### Matrice de Chunk 
+        - Une matrice de chunk, pour laquelle chaque chunk possède diférents paramètres (Humidité , Température , Occupation par un village §§§ ... §§§). 
+    - ### Chunk 
+        - Chaque chunk est composé de tuiles, un chunk est une matrice de 4x4 tuile. Une tuile possède §§§ ... §§§
+    - ### Batiment
+        - §§§ ... §§§
+    - ### Ressource
+        - §§§ ... §§§
+- ## Structure de décision
+    - ### Liste de comdition
+        - Une liste de condition prédéfinit qui possède différente structure propre. Les conditions du premiers ordres nécessite une seule variable. Par exemple : "Si le village [ a | a un manque de | a un surplus de ] [ randint de nombre ou de pourcentage (pour les deux derniers) ] de [ valeurs (moulin / champs / maison / main d'oeuvre / grain / pain / etc...) ] "
+        - Pour les conditions plus compliqués et plus rare (second ordre / troisième ordre etc ... ). C'est la même chose, un N ordre aura N variables et N conjonction (et ou ou) entre les N condition du premiers ordres.
+        - Exemple :
+            - Une condition peut être "Si le vilage [a un manque de] [dix pourcent] de [production de blés]"
+            - " Si le vilage [a] [trois] [mine] "
+    - ### Liste de d'action
+        - §§§ ... §§§
+    - ### Arbre de décision 
+        - Chaque mairie posséde un code génétique qui possède différente donnée utile à la gestion de son village.
+        - Une nature §§§ ... §§§
+        - Un arbre avec deux type de noeuds (soit une condtion ou une action), chaque noeud d'action nécessite un noeud père de plus il ne possède pas de fils. 
+        - §§§ ... §§§
+ - ## Procedure d'evolution
+    - ### §§§ ... §§§
+ - ## Mutation 
+    Après une generation, l'arbre de décision reçoit un nombre PAF de mutation.
+    - ### Evolution
+        -  Une mutation d'evolution est definit par le fait que si chaque branche de l'arbre se termine par une action, un nouveaux noeud de condtion se creer entre deux noeuds de conditions.
+        - Modifie une condition §§§ ... §§§
+        - Ajoute un noeud §§§ ... §§§ 
+    - ### Modification
+        - Modification des priorités, une modification des prioritées
+    - ### Assossiation
+
 
 # Chunks
 
