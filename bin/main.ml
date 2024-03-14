@@ -1,1 +1,7 @@
-(* Nothing to see here, nothing has been yet implemented *)
+open Bogue
+
+let () =
+  Widget.label "Hello world"
+    |> Layout.resident
+    |> Bogue.of_layout
+    |> Bogue.run
