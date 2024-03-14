@@ -67,19 +67,19 @@ A partir d'une certaine altitude la case sera considéré comme inutilisable et 
 
 ## Coefficient d'hostilité environnementale
 
-Pour tout chunk $c$, on note $\mathcal{H}(c)$ le coefficient d'hostilité environnementale de $c$ définie selon $h(c)$ et $q(c)$, respectivement l'humidité et la chaleur du chunk $c$ tel que
+Pour tout chunk $c$, on note $\epsilon(c)$ le coefficient d'hostilité environnementale de $c$ définie selon $h(c)$ et $q(c)$, respectivement l'humidité et la chaleur du chunk $c$ tel que
 
-$$\mathcal{H}(c) = (|h(c) - 1| + 1) (|q(c) - 1| + 1)$$
+$$\epsilon(c) = (|h(c) - 1| + 1) (|q(c) - 1| + 1)$$
 
-**Remarque**: On a $0 \le h, q \le 2$, donc $\mathcal{H} \in \{1,2,4\}$
+**Remarque**: On a $0 \le h, q \le 2$, donc $\epsilon \in \{1,2,4\}$
 
-## Coefficient d'accessibilité
+## Coefficient d'inaccessibilité
 
-Le coefficient d'accessibilité ou accessibilité d'un chunk $c$ est noté $\mathcal{A}(c)$ et est calculée à partir de la formule suivante
+Le coefficient d'inaccessibilité ou accessibilité d'un chunk $c$ est noté $\hbar(c)$ et est calculée à partir de la formule suivante
 
-$$\mathcal{A}(c) = \frac{\sigma(z_r)}{\mathcal{H}(c)|\overline{z_r} - z_r(c)|}$$
+$$\hbar(c) = \frac{\sigma(z_r)}{\epsilon(c)|\overline{z_r} - z_r(c)|}$$
 
-**Remarque**: $\mathcal A \in \overline{\mathbb{R}^+}$, en effet si $\overline z_r = z_r(c)$ alors $\mathcal A = +\infty$
+**Remarque**: $\hbar(c) \in \overline{\mathbb{R}^+}$, en effet si $\overline z_r = z_r(c)$ alors $\hbar = +\infty$
 
 # Villages
 
@@ -164,7 +164,7 @@ Au début de la simulation, l'algorithme muni chaque village de $4$ bâtiments. 
 
 Le coût de construction net $\mathcal C(c)$ est réévalué par rapport au coût de construction brut par le coefficient d’accessibilité du chunk. Avec $\mathcal C_b$ le coût de construction brut du bâtiment,
 
-$$\mathcal C (c) = \mathcal A(c) \times \mathcal C_b$$
+$$\mathcal C (c) = \hbar(c) \times \mathcal C_b$$
 
 ### Types de bâtiments
 
