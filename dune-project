@@ -15,7 +15,7 @@
  (name TIPE)
  (synopsis "TIPE project - describing urban evolution using natural selection")
  (description "This personnal initiative project is meant to play around with a natural selection algotithm.")
- (depends ocaml dune)
+ (depends ocaml dune tsdl)
  (tags
   ("TIPE" "natural evolution" "modelisation" "school project")))
 
