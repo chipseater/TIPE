@@ -11,6 +11,22 @@ include-before:
 \pagebreak
 ###### §§§ .... §§§ signifie que je n'ai pas finit
 # Table des Idées
+- ## Objectif 
+    - Création de différent arbre de décision dans le but de créer une IA de jeu de gestion de façon evolutive par selection.
+- ## Procedure d'evolution de la simulation
+    - ### Generation de la carte
+        - On génère une carte de façon procedural : 
+            - On commence par créer une matrice de taille N.
+            - On utilise un bruit de Perlin dans le but d'affecter diférente caractéristique(Hauteur, Humidité, Temperature, etc ...)
+    - ### Simulation 
+        - Au début de la simulation on place de façon aléatoire 99 village definit plus tard.
+        - On effectue un nombre M de tour, a chaque tour chaque village effectue une action définit par son arbre de décision.
+        - Après le nombre de tour effectuer, on récuppère les 33 meillieurs villages définit a partir d'une fonction définit avec différent paramètre (taille de la ville, nb d'habitant, ... )
+        - Avec ces 33 village on creer deux copie de chaque village et on modifie ces deux copies avec des mutation. On aura alors 33 village présent de base + 33 village légèrement modifier + 33 village très modifier ce qui représente les 99 village pour la prochaine simulation.
+        - On passe a la génération suivante, on réinsitialise la carte initialement définit puis on recomence le début de la simulation.
+        - Après 50 génération on creer un rapport sur les dix meilieurs générations.
+
+
 - ## Structure des donnees 
     - ### Matrice de Chunk 
         - Une matrice de chunk, pour laquelle chaque chunk possède diférents paramètres (Humidité , Température , Occupation par un village §§§ ... §§§). 
@@ -36,9 +52,7 @@ include-before:
         - Un noeud action fait que le village execute quelque chose §§§ ... §§§
         - Un noeud condition fait que si la condition est respecté alors on applique la suite d'instruction de gauche sinon ceux de droite 
         - §§§ ... §§§
- - ## Procedure d'evolution
-    - ### §§§ ... §§§
- - ## Mutation 
+  - ## Mutation 
     Après une generation, l'arbre de décision reçoit un nombre PAF de mutation.
     - ### Evolution
         -  Une mutation d'evolution est definit par le fait que si chaque branche de l'arbre se termine par une action, un nouveaux noeud de condtion se creer entre deux noeuds de conditions.
