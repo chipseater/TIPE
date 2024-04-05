@@ -37,7 +37,7 @@ include-before:
     - ### Ressource
         - §§§ ... §§§
 - ## Structure de décision
-    - ### Liste de comdition
+    - ### Liste de condition
         - Une liste de condition prédéfinit qui possède différente structure propre. Les conditions du premiers ordres nécessite une seule variable. Par exemple : "Si le village [ a | a un manque de | a un surplus de ] [ randint de nombre ou de pourcentage (pour les deux derniers) ] de [ valeurs (moulin / champs / maison / main d'oeuvre / grain / pain / etc...) ] "
         - Pour les conditions plus compliqués et plus rare (second ordre / troisième ordre etc ... ). C'est la même chose, un N ordre aura N variables et N conjonction (et ou ou) entre les N condition du premiers ordres.
         - Exemple :
@@ -92,7 +92,9 @@ On considère que $h$ et $q$ sont des grandeurs adimentionné.
 |                 | **0 (sec)**  | **1 (tempéré)** | **2 (humide)** |
 |-----------------|--------------|-----------------|----------------|
 | **0 (froid)**   | désert froid | tundra          | taïga          |
+| |Mort/Blanc | c5e885 | 5b7954
 | **1 (tempéré)** | steppe       | plaine          | forêt          |
+|
 | **2 (chaud)**   | désert chaud | savane          | jungle  |
 
 On pose $\mathcal B$ l'ensemble des biomes.
