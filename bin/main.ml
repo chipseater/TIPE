@@ -4,21 +4,20 @@
 Map
 """
 (* Contains the heat and humiditity values of a biome, aka h and q *)
-type value = Low | Medium | High
+(* h, q \in [0, 14] *)
+type biome = int * int
 
-type biome = value * value
+type map = ((chunk array ) array)
 
 type tile = building * hauteur
 
 type chunk = ((tile array) array ) * biome 
 
-type position = int * int 
-
 """
 Village
 """
 
-type village = id * tree * logistics * position 
+type village = id * tree * logistics * (int * int)
   
 type ressource = Food | People | Stone
 
