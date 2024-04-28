@@ -1,5 +1,3 @@
-(* Nothing to see here, nothing has been yet implemented *)
-
 """
 Map
 """
@@ -43,15 +41,6 @@ type condition = int * ing * ressource
 
 type tree = Vide | Node of condition * tree * tree * action 
 
-
-
-
-
-
-
-
-
-
 """
 Fonction
 """
@@ -73,12 +62,8 @@ let evolution village =
   let test (p1,p2,p3) = (*a pourcent / Lack or Surplus / ressource *)
     let need = search needed p3 in
     let ressource_stock = search tab p3 in 
-    
-
-
   in
   let to_do (v,b) =
-
   in
   let rec eval tree = match tree with 
     |Vide -> failwith("1.Invalid Argument") (*Invalid Arg*)
@@ -90,9 +75,5 @@ let evolution village =
         |a,b    -> if (test cond) then eval a       else eval b 
     end
   in
-
-
 ;;
-
-
 

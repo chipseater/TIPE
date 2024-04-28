@@ -6,7 +6,7 @@ Le but de ce TIPE est d'étudier l'évolution d'un système urbain à travers un
 
 Rien n'a vraiment été implémenté, il faudra utiliser à l'avenir pour exécuter le projet
 ```
-dune exec main.ml
+dune exec TIPE
 ```
 
 # Documentation
