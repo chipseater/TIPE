@@ -1,4 +1,14 @@
 type biome = Forest | Desert | Plains
+
+(* A tile is made out of the eventual building it 
+   contains associated with its elevation *)
+type tile = (option building) * int
+
+(* A chunk is a 4*4 tile matrix associated with its biome *)
+type chunk = ((tile array) array) * biome 
+(* A n*n map is a n/4*n/4 chunk matrix *)
+type map = ((chunk array) array)
+
 (* Contains the pole coordinates and biome *)
 type pole = int * int * biome
 
