@@ -66,5 +66,3 @@ let print_map map =
   done;
 ;;
 
-print_map (gen_map 20 8);;
-
