@@ -1,4 +1,4 @@
 (executable
- (public_name TIPE)
- (name main)
- (libraries TIPE bogue tsdl))
+  (public_name TIPE)
+  (name main)
+)

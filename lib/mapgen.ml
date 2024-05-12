@@ -1,8 +1,9 @@
 type biome = Forest | Desert | Plains
+type building = House | Quarry | Sawmill | Farm 
 
 (* A tile is made out of the eventual building it 
    contains associated with its elevation *)
-type tile = (option building) * int
+type tile = (building option) * int
 
 (* A chunk is a 4*4 tile matrix associated with its biome *)
 type chunk = ((tile array) array) * biome 

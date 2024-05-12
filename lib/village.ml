@@ -1,3 +1,5 @@
+open Mapgen
+
 (* Village *)
 type ressource = Food | People | Stone | Wood | Bed 
 (* Contains a dictionnary with the ressources status *)
@@ -12,7 +14,6 @@ type verb = Build | Overwrite
 type action = verb * building
 type condition = int * ing * ressource
 type tree = Vide | Node of condition * tree * tree * action  
-type building = House | Quarry | Sawmill | Farm 
 
 type village = id * tree * logistics * (int * int)  
 

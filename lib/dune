@@ -1,2 +1,11 @@
 (library
- (name TIPE))
+ (name mapgen)
+ (modules mapgen)
+)
+
+(library
+  (name village)
+  (modules village)
+  (libraries mapgen)
+)
+
