@@ -1,1 +1,1 @@
-print_string "Feur quoicoubeh"
+print_string "Hello world\n"
