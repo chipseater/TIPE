@@ -18,11 +18,11 @@ type tree = Vide | Node of condition * tree * tree * action
 type village = id * tree * logistics * (int * int)  
 
 (* Computes the diffrence ratio between the stockpiles and the needs *)
-let rec calcul logistics = match logistics with 
+let rec get_ratios logistics = match logistics with 
   | [], _::_ | _::_, [] -> failwith "2.Lack ressource"
   | (e, _)::_, (r, _)::_ when e <> r -> failwith "3.Not the same ressource"
   | [], [] -> []
-  | (e, d)::q, (_, f)::s -> (e, (d - f) * 100 / d)::(calcul (q, s))
+  | (e, d)::q, (_, f)::s -> (e, (d - f) * 100 / d)::(get_ratios (q, s))
 ;;
 
 (* Evaluates to the amount of the passed ressource that is con/cal *)
@@ -46,7 +46,7 @@ let test difference condition =
 
 let evolution village = 
   let (_, tree, logistics, _) = village in 
-  let ratios = calcul logistics in
+  let ratios = get_ratios logistics in
   (* Do action defined by the node, lack of the implementation of the village *)
   let to_do action = () in
   let rec eval tree = match tree with 
