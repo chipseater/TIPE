@@ -17,43 +17,50 @@ type tree = Vide | Node of condition * tree * tree * action
 
 type village = id * tree * logistics * (int * int)  
 
-(* Fonction *)
-let rec calcul (stock:data) (needed:data) = match (stock,needed) with 
-  |[], e::q |e::q ,[] -> failwith("2.Lack ressource") 
-  |(e,d)::q ,(r,f)::s when e != r -> failwith("3.Not the same ressource")
-  |[],[]              -> []
-  |(e,d)::q ,(r,f)::s -> (e,(d-f)) :: (calcul q s)
+(* Computes the diffrence ratio between the stockpiles and the needs *)
+let rec calcul logistics = match logistics with 
+  | [], _::_ | _::_, [] -> failwith "2.Lack ressource"
+  | (e, _)::_, (r, _)::_ when e <> r -> failwith "3.Not the same ressource"
+  | [], [] -> []
+  | (e, d)::q, (_, f)::s -> (e, (d - f) * 100 / d)::(calcul (q, s))
 ;;
+
+(* Evaluates to the amount of the passed ressource that is con/cal *)
 let rec search (data:data) ressource = match data with 
-  |[] -> failwith("4.Not Defined")
-  |(e,x)::q when e = ressource -> x 
-  |e::q -> search q ressource
+  | [] -> failwith "4.Not Defined"
+  | (e, x)::_ when e = ressource -> x 
+  | _::q -> search q ressource
+;; 
+
+(* Tests if the passed condition is fullfilled *)
+let test difference condition = 
+  let needed_percent, inequality, ressource = condition in
+  (* Retrieves the diffrence between the stocks and the needs *)
+  let ressource_diff = search difference ressource in
+  let ratio = ressource_diff * 100 / needed_percent in 
+  match ratio, inequality with
+    | x, Lack when x > 0 -> false 
+    | x, Surplus when x < 0 -> false
+    | x, _ -> (x > needed_percent)
 ;;
+
 let evolution village = 
-  let (id,tree,(old_stock, needed), pos) =village in 
-  let tab = calcul old_stock needed in
-  let test (p1,p2,p3) = (*a pourcent (Exp : 20% or more) / Lack or Surplus / ressource *)
-    let need = search needed p3 in
-    let ressource_stock = search tab p3 in 
-    let ratio = (ressource_stock - need)*100/need in 
-    match ratio,p2 with  
-      |x, Lack when x > 0 -> false 
-      |x, Surplus when x < 0 -> false
-      |x, _ -> (x > p1)
-  in
-  let to_do (v,b) =
-    ()
-    (* Do action defined by the node, lack of the implementation of the village *)
-  in
+  let (_, tree, logistics, _) = village in 
+  let ratios = calcul logistics in
+  (* Do action defined by the node, lack of the implementation of the village *)
+  let to_do action = () in
   let rec eval tree = match tree with 
-    |Vide -> failwith("1.Invalid Argument") (*Invalid Arg*)
-    |Node(cond,tree_verif, tree_not_verif,act) -> begin 
+    | Vide -> failwith "1.Invalid Argument"
+    | Node (cond, tree_verif, tree_not_verif, act) ->
+      let is_condition_fulfilled = test ratios cond in
       match (tree_verif, tree_not_verif) with 
-        |Vide,Vide -> to_do act 
-        |Vide,a -> if (test cond) then (to_do act)  else (eval a)  
-        |a,Vide -> if (test cond) then (eval a)     else (to_do act)
-        |a,b    -> if (test cond) then eval a       else eval b 
-    end
+        | Vide, Vide -> to_do act 
+        | Vide, a -> 
+            if is_condition_fulfilled then to_do act else eval a
+        | a, Vide -> 
+            if is_condition_fulfilled then eval a else to_do act
+        | a, b -> 
+            if is_condition_fulfilled then eval a else eval b 
   in
   eval tree
 ;;
