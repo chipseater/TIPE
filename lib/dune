@@ -27,3 +27,9 @@
   (libraries mapgen yojson)
 )
 
+(library
+  (name decision)
+  (modules decision)
+  (libraries mapgen village)
+)
+

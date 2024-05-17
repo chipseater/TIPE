@@ -1,7 +1,10 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
+=======
+>>>>>>> 71aa340 ([village.ml/decision.ml] changes and start create)
 (* open Yojson.Safe *)
 >>>>>>> 9982793 ([Mapgen] It outputs a json map)
 open Mapgen;;
@@ -31,4 +34,12 @@ done
 
 (* print_chunk_z (submatrix matrix (0, 0) 2) *)
 
+<<<<<<< HEAD
 >>>>>>> dec9dce ([Mapgen] Perlin noise finaly works)
+=======
+=======
+open Decision
+
+print_map (gen_map 100 20);;
+>>>>>>> 23a3cf0 ([village.ml/decision.ml] changes and start create)
+>>>>>>> 71aa340 ([village.ml/decision.ml] changes and start create)
