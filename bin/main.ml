@@ -1,1 +1,3 @@
-print_string "Hello world\n"
+open Decision
+
+print_map (gen_map 100 20);;

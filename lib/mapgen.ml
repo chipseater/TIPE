@@ -6,7 +6,7 @@ type building = House | Quarry | Sawmill | Farm
 type tile = (building option) * int
 
 (* A chunk is a 4*4 tile matrix associated with its biome *)
-type chunk = ((tile array) array) * biome 
+type chunk = ((tile array) array) * biome * int
 (* A n*n map is a n/4*n/4 chunk matrix *)
 type map = ((chunk array) array)
 
