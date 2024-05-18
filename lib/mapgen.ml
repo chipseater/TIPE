@@ -1,3 +1,6 @@
+let z_max = 9;;
+let chunk_width = 4;;
+
 type biome = Forest | Desert | Plains
 type building = House | Quarry | Sawmill | Farm 
 
@@ -54,7 +57,50 @@ let rec nearest_biome p poles = match poles with
   done; map
 ;;
 
-let print_map map =
+(* Returns a nxn grid of random numbers *)
+let gen_random_values n =
+  let () = Random.self_init () in
+  let map = Array.make_matrix n n 0 in
+  for i = 0 to (n - 1) do
+    for j = 0 to (n - 1) do
+      map.(i).(j) <- (Random.int z_max)
+    done
+  done;
+  map
+;;
+
+(* Checks if the point is not outside of a nxn map *)
+let is_valid n i j = not (i < 0 || i >= n || j < 0 || j >= n);;
+
+(* Returns the average of the neighbouring square *)
+let average_adjacent map i j =
+  let n = Array.length map in
+  let sum = ref 0 in
+  let count = ref 0 in
+  (* Cycles through the adjacent tiles and counts their number
+     while summing their values to average them *)
+  for k = 0 to 3 do
+    let i_offset, j_offset = [| -1, 0 ; 1, 0 ; 0, -1 ; 0, 1 |].(k) in
+    let new_i, new_j = i + i_offset, j + j_offset in
+    if is_valid n new_i new_j 
+      then (sum := !sum + map.(new_i).(new_j); 
+      count := !count + 1)
+  done;
+  !sum / !count
+;;
+
+let print_int_map map =
+  let n = Array.length map in
+  for i = 0 to (n - 1) do
+    for j = 0 to (n - 1) do
+      print_int map.(i).(j);
+      print_char ' '
+    done;
+    print_char '\n'
+  done;
+;;
+
+let print_biome_map map =
   let n = Array.length map in
   for i = 0 to (n - 1) do
     for j = 0 to (n - 1) do
