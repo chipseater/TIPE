@@ -72,9 +72,8 @@ let gen_random_values n =
 (* Checks if the point is not outside of a nxn map *)
 let is_valid n i j = not (i < 0 || i >= n || j < 0 || j >= n);;
 
-(* Returns the average of the neighbouring square *)
-let average_adjacent map i j =
-  let n = Array.length map in
+(* Returns the average of the neighbouring square in a nxn map *)
+let average_adjacent map n i j =
   let sum = ref 0 in
   let count = ref 0 in
   (* Cycles through the adjacent tiles and counts their number
@@ -87,6 +86,17 @@ let average_adjacent map i j =
       count := !count + 1)
   done;
   !sum / !count
+;;
+
+let interpolate map =
+  let n = Array.length map in
+  let interpolated_map = Array.make_matrix n n 0 in
+  for i = 0 to (n - 1) do
+    for j = 0 to (n - 1) do
+      interpolated_map.(i).(j) <- average_adjacent map n i j
+    done
+  done;
+  interpolated_map
 ;;
 
 let print_int_map map =
