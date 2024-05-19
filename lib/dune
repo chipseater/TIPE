@@ -1,6 +1,12 @@
 (library
+  (name interpolation)
+  (modules interpolation)
+)
+
+(library
  (name mapgen)
  (modules mapgen)
+ (libraries interpolation)
 )
 
 (library

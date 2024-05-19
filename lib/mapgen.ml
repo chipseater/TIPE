@@ -1,3 +1,5 @@
+open Interpolation
+
 let z_max = 9;;
 let chunk_width = 4;;
 
@@ -88,7 +90,7 @@ let average_adjacent map n i j =
   !sum / !count
 ;;
 
-let interpolate map =
+let average_map map =
   let n = Array.length map in
   let interpolated_map = Array.make_matrix n n 0 in
   for i = 0 to (n - 1) do
