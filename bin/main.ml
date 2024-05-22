@@ -1,7 +1,5 @@
 open Mapgen;;
 
-let random_map = gen_random_values 50;;
-print_int_map random_map;;
-print_char '\n';;
-print_int_map (average_map random_map);;
+let random_map = perlin_map 1000 500 1;;
+print_float_map (random_map);;
 
