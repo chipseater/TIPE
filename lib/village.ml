@@ -97,7 +97,10 @@ let rec chunk_list_parcour (liste:position list) (map:map) = match liste with
   |(i,j) :: q -> addition_data (checkup_chunk map.(i).(j)) ( chunk_list_parcour q map)
   |[] -> void_data
 
+let stock_exp:data = [(Bed,0);(Food,0);(People,0);(Stone,0);(Wood,0)]
+let needed_exp:data = [(Bed,0);  (Food,100);(People,-25); (Stone,0);  (Wood,0)]
 
+let village_exp:village = 1, Vide, (stock_exp, needed_exp), (0, 0), [] 
 
 
 
