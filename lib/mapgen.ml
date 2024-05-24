@@ -126,12 +126,14 @@ let interpolate a b x =
   else (b -. a) *. (smoothstep x) +. a
 ;;
 
+(* Returns the fract part of x / n, here it is used to compute
+   the relative coordinates in a n-sized grid cell *)
 let local_coord x n =
   let frac x = x -. Float.floor x in
   frac ((float_of_int x) /. (float_of_int n))
 ;;
 
-let perlin grad_grid grid_width n i j =
+let perlin grad_grid grid_width i j =
   (* The local coordinates in the grid cells *)
   let li, lj = local_coord i grid_width, local_coord j grid_width in
   (* The bottom-left coner coordinates of the grid cell *)
@@ -149,31 +151,33 @@ let perlin grad_grid grid_width n i j =
   let br_dot_prod = (li -. 1.) *. br_grad_j +. (lj -. 1.) *. br_grad_i in
   (* Interpolates the dot products from left to right 
      then from bottom to top *)
-  (* print_float li; print_char ' '; print_float lj; print_char '\n';
-  print_float li; print_char ' '; print_float (1. -. lj); print_char '\n';
-  print_float (1. -. li); print_char ' '; print_float lj; print_char '\n';
-  print_float (1. -. li); print_char ' '; print_float (1. -. lj); print_char '\n'; *)
   let top_interpolation = interpolate tl_dot_prod tr_dot_prod lj in
   let bottom_interpolation = interpolate bl_dot_prod br_dot_prod lj in
   interpolate top_interpolation bottom_interpolation li
 ;;
 
-let perlin_layer map n total grid_width =
+(* Adds a layer of perlin weighted by factor to a nxn matrix map *)
+let perlin_layer map n grid_width factor =
+  (* Generates a gradient grid with enough padding to work with *)
   let grad_grid = gen_rand_grad (n + 2 * grid_width) grid_width in
   for i = 0 to (n - 1) do
     for j = 0 to (n - 1) do 
       map.(i).(j) <-
-        map.(i).(j) +. (0.5 *. (perlin grad_grid grid_width n i j) +. 0.5) /. (float_of_int total)
+        map.(i).(j) +. 
+          0.5 *. ((perlin grad_grid grid_width i j) +. 1.) /. factor
     done
   done
 ;;
 
-let perlin_map n grid_width octaves =
+(* Superposes octaves of noises to create fractal noise with cell width m *)
+let perlin_map n m octaves =
   let map = Array.make_matrix n n 0. in
-  let period = ref 1 in
+  let factor = ref 1 in
   for _ = 1 to octaves do
-    period := !period * 2;
-    perlin_layer map n octaves (grid_width / !period)
+    (* Weights the layer by factor = 2^i *)
+    let width = m / !factor in
+    perlin_layer map n width (float_of_int !factor);
+    factor := !factor * 2
   done;
   map
 ;;
@@ -213,7 +217,4 @@ let print_biome_map map =
     print_char '\n'
   done;
 ;;
-
-let grads = gen_rand_grad 100 10;;
-perlin grads 10 10 9;; 
 
