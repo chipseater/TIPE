@@ -3,8 +3,8 @@
 (*              Temp *)
 type biome = Forest | Desert | Plains
 type building = House | Quarry | Sawmill | Farm 
-type tile = (building option) * int
-type chunk = ((tile array) array) * biome * int
+type tile = Tile of (building option) * int
+type chunk = Chunk of ((tile array) array) * biome * int
 let chunk_width =4 ;; 
 type map = ((chunk array) array)
 type ressource = Food | People | Stone | Wood | Bed 
@@ -17,6 +17,12 @@ type action = verb * building
 type condition = int * ing * ressource
 type tree = Vide | Node of condition * tree * tree * action  
 type village = int * tree * logistics * position *  position list 
+let rec addition_data (l1:data) (l2:data) = match l1,l2 with
+  |((r1,_)::_),((r2,_)::_) when r1 != r2 -> raise (Invalid_argument "Not same ressource's place")
+  |e::q,[] |[],e::q -> raise (Invalid_argument("Not same size"))
+  |((r1,v1)::q1),((_,v2)::q2) -> (r1,(v1+v2))::(addition_data q1 q2)
+  |[],[] -> []
+
 
 
 
@@ -57,10 +63,36 @@ let test difference condition =
     | x, Surplus when x < 0 -> false
     | x, _ -> (x > needed_percent)
 ;;
+
+let calcul_of_people (data:data) = 
+  let food = (search data Food )in
+  let bed = search data Bed in
+  let people = search data People in 
+  if people > bed then addition_data data [(Bed,0);(Food,0);(People,bed - people);(Stone,0);(Wood,0)]
+  else let remain_bed = bed - people in 
+  if food < remain_bed then [(Bed,0);(Food,-food);(People,food);(Stone,0);(Wood,0)]
+  else [(Bed,0);(Food,food-remain_bed);(People,remain_bed);(Stone,0);(Wood,0)]
+
+ ;;
+
+ let update_people logistics = 
+  match logistics with
+  | (stock,need) -> ((calcul_of_people stock:data),need)
+
+
+let 
+
+
 (* Make all action in one turn *)
 let evolution_par_tour village = 
   let (_, tree, logistics, _) = village in
-  let new_logistics = update_logistics logistics in 
+  let temp_logistics =  update_people logistics in
+  let new_logistics = update_logistics temp_logistics in 
+
+
+
+
+
   let ratio = get_ratio new_logistics in
   let a, _ = new_logistics in
   let stockpile = match 
@@ -85,6 +117,8 @@ let evolution_par_tour village =
         | a, b -> 
             if is_condition_fulfilled then eval a else eval b 
   in
+
+  
   eval tree
 ;;
 
