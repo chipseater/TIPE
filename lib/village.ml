@@ -85,55 +85,45 @@ let get_tile (chunk:chunk) = match chunk with
 
 
 (* Chunk parcours *)
-(* NO *)
+(* OK ? *)
 let checkup_chunk (chunk:chunk) = 
   let rec parcours_chunk (i:int) (j:int)  = match i,j with
-    |i ,_ when i=0 -> print_char '1'; void_data     
-    |i, j when j=0 -> print_char '2';parcours_chunk (i-1) chunk_width 
-    |i,j ->print_char '0' ;addition_data (checkup_tile((get_tile chunk).(i).(j))) (parcours_chunk i (j-1))
+    |i ,_ when i=0 -> void_data     
+    |i, j when j=0 -> parcours_chunk (i-1) (chunk_width) 
+    |i,j ->(let x = checkup_tile((get_tile chunk).(i-1).(j-1)) in addition_data x (parcours_chunk i (j-1)))
 in
-parcours_chunk (chunk_width-1) (chunk_width-1) 
+parcours_chunk (chunk_width) (chunk_width) 
 ;;
-(* NO *)
+(* OK ? *)
 let rec chunk_list_parcour (liste:position list) (map:map) = match liste with
   |(i,j) :: q -> addition_data (checkup_chunk map.(i).(j)) ( chunk_list_parcour q map)
   |[] -> void_data
 
-let stock_exp:data = [(Bed,0);(Food,0);(People,0);(Stone,0);(Wood,0)]
+(*
+  let stock_exp:data = [(Bed,0);(Food,0);(People,0);(Stone,0);(Wood,0)]
 let needed_exp:data = [(Bed,0);  (Food,100);(People,-25); (Stone,0);  (Wood,0)]
-
 let needed_exp_false:data = [(Food,0);  (Food,100);(People,-25); (Stone,0);  (Wood,0)]
-
 let village_exp:village = 1, Vide, (stock_exp, needed_exp), (0, 0), [] 
-
 (* let a = addition_data needed_exp needed_exp_false  *)
-
 let () = assert(addition_data stock_exp needed_exp = [(Bed,0);(Food,100);(People,-25);(Stone,0);(Wood,0)]) 
-
-
-let mock_chunk = Chunk ( [| [| Tile (None, 10); Tile (None, 11); Tile (Some House, 12); Tile (Some Sawmill, 13) |]; 
-                            [| Tile (Some House, 9); Tile (None, 10); Tile (Some Quarry, 11); Tile (Some Sawmill, 12) |]; 
-                            [| Tile (None, 10); Tile (None, 10); Tile (Some Farm, 11); Tile (None, 11) |]; 
-                            [| Tile (None, 11); Tile (None, 10); Tile (Some House, 12); Tile (Some House, 10) |]; |], Forest );;
-
-
+let mock_chunk = Chunk ( [| [| Tile (None, 10);       Tile (None, 11); Tile (Some House, 12);   Tile (Some Sawmill, 13) |]; 
+                            [| Tile (Some House, 9);  Tile (None, 10); Tile (Some Quarry, 11);  Tile (Some Sawmill, 12) |]; 
+                            [| Tile (None, 10);       Tile (None, 10); Tile (Some Farm, 11);    Tile (None, 11) |]; 
+                            [| Tile (None, 11);       Tile (None, 10); Tile (Some House, 12);   Tile (Some House, 10) |]; |], Forest );;
 let mock_chunk2 = Chunk ( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |]; 
                             [| Tile (None, 9);  Tile (None, 10); Tile (None, 11); Tile (None, 12) |]; 
                             [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |]; 
                             [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |]; |], Forest );;
-
 let map = [| [| mock_chunk2;mock_chunk2|];
             [| mock_chunk2;mock_chunk|]|]
-
-let chunk_list = [(0,0);(1,1)] 
+let chunk_list = [(0,0);(1,1);(1,1)] 
 let chunk_list3 = [(1,1)]
 let chunk_list2 = [(0,1)] 
-
-(* let a = chunk_list_parcour chunk_list map *)
-
-let a = checkup_tile (Tile (Some House, 9) )
-
-let b = checkup_tile (Tile (None,9 ))
- let a = checkup_chunk mock_chunk2  
-
+let a = chunk_list_parcour chunk_list map 
+let c = chunk_list_parcour chunk_list3 map 
+let b = chunk_list_parcour chunk_list2 map 
+(* let a = checkup_tile (Tile (Some House, 9) ) *)
+(* let b = checkup_tile (Tile (None,9 )) *)
+(* let a = checkup_chunk mock_chunk *)
+*)
 
