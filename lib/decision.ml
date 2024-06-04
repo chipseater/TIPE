@@ -22,7 +22,7 @@ let rec addition_data (l1:data) (l2:data) = match l1,l2 with
   |e::q,[] |[],e::q -> raise (Invalid_argument("Not same size"))
   |((r1,v1)::q1),((_,v2)::q2) -> (r1,(v1+v2))::(addition_data q1 q2)
   |[],[] -> []
-
+  let rec chunk_list_parcour (liste:position list) (map:map) = [(Bed,0);(Food,0);(People,0);(Stone,0);(Wood,0)]
 
 
 
@@ -75,21 +75,35 @@ let calcul_of_people (data:data) =
 
  ;;
 
- let update_people logistics = 
+ let update_people logistics:logistics = 
   match logistics with
   | (stock,need) -> ((calcul_of_people stock:data),need)
 
+let update_all_logistics (logistics:logistics) =
+  let temp_logistics =  update_people logistics in
+  let new_logistics = update_logistics temp_logistics in 
+ (new_logistics:logistics)
 
-let 
+ let destroy_build (logistics:logistics) (position_list:position list) (map:map) =
+
+
+
+  ([(Bed,0);(Food,0);(People,0);(Stone,0);(Wood,0)],[(Bed,0);(Food,0);(People,0);(Stone,0);(Wood,0)])
+
+
+let lack_of_people (logistics:logistics) (old_logistics:logistics) (chunk_list:position list) (map:map) =
+  let (data,need) = logistics in 
+  if (search data People) < 0 then (destroy_build old_logistics chunk_list map )
+  else logistics
 
 
 (* Make all action in one turn *)
-let evolution_par_tour village = 
-  let (_, tree, logistics, _) = village in
-  let temp_logistics =  update_people logistics in
-  let new_logistics = update_logistics temp_logistics in 
-
-
+let evolution_par_tour (village:village) (map:map) = 
+  let (_, tree, logistics, _,chunk_list) = village in
+  let (stock_temp,_) = logistics in
+  let logistics1 = (stock_temp, chunk_list_parcour chunk_list map) in
+  let temp_logistics = update_all_logistics logistics1 in
+  let new_logistics = lack_of_people temp_logistics logistics chunk_list map in
 
 
 
