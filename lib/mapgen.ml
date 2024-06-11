@@ -1,4 +1,4 @@
-let z_max = 9;;
+let z_max = 100.;;
 let chunk_width = 4;;
 
 type biome = Forest | Desert | Plains
@@ -6,15 +6,19 @@ type building = House | Quarry | Sawmill | Farm
 
 (* A tile is made out of the eventual building it 
    contains associated with its elevation *)
-type tile = (building option) * int
+type tile = Tile of (building option) * int
 
 (* A chunk is a 4*4 tile matrix associated with its biome *)
+<<<<<<< HEAD
 type chunk = ((tile array) array) * biome * int
+=======
+type chunk = Chunk of ((tile array) array) * biome | None
+>>>>>>> 9982793 ([Mapgen] It outputs a json map)
 (* A n*n map is a n/4*n/4 chunk matrix *)
 type map = ((chunk array) array)
 
 (* Contains the pole coordinates and biome *)
-type pole = int * int * biome
+type pole = int * int * biome;;
 
 (* Sets the balance between the diffrent biomes,
    here 8 plains for 1 desert and 1 tundra *)
@@ -45,28 +49,17 @@ let rec nearest_biome p poles = match poles with
   | (x1, y1, b1)::(x2, y2, b2)::q ->
       nearest_biome p ((if ((distance (x1, y1) p) < (distance (x2, y2) p)) 
         then (x1, y1, b1) else (x2, y2, b2))::q)
+;;
 
 (* Generates a nxn sized map with k biomes *)
- let gen_map n k =
+ let gen_biomes n nb_biomes =
   let map = Array.make_matrix n n Plains in
-  let poles = gen_poles n k in
+  let poles = gen_poles n nb_biomes in
   for i = 0 to (n - 1) do
     for j = 0 to (n - 1) do
       map.(i).(j) <- nearest_biome (i, j) poles
   done
   done; map
-;;
-
-(* Returns a nxn grid of random numbers *)
-let gen_random_values n =
-  let () = Random.self_init () in
-  let map = Array.make_matrix n n 0 in
-  for i = 0 to (n - 1) do
-    for j = 0 to (n - 1) do
-      map.(i).(j) <- (Random.int z_max)
-    done
-  done;
-  map
 ;;
 
 (* Checks if the point is not outside of a nxn map *)
@@ -157,29 +150,68 @@ let perlin grad_grid grid_width i j =
 ;;
 
 (* Adds a layer of perlin weighted by factor to a nxn matrix map *)
-let perlin_layer map n grid_width factor =
+let perlin_layer (map: (float array) array) n grid_width factor =
   (* Generates a gradient grid with enough padding to work with *)
   let grad_grid = gen_rand_grad (n + 2 * grid_width) grid_width in
   for i = 0 to (n - 1) do
     for j = 0 to (n - 1) do 
-      map.(i).(j) <-
-        map.(i).(j) +. 
-          0.5 *. ((perlin grad_grid grid_width i j) +. 1.) /. factor
+      let raw_z = perlin grad_grid grid_width i j in
+      assert (raw_z >= -. 0.71 && raw_z <= 0.71);
+      let z = map.(i).(j) +. 
+          (0.5 *. raw_z +. 0.25) /. factor in
+      assert (z <= 1.);
+      map.(i).(j) <- z
     done
   done
 ;;
 
+(* Converts a float matrix width values ranging from 0 to 1
+   to a int matrix with values ranging from 0 to the factor *)
+let upscale_matrix_to_int factor (matrix: (float array) array) =
+  let n = Array.length matrix in
+  let new_matrix = Array.make_matrix n n 0 in
+  for i = 0 to n - 1 do
+    for j = 0 to n - 1 do
+      new_matrix.(i).(j) <- int_of_float (factor *. matrix.(i).(j))
+    done
+  done;
+  new_matrix
+;;
+
 (* Superposes octaves of noises to create fractal noise with cell width m *)
-let perlin_map n m octaves =
+let perlin_map n cell_width octaves =
   let map = Array.make_matrix n n 0. in
   let factor = ref 1 in
   for _ = 1 to octaves do
     (* Weights the layer by factor = 2^i *)
-    let width = m / !factor in
+    let width = cell_width / !factor in
     perlin_layer map n width (float_of_int !factor);
     factor := !factor * 2
   done;
   map
+;;
+
+(* Generates an empty chunk according to z_values and a biome *)
+let gen_empty_chunk (z_values: (int array) array) (biome: biome) =
+  let chunk = Array.make_matrix chunk_width chunk_width (Tile (None, 0)) in
+  for i = 0 to (chunk_width - 1) do
+    for j = 0 to (chunk_width - 1) do
+      let z = z_values.(i).(j) in
+      chunk.(i).(j) <- Tile (None, z)
+    done
+  done;
+  Chunk (chunk, biome)
+
+(* Extracts a nxn submatrix from the top-left corner *)
+let submatrix matrix corner n =
+  let x, y = corner in
+  let submatrix = Array.make_matrix n n 0 in
+  for i = 0 to (n - 1) do
+    for j = 0 to (n - 1) do
+      submatrix.(i).(j) <- matrix.(x + i).(y + j);
+    done;
+  done;
+  submatrix
 ;;
 
 let print_int_map map =
@@ -190,7 +222,22 @@ let print_int_map map =
       print_char ' '
     done;
     print_char '\n'
+  done
+
+let gen_map n nb_biomes z_width octaves =
+  let nb_of_chunk = n / chunk_width in
+  let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
+  let biomes = gen_biomes n nb_biomes in
+  let z_map = perlin_map n z_width octaves
+    |> upscale_matrix_to_int z_max in
+  for i = 0 to nb_of_chunk - 1 do
+    for j = 0 to nb_of_chunk - 1 do
+      let z_values = submatrix z_map (i, j) chunk_width in
+      let biome = biomes.(i).(j) in
+      map.(i).(j) <- gen_empty_chunk z_values biome;
+    done
   done;
+  map
 ;;
 
 let print_float_map map =
@@ -202,19 +249,65 @@ let print_float_map map =
     done;
     print_float map.(i).(n - 1);
     print_char '\n'
-  done;
+  done
+
+let isNone chunk = match chunk with
+  | Chunk (_, _) -> false
+  | None -> true
+
+let biome_to_string = function
+  | Forest -> "F"
+  | Desert -> "D"
+  | Plains -> "P"
+
+let building_to_string = function
+  | Some House -> "H"
+  | Some Quarry -> "Q"
+  | Some Sawmill -> "S"
+  | Some Farm -> "F"
+  | None -> "N"
+
+(* type building = House | Quarry | Sawmill | Farm  *)
+let print_biome biome =
+  biome |> biome_to_string |> print_string
+
+let get_chunk_biome = function
+  | Chunk (_, biome) -> biome
+  | None -> raise (Invalid_argument "Manipulating an empty chunk")
+
+let print_chunk_biome chunk =
+  assert (not (isNone chunk));
+  chunk |> get_chunk_biome |> print_biome
 ;;
 
-let print_biome_map map =
-  let n = Array.length map in
-  for i = 0 to (n - 1) do
-    for j = 0 to (n - 1) do
-      match map.(i).(j) with
-      | Forest -> print_string "F "
-      | Desert -> print_string "D "
-      | Plains -> print_string "P ";
-    done;
-    print_char '\n'
+let get_tile_z = function
+  | Tile (_, z) -> z
+;;
+
+let get_tile_building = function
+  | Tile (building, _) -> building
+;;
+
+let get_chunk_tiles chunk =
+  match chunk with
+  | Chunk (tiles, _) -> tiles
+  | None -> raise (Invalid_argument "Manipulating an empty chunk")
+;;
+
+let get_chunk_z chunk =
+  assert (not (isNone chunk));
+  let chunk_z = Array.make_matrix chunk_width chunk_width 0 in
+  for i = 0 to (chunk_width - 1) do
+    for j = 0 to (chunk_width - 1) do
+      let tile = (get_chunk_tiles chunk).(i).(j) in
+      chunk_z.(i).(j) <- get_tile_z tile
+    done
   done;
+  chunk_z
+;;
+
+let print_chunk_z chunk = chunk
+  |> get_chunk_z
+  |> print_int_map
 ;;
 

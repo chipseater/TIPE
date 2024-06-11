@@ -21,3 +21,9 @@
   (libraries mapgen village decision)
 )
 
+(library
+  (name dumpmap)
+  (modules dumpmap)
+  (libraries mapgen yojson)
+)
+

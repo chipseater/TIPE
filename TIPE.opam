@@ -11,7 +11,7 @@ bug-reports: "https://github.com/chipseater/TIPE/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.10"}
-  "tsdl"
+  "yojson"
   "odoc" {with-doc}
 ]
 build: [
