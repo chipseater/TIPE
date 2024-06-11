@@ -17,4 +17,9 @@ type action = verb * building
 type condition = int * ing * ressource
 type tree = Vide | Node of condition * tree * tree * action  
 type village = int * tree * logistics * position *  position list 
+<<<<<<< HEAD
 =
+=======
+
+let save  = 
+>>>>>>> e3ff7ed (trying to pull the map code)

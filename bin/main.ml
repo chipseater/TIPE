@@ -1,10 +1,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 =======
 >>>>>>> 71aa340 ([village.ml/decision.ml] changes and start create)
+=======
+>>>>>>> e3ff7ed (trying to pull the map code)
 (* open Yojson.Safe *)
 >>>>>>> 9982793 ([Mapgen] It outputs a json map)
 open Mapgen;;
@@ -42,4 +45,11 @@ open Decision
 
 print_map (gen_map 100 20);;
 >>>>>>> 23a3cf0 ([village.ml/decision.ml] changes and start create)
+<<<<<<< HEAD
 >>>>>>> 71aa340 ([village.ml/decision.ml] changes and start create)
+=======
+=======
+open Generates
+
+>>>>>>> 3b8f0f9 ([all] Start of session code)
+>>>>>>> e3ff7ed (trying to pull the map code)

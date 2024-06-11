@@ -33,3 +33,9 @@
   (libraries mapgen village)
 )
 
+(library
+  (name generate)
+  (modules generate )
+  (libraries mapgen village decision)
+)
+
