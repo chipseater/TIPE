@@ -9,3 +9,9 @@
   (libraries mapgen)
 )
 
+(library
+  (name dumpmap)
+  (modules dumpmap)
+  (libraries mapgen yojson)
+)
+

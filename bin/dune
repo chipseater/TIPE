@@ -2,5 +2,5 @@
   (public_name TIPE)
   (name main)
   (modules main)
-  (libraries mapgen village)
+  (libraries mapgen village yojson dumpmap)
 )
