@@ -62,12 +62,11 @@ let checkup_tile (tile:tile) =
             |Sawmill -> sawmill_data_prodution
 (* Get only the tile *)
 let get_tile (chunk:chunk) = match chunk with
-| Chunk(t,_) -> t
+  | Chunk(t,_) -> t
 ;;
 
 
 (* Chunk parcours *)
-(* OK ? *)
 let checkup_chunk (chunk:chunk) = 
   let rec parcours_chunk (i:int) (j:int)  = match i,j with
     |i ,_ when i=0 -> void_data     
@@ -76,7 +75,6 @@ let checkup_chunk (chunk:chunk) =
 in
 parcours_chunk (chunk_width) (chunk_width) 
 ;;
-(* OK ? *)
 let rec chunk_list_parcour (liste:position list) (map:map) = match liste with
   |(i,j) :: q -> addition_data (checkup_chunk map.(i).(j)) ( chunk_list_parcour q map)
   |[] -> void_data
