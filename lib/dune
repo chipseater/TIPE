@@ -1,41 +1,23 @@
 (library
  (name mapgen)
- (modules mapgen)
-)
+ (modules mapgen))
 
 (library
-  (name village)
-  (modules village)
-  (libraries mapgen)
-)
+ (name village)
+ (modules village)
+ (libraries mapgen))
 
 (library
-  (name decision)
-  (modules decision)
-  (libraries mapgen village)
-)
+ (name decision)
+ (modules decision)
+ (libraries mapgen village))
 
 (library
-  (name generate)
-  (modules generate )
-  (libraries mapgen village decision)
-)
+ (name dumpmap)
+ (modules dumpmap)
+ (libraries mapgen yojson))
 
 (library
-  (name dumpmap)
-  (modules dumpmap)
-  (libraries mapgen yojson)
-)
-
-(library
-  (name decision)
-  (modules decision)
-  (libraries mapgen village)
-)
-
-(library
-  (name generate)
-  (modules generate )
-  (libraries mapgen village decision)
-)
-
+ (name generation)
+ (modules generation)
+ (libraries mapgen village decision))
