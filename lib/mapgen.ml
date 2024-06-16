@@ -9,11 +9,7 @@ type building = House | Quarry | Sawmill | Farm
 type tile = Tile of (building option) * int
 
 (* A chunk is a 4*4 tile matrix associated with its biome *)
-<<<<<<< HEAD
-type chunk = ((tile array) array) * biome * int
-=======
 type chunk = Chunk of ((tile array) array) * biome | None
->>>>>>> 9982793 ([Mapgen] It outputs a json map)
 (* A n*n map is a n/4*n/4 chunk matrix *)
 type map = ((chunk array) array)
 

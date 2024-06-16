@@ -1,5 +1,5 @@
 
-(*open Village*)
+open Village
 (*              Temp *)
 
 
@@ -121,7 +121,7 @@ let rec search (data:data) ressource = match data with
   | (e, x)::_ when e = ressource -> x 
   | _::q -> search q ressource
 ;; 
-
+(*
 (* Tests if the passed condition is fullfilled *)
 let test difference (condition:condition) = 
   let needed_percent, inequality, ressource = condition in
@@ -133,6 +133,7 @@ let test difference (condition:condition) =
     | x, Surplus when x < 0 -> false
     | x, _ -> (x > needed_percent)
 ;;
+*)
 (* Calculate the number of people in the village *)
 let calcul_of_people (data:data):data = 
   let food = (search data Food )in
@@ -216,7 +217,6 @@ let evolution_par_tour (village:village) (map:map) =
 
 
 
-  let ratio = get_ratio new_logistics in
   let a, _ = new_logistics in
   (* let stockpile = match with *)
 

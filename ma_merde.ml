@@ -98,3 +98,4 @@ let village_exp:village = 1, Vide, (stock_exp, needed_exp), (1, 1), [(1,1);(0,0)
 let a = destroy_build (stock_exp,needed_exp) ([(1,1);(0,0)]) map 
 ;;
 map 
+Hashtbl
