@@ -1,16 +1,4 @@
-open Yojson.Safe
 open Mapgen
-
-let print_matrix_list list =
-  List.iter
-    (fun x ->
-      List.iter
-        (fun y ->
-          print_int y;
-          print_char ' ')
-        x;
-      print_char '\n')
-    list
 
 let tile_to_json tile =
   let z = get_tile_z tile in
@@ -24,14 +12,17 @@ let tile_to_json tile =
   in
   `Assoc [ ("tile", tile_data) ]
 
+(* Converts an array to a json object *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
 let array_to_json_list to_json (array : 'a array) =
   let n = Array.length array in
+  (* Converts an array to a list *)
   let rec listify index =
     if index = n then [] else to_json array.(index) :: listify (index + 1)
   in
   `List (listify 0)
 
+(* Converts a 2-dimensional array to a json object *)
 let matrix_to_json_list to_json matrix =
   let n = Array.length matrix in
   let rec listify index =
@@ -42,7 +33,6 @@ let matrix_to_json_list to_json matrix =
 
 let serialize_chunk (chunk : chunk) =
   let biome = get_chunk_biome chunk in
-  (* let to_json = (fun x -> `Int x) in *)
   let tiles = get_chunk_tiles chunk in
   `Assoc
     [

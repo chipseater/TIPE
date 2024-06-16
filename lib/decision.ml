@@ -1,4 +1,5 @@
 open Village
+open Mapgen
 
 (* Create the new logistics *)
 let rec update_logistics (logistics : logistics) : logistics =
@@ -20,23 +21,22 @@ let rec get_ratio (logistics : logistics) : data =
   | (e, d) :: q, (_, f) :: s -> (e, d * 100 / f) :: get_ratio (q, s)
 
 (* Evaluates to the amount of the passed ressource that is con/cal *)
-let rec search (data:data) ressource =
+let rec search (data : data) ressource =
   match data with
   | [] -> failwith "4.Not Defined"
   | (e, x) :: _ when e = ressource -> x
   | _ :: q -> search q ressource
 
 (* Tests if the passed condition is fullfilled *)
-let test difference (condition:condition) = 
+let test difference (condition : condition) =
   let needed_percent, inequality, ressource = condition in
   (* Retrieves the ratio between the stocks and the needs *)
   let ressource_ratio = search difference ressource in
   let ratio = ressource_ratio - needed_percent in
-  match ratio, inequality with
-    | x, Lack when x > 0 -> false 
-    | x, Surplus when x < 0 -> false
-    | x, _ -> (x > needed_percent)
-;;
+  match (ratio, inequality) with
+  | x, Lack when x > 0 -> false
+  | x, Surplus when x < 0 -> false
+  | x, _ -> x > needed_percent
 
 (* Calculate the number of people in the village *)
 let calcul_of_people (data : data) : data =
@@ -47,41 +47,37 @@ let calcul_of_people (data : data) : data =
     addition_data data
       [ (Bed, 0); (Food, 0); (People, bed - people); (Stone, 0); (Wood, 0) ]
   else
-    let remain_bed = bed - people in
-    if food < remain_bed then
+    let remaining_beds = bed - people in
+    if food < remaining_beds then
       addition_data data
         [ (Bed, 0); (Food, -food); (People, food); (Stone, 0); (Wood, 0) ]
     else
       addition_data data
         [
           (Bed, 0);
-          (Food, -remain_bed);
-          (People, remain_bed);
+          (Food, -remaining_beds);
+          (People, remaining_beds);
           (Stone, 0);
           (Wood, 0);
         ]
 
-(* Update the number of people *)
+(*  *)
 let update_people (logistics : logistics) : logistics =
   match logistics with stock, need -> ((calcul_of_people stock : data), need)
 
-(* Calcul la nouvelle table de data  *)
+(* Calcul la nouvelle table de data *)
 let update_all_logistics (logistics : logistics) =
   let temp_logistics = update_people logistics in
   let new_logistics = update_logistics temp_logistics in
   (new_logistics : logistics)
 
-(*    Ok      *)
 (* Set None to the tile i j on the chunk x y *)
 let set_None_to (map : map) (i : int) (j : int) (x : int) (y : int) : unit =
-  let chunk = match map.(x).(y) with Chunk (a, _) -> a in
-  let tile = chunk.(i).(j) in
-  match tile with
-  | Tile (a, b) ->
-      chunk.(i).(j) <- Tile (None, b);
-      ()
+  let chunk = map.(x).(y) in
+  let tile_z = get_tile_z (get_chunk_tiles chunk).(i).(j) in
+  (get_chunk_tiles chunk).(i).(j) <- Tile (None, tile_z)
 
-(* Calcul la nouvelle table de donnée en modifiant la map *)
+(* Calcule la nouvelle table de donnée en modifiant la map *)
 let destroy_build (logistics : logistics) (position_list : position list)
     (map : map) : logistics =
   let temp_logistics = update_people logistics in
@@ -100,7 +96,6 @@ let destroy_build (logistics : logistics) (position_list : position list)
           set_None_to map (i - 1) (j - 1) x y;
           parcours_chunk i j map.(x).(y) stock x y)
   in
-
   let rec parcours_list (l : position list) (stock : data) =
     match l with
     | [] -> failwith "Invalid Arg d.1"
@@ -113,7 +108,6 @@ let destroy_build (logistics : logistics) (position_list : position list)
              (stock : data)
              x y)
   in
-
   let _ = parcours_list position_list stoc in
   update_all_logistics logistics
 
@@ -124,31 +118,33 @@ let lack_of_people (logistics : logistics) (old_logistics : logistics)
   else logistics
 
 (* Make all action in one turn *)
-let evolution_par_tour (village : village) (map : map) =
-  let _, tree, logistics, _, chunk_list = village in
-  let stock_temp, _ = logistics in
-  let logistics1 = (stock_temp, chunk_list_parcour chunk_list map) in
-  let temp_logistics = update_all_logistics logistics1 in
-  let new_logistics = lack_of_people temp_logistics logistics chunk_list map in
+(* let evolution_par_tour (village : village) (map : map) =
+   let _, tree, logistics, _, chunk_list = village in
+   let stock_temp, _ = logistics in
+   let logistics1 = (stock_temp, chunk_list_parcour chunk_list map) in
+   let temp_logistics = update_all_logistics logistics1 in
+   let new_logistics = lack_of_people temp_logistics logistics chunk_list map in
 
-  let a, _ = new_logistics in
+   let a, _ = new_logistics in
 
-  (* let stockpile = match with *)
+   (* let stockpile = match with *)
 
-  (* Do action defined by the node, lack of the implementation of the village *)
-  let to_do action = () in
+   (* Do action defined by the node, lack of the implementation of the village *)
+   let to_do action = () in
 
-  let rec eval tree =
-    match tree with
-    | Vide -> failwith "1.Invalid Argument"
-    | Node (cond, tree_verif, tree_not_verif, act) -> (
-        let is_condition_fulfilled = test ratio cond in
-        match (tree_verif, tree_not_verif) with
-        | Vide, Vide -> to_do act
-        | Vide, a -> if is_condition_fulfilled then to_do act else eval a
-        | a, Vide -> if is_condition_fulfilled then eval a else to_do act
-        | a, b -> if is_condition_fulfilled then eval a else eval b)
-  in eval tree
+   let rec eval tree =
+     match tree with
+     | Vide -> failwith "1.Invalid Argument"
+     | Node (cond, tree_verif, tree_not_verif, act) -> (
+         let is_condition_fulfilled = test ratio cond in
+         match (tree_verif, tree_not_verif) with
+         | Vide, Vide -> to_do act
+         | Vide, a -> if is_condition_fulfilled then to_do act else eval a
+         | a, Vide -> if is_condition_fulfilled then eval a else to_do act
+         | a, b -> if is_condition_fulfilled then eval a else eval b)
+   in
+   eval tree
+*)
 
 let stock_exp : data =
   [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ]
@@ -227,6 +223,4 @@ let map =
 let village_exp : village =
   (1, Vide, (stock_exp, needed_exp), (1, 1), [ (1, 1); (0, 0) ])
 
-let a = destroy_build (stock_exp, needed_exp) [ (1, 1); (0, 0) ] map;;
-
-map
+let a = destroy_build (stock_exp, needed_exp) [ (1, 1); (0, 0) ] map
