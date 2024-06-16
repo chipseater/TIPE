@@ -1,17 +1,13 @@
 (library
  (name mapgen)
- (modules mapgen)
-)
+ (modules mapgen))
 
 (library
-  (name village)
-  (modules village)
-  (libraries mapgen)
-)
+ (name village)
+ (modules village)
+ (libraries mapgen))
 
 (library
-  (name dumpmap)
-  (modules dumpmap)
-  (libraries mapgen yojson)
-)
-
+ (name dumpmap)
+ (modules dumpmap)
+ (libraries mapgen yojson))
