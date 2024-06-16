@@ -225,7 +225,7 @@ let gen_map n nb_biomes z_width octaves =
   let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
   let biomes = gen_biomes n nb_biomes in
   let z_map = perlin_map n z_width octaves
-    |> upscale_matrix_to_int z_max in
+    |> upscale_matrix_to_int (2. *. z_max) in
   for i = 0 to nb_of_chunk - 1 do
     for j = 0 to nb_of_chunk - 1 do
       let z_values = submatrix z_map (i, j) chunk_width in

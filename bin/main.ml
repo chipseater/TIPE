@@ -4,7 +4,7 @@ open Dumpmap;;
 open Yojson.Safe;;
 
 
-let map = (gen_map 100 10 10 1);;
+let map = (gen_map 100 100 10 2);;
 let n = Array.length map;;
 print_int n;;
 map

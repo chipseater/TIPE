@@ -35,10 +35,9 @@ let matrix_to_json_list to_json matrix =
 
 let serialize_chunk (chunk: chunk) = 
   let biome = get_chunk_biome chunk in
-  (* let to_json = (fun x -> `Int x) in *)
   let tiles = get_chunk_tiles chunk in
   `Assoc [
-    ("chunk_z", `List [matrix_to_json_list tile_to_json tiles]); 
+    ("chunk_z", matrix_to_json_list tile_to_json tiles); 
     ("biome", `String (biome_to_string biome))
   ]
 
