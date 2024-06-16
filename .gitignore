@@ -1,4 +1,5 @@
 _build
+.vscode
 README.pdf
 map.json
 jupyter/.ipynb_checkpoints
