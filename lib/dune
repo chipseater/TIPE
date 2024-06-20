@@ -16,4 +16,3 @@
  (name dumpmap)
  (modules dumpmap)
  (libraries mapgen yojson))
-

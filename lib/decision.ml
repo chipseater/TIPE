@@ -113,7 +113,7 @@ let destroy_build (logistics : logistics) (position_list : position list)
 
 let lack_of_people (logistics : logistics) (old_logistics : logistics)
     (chunk_list : position list) (map : map) =
-  let data, need = logistics in
+  let data, _ = logistics in
   if search data People < 0 then destroy_build old_logistics chunk_list map
   else logistics
 
@@ -146,69 +146,3 @@ let lack_of_people (logistics : logistics) (old_logistics : logistics)
    eval tree
 *)
 
-let stock_exp : data =
-  [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ]
-
-let needed_exp : data =
-  [ (Bed, 0); (Food, 100); (People, -25); (Stone, 0); (Wood, 0) ]
-
-let mock_chunk1 =
-  Chunk
-    ( [|
-        [|
-          Tile (None, 10);
-          Tile (None, 11);
-          Tile (Some House, 12);
-          Tile (None, 13);
-        |];
-        [|
-          Tile (None, 9);
-          Tile (None, 10);
-          Tile (Some Quarry, 11);
-          Tile (None, 12);
-        |];
-        [|
-          Tile (None, 10); Tile (None, 10); Tile (Some Farm, 11); Tile (None, 11);
-        |];
-        [|
-          Tile (None, 11);
-          Tile (None, 10);
-          Tile (Some House, 12);
-          Tile (None, 10);
-        |];
-      |],
-      Forest )
-
-let mock_chunk2 =
-  Chunk
-    ( [|
-        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
-        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
-        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
-        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
-      |],
-      Forest )
-
-let mock_chunk3 =
-  Chunk
-    ( [|
-        [|
-          Tile (None, 10); Tile (Some Farm, 11); Tile (None, 12); Tile (None, 13);
-        |];
-        [|
-          Tile (None, 9);
-          Tile (Some Farm, 10);
-          Tile (Some House, 11);
-          Tile (None, 12);
-        |];
-        [|
-          Tile (None, 10);
-          Tile (Some Farm, 10);
-          Tile (Some House, 11);
-          Tile (None, 11);
-        |];
-        [|
-          Tile (None, 11); Tile (Some Farm, 10); Tile (None, 12); Tile (None, 10);
-        |];
-      |],
-      Forest )
