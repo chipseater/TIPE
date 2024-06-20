@@ -88,10 +88,10 @@ let destroy_build (logistics : logistics) (position_list : position list)
     | i, _ when i = 0 -> void_data
     | i, j when j = 0 -> parcours_chunk (i - 1) chunk_width chunk stock x y
     | i, j ->
-        let w = checkup_tile (get_tile chunk).(i - 1).(j - 1) in
+        let w = get_production_from_tile (get_chunk_tiles chunk).(i - 1).(j - 1) in
         let a = search w People in
         let b = search stock People in
-        if a < b then parcours_chunk i (j - 1) chunk (sum_chunk_production w stock) x y
+        if a < b then parcours_chunk i (j - 1) chunk (sum_data w stock) x y
         else (
           set_None_to map (i - 1) (j - 1) x y;
           parcours_chunk i j map.(x).(y) stock x y)
