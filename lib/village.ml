@@ -1,46 +1,34 @@
 open Mapgen
-(*
-   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                 Type
-   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-*)
-(* Village *)
 
 type ressource = Food | People | Stone | Wood | Bed
 
-(* Contains a dictionnary with the ressources status *)
+(* Dictionnaire contenant des ressources et leur quantités *)
 type data = (ressource * int) list
 
-(* Contains both the needed ressources and the village's stockpiles *)
+(* Contient à la fois les ressources nécessaires et les stocks du village *)
 type logistics = data * data
 type position = int * int
 
-(*  Tree *)
-
+(* Arbre *)
 type ing = Surplus | Lack
 
-(*More laiter or to vanish*)
+(* Soit le type verb sera suprimé, soit il y aura d'autres constructeurs à l'avenir *)
 type verb = Build
 type action = verb * building
 type condition = int * ing * ressource
 type tree = Vide | Node of condition * tree * tree * action
 
-(* ID / Decision tree / Ressource table / Center coordonate / Chunk's coordonate list *)
+(* Id / arbre de décision/ table de ressource 
+  / coordonées du centre / liste des chunks du village
+*)
 type village = int * tree * logistics * position * position list
 
-(*
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Global Value   
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Divide by ?? to have real value
-          *)
+(* Valeurs globales *)
+(* Les productions seront divisés par un certain coeficient dans le futur *)
 let void_data : data =
   [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ]
 
-(* Need change *)
+(* À équilibrer *)
 let house_data_prodution : data =
   [ (Bed, 5); (Food, 0); (People, -1); (Stone, 0); (Wood, 0) ]
 
@@ -53,20 +41,18 @@ let farm_data_prodution : data =
 let sawmill_data_prodution : data =
   [ (Bed, 0); (Food, 0); (People, -10); (Stone, 0); (Wood, 50) ]
 
-(*
-           Fonction
-*)
-(*Combine two data type *)
-let rec addition_data (l1 : data) (l2 : data) =
+(* Fonction *)
+(* Additionne deux dictionnaires de ressources *)
+let rec sum_data (l1 : data) (l2 : data) =
   match (l1, l2) with
   | (r1, _) :: _, (r2, _) :: _ when r1 != r2 ->
-      raise (Invalid_argument "Not same ressource's place")
+      raise (Invalid_argument "Not the same ressource's place")
   | [], [] -> []
-  | _, [] | [], _ -> raise (Invalid_argument "Not same size")
-  | (r1, v1) :: q1, (_, v2) :: q2 -> (r1, v1 + v2) :: addition_data q1 q2
+  | _, [] | [], _ -> raise (Invalid_argument "Not the same size")
+  | (r1, v1) :: q1, (_, v2) :: q2 -> (r1, v1 + v2) :: sum_data q1 q2
 
-(* Give the associed data of the tile *)
-let checkup_tile (tile : tile) : data =
+(* Renvoie la production de la tuile d'après le batiment qu'il contient *)
+let get_production_from_tile (tile : tile) : data =
   match tile with
   | Tile (None, _) -> void_data
   | Tile (Some e, _) -> (
@@ -76,23 +62,21 @@ let checkup_tile (tile : tile) : data =
       | Farm -> farm_data_prodution
       | Sawmill -> sawmill_data_prodution)
 
-(* Get only the tile *)
-let get_tile (chunk : chunk) = match chunk with Chunk (t, _) -> t
+let sum_chunk_production chunk =
+  let chunk_production = ref void_data in
+  for i = 0 to chunk_width - 1 do
+    for j = 0 to chunk_width - 1 do
+      let tile = (get_chunk_tiles chunk).(i).(j) in
+      let tile_production = get_production_from_tile tile in
+      chunk_production := sum_data tile_production !chunk_production
+    done
+  done;
+  !chunk_production
 
-(* Chunk parcours *)
-let checkup_chunk (chunk : chunk) =
-  let rec parcours_chunk (i : int) (j : int) =
-    match (i, j) with
-    | i, _ when i = 0 -> void_data
-    | i, j when j = 0 -> parcours_chunk (i - 1) chunk_width
-    | i, j ->
-        let x = checkup_tile (get_tile chunk).(i - 1).(j - 1) in
-        addition_data x (parcours_chunk i (j - 1))
-  in
-  parcours_chunk chunk_width chunk_width
-
-let rec chunk_list_parcour (liste : position list) (map : map) =
-  match liste with
+(* Sums the production of the chunk contained in the list *)
+let rec sum_chunk_list_production (chunk_list: position list) (map : map) =
+  match chunk_list with
   | (i, j) :: q ->
-      addition_data (checkup_chunk map.(i).(j)) (chunk_list_parcour q map)
+      let production = sum_chunk_production map.(i).(j) in
+      sum_data production (sum_chunk_list_production q map)
   | [] -> void_data

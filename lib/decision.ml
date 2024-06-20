@@ -44,15 +44,15 @@ let calcul_of_people (data : data) : data =
   let bed = search data Bed in
   let people = search data People in
   if people > bed then
-    addition_data data
+    sum_data data
       [ (Bed, 0); (Food, 0); (People, bed - people); (Stone, 0); (Wood, 0) ]
   else
     let remaining_beds = bed - people in
     if food < remaining_beds then
-      addition_data data
+      sum_data data
         [ (Bed, 0); (Food, -food); (People, food); (Stone, 0); (Wood, 0) ]
     else
-      addition_data data
+      sum_data data
         [
           (Bed, 0);
           (Food, -remaining_beds);
@@ -91,7 +91,7 @@ let destroy_build (logistics : logistics) (position_list : position list)
         let w = checkup_tile (get_tile chunk).(i - 1).(j - 1) in
         let a = search w People in
         let b = search stock People in
-        if a < b then parcours_chunk i (j - 1) chunk (addition_data w stock) x y
+        if a < b then parcours_chunk i (j - 1) chunk (sum_chunk_production w stock) x y
         else (
           set_None_to map (i - 1) (j - 1) x y;
           parcours_chunk i j map.(x).(y) stock x y)
@@ -212,15 +212,3 @@ let mock_chunk3 =
         |];
       |],
       Forest )
-
-let map =
-  [|
-    [| mock_chunk1; mock_chunk2; mock_chunk2 |];
-    [| mock_chunk2; mock_chunk3; mock_chunk2 |];
-    [| mock_chunk2; mock_chunk2; mock_chunk2 |];
-  |]
-
-let village_exp : village =
-  (1, Vide, (stock_exp, needed_exp), (1, 1), [ (1, 1); (0, 0) ])
-
-let a = destroy_build (stock_exp, needed_exp) [ (1, 1); (0, 0) ] map
