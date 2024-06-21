@@ -28,17 +28,69 @@ let rec search (data : data) ressource =
   | (e, x) :: _ when e = ressource -> x
   | _ :: q -> search q ressource
 
-(* Tests if the passed condition is fullfilled *)
+
+                                                          (* A Changer *)
+(* Tests if the passed condition is fullfilled
 let test difference (condition : condition) =
-  let needed_percent, inequality, ressource = condition in
+  let needed_percent, inequality, ressource,ressource2  = condition in
   (* Retrieves the ratio between the stocks and the needs *)
   let ressource_ratio = search difference ressource in
   let ratio = ressource_ratio - needed_percent in
   match (ratio, inequality) with
   | x, Lack when x > 0 -> false
   | x, Surplus when x < 0 -> false
-  | x, _ -> x > needed_percent
+  | x, _ -> x > needed_percent *)
 
+
+  let ingpercent r1 r2 ing x donnee:bool =
+    let nr1 = search donnee r1 in
+    let nr2 = search donnee r2 in
+    match ing with
+    |More -> begin 
+      let dif = (nr1 - nr2)*100/nr1 in
+      if nr1 > nr2 then (dif > x) else false
+    end
+    |Less -> begin 
+      let dif = (nr1 - nr2)/nr1 in
+      if nr1 < nr2 then (dif > x) else false
+    end
+  ;;
+  let ingflat r1 r2 ing x donnee:bool =
+    let nr1 = search donnee r1 in
+    let nr2 = search donnee r2 in
+    match ing with
+    |More -> begin 
+      let dif = nr1 - nr2 in
+      if nr1 > nr2 then (dif > x) else false
+    end
+    |Less -> begin 
+      let dif = nr1 - nr2 in
+      if nr1 < nr2 then (dif > x) else false
+    end
+  ;;
+let equalpercent r1 r2 x donnee =  
+  let nr1 = search donnee r1 in
+  let nr2 = search donnee r2 in
+  let dif = nr1 - nr2 in 
+  false
+;;
+let equalflat r1 r2 x donnee = 
+  let nr1 = search donnee r1 in
+  let nr2 = search donnee r2 in
+  let dif = nr1 - nr2 in 
+  let test = if dif < 0 then -dif else dif in 
+  test < x
+;;
+
+  let test (donnee:data) (condition:condition):bool = 
+  match condition with
+  |Ingpercent   (r1,r2,ing,x) -> ingpercent r1 r2 ing x donnee
+  |Ingflat      (r1,r2,ing,x) -> ingflat r1 r2 ing x donnee
+  |Equalflat    (r1,r2,x)     -> equalflat r1 r2 x         
+  |Equalpercent (r1,r2,x)     -> equalpercent r1 r2 x 
+
+
+;;
 (* Calculate the number of people in the village *)
 let calcul_of_people (data : data) : data =
   let food = search data Food in

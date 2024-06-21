@@ -11,12 +11,16 @@ type logistics = data * data
 type position = int * int
 
 (* Arbre *)
-type ing = Surplus | Lack
+type ing = More | Less
 
 (* Soit le type verb sera suprimé, soit il y aura d'autres constructeurs à l'avenir *)
 type verb = Build
 type action = verb * building
-type condition = int * ing * ressource
+(*  *)
+type condition = Ingpercent of ressource * ressource * ing * int 
+                |Ingflat of ressource * ressource * ing * int 
+                |Equalpercent of ressource * ressource * int 
+                |Equalflat of ressource * ressource * int
 type tree = Vide | Node of condition * tree * tree * action
 
 (* Id / arbre de décision/ table de ressource
