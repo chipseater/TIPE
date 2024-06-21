@@ -21,3 +21,4 @@
  (name mapmanage)
  (modules mapmanage)
  (libraries mapgen))
+
