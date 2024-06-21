@@ -1,6 +1,6 @@
 open Mapgen
 
-let tile_to_json tile =
+(* let tile_to_json tile =
   let z = get_tile_z tile in
   let building = get_tile_building tile in
   let tile_data =
@@ -10,7 +10,7 @@ let tile_to_json tile =
         `Assoc [ ("building", `String (building_to_string building)) ];
       ]
   in
-  `Assoc [ ("tile", tile_data) ]
+  `Assoc [ ("tile", tile_data) ] *)
 
 (* Converts an array to a json object *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
@@ -31,13 +31,13 @@ let matrix_to_json_list to_json matrix =
   in
   `List (listify 0)
 
-let serialize_chunk (chunk : chunk) =
+(* let serialize_chunk (chunk : chunk) =
   let biome = get_chunk_biome chunk in
   let tiles = get_chunk_tiles chunk in
   `Assoc
     [
       ("chunk_z", `List [ matrix_to_json_list tile_to_json tiles ]);
       ("biome", `String (biome_to_string biome));
-    ]
-
-let serialize_map map = `List [ matrix_to_json_list serialize_chunk map ]
+    ] *)
+(* 
+let serialize_map map = `List [ matrix_to_json_list serialize_chunk map ] *)
