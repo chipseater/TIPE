@@ -1,4 +1,5 @@
 open Mapgen
+open Mapmanage
 
 type ressource = Food | People | Stone | Wood | Bed
 
@@ -18,8 +19,8 @@ type action = verb * building
 type condition = int * ing * ressource
 type tree = Vide | Node of condition * tree * tree * action
 
-(* Id / arbre de décision/ table de ressource 
-  / coordonées du centre / liste des chunks du village
+(* Id / arbre de décision/ table de ressource
+   / coordonées du centre / liste des chunks du village
 *)
 type village = int * tree * logistics * position * position list
 
@@ -74,7 +75,7 @@ let sum_chunk_production chunk =
   !chunk_production
 
 (* Sums the production of the chunk contained in the list *)
-let rec sum_chunk_list_production (chunk_list: position list) (map : map) =
+let rec sum_chunk_list_production (chunk_list : position list) (map : map) =
   match chunk_list with
   | (i, j) :: q ->
       let production = sum_chunk_production map.(i).(j) in

@@ -5,15 +5,19 @@
 (library
  (name village)
  (modules village)
- (libraries mapgen))
+ (libraries mapgen mapmanage))
 
 (library
  (name decision)
  (modules decision)
- (libraries mapgen village))
+ (libraries mapgen mapmanage village))
 
 (library
  (name dumpmap)
  (modules dumpmap)
- (libraries mapgen yojson))
+ (libraries mapgen mapmanage yojson))
 
+(library
+ (name mapmanage)
+ (modules mapmanage)
+ (libraries mapgen))
