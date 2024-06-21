@@ -16,15 +16,15 @@ let rec update_logistics (logistics : logistics) : logistics =
 (* Create the ratio of all ressources *)
 let rec get_ratio (logistics : logistics) : data =
   match logistics with
-  | [], _ :: _ | _ :: _, [] -> raise (Invalid_Argument "Logistics tuple malformed (not the same length for both dicts)")
-  | (e, _) :: _, (r, _) :: _ when e <> r -> raise (Invalid_Argument "Logistics tuple malformed (Ressources do not match across dicts)")
+  | [], _ :: _ | _ :: _, [] -> raise (Invalid_argument "Logistics tuple malformed (not the same length for both dicts)")
+  | (e, _) :: _, (r, _) :: _ when e <> r -> raise (Invalid_argument "Logistics tuple malformed (Ressources do not match across dicts)")
   | [], [] -> []
   | (e, d) :: q, (_, f) :: s -> (e, d * 100 / f) :: get_ratio (q, s)
 
 (* Evaluates to the amount of the passed ressource that is con/cal *)
 let rec search (data : data) ressource =
   match data with
-  | [] -> raise (Invalid_Argument "Ressource not found in data dict")
+  | [] -> raise (Invalid_argument "Ressource not found in data dict")
   | (e, x) :: _ when e = ressource -> x
   | _ :: q -> search q ressource
 
@@ -86,8 +86,8 @@ let equalflat r1 r2 x donnee =
   match condition with
   |Ingpercent   (r1,r2,ing,x) -> ingpercent r1 r2 ing x donnee
   |Ingflat      (r1,r2,ing,x) -> ingflat r1 r2 ing x donnee
-  |Equalflat    (r1,r2,x)     -> equalflat r1 r2 x         
-  |Equalpercent (r1,r2,x)     -> equalpercent r1 r2 x 
+  |Equalflat    (r1,r2,x)     -> equalflat r1 r2 x donnee
+  |Equalpercent (r1,r2,x)     -> equalpercent r1 r2 x donnee
 
 
 ;;
@@ -152,7 +152,7 @@ let destroy_build (logistics : logistics) (position_list : position list)
         else (
           (* set_None_to map (i - 1) (j - 1) x y; *)
           let chunk = map.(x).(y) in
-          mutate_building_in_chunk chunk None i j
+          (* mutate_building_in_chunk chunk None i j *)
           parcours_chunk i j map.(x).(y) stock x y)
   in
   let rec parcours_list (l : position list) (stock : data) =
