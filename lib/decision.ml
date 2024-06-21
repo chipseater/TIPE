@@ -1,4 +1,5 @@
 open Village
+open Mapmanage
 open Mapgen
 
 (* Create the new logistics *)
@@ -15,15 +16,15 @@ let rec update_logistics (logistics : logistics) : logistics =
 (* Create the ratio of all ressources *)
 let rec get_ratio (logistics : logistics) : data =
   match logistics with
-  | [], _ :: _ | _ :: _, [] -> failwith "2.Lack ressource"
-  | (e, _) :: _, (r, _) :: _ when e <> r -> failwith "3.Not the same ressource"
+  | [], _ :: _ | _ :: _, [] -> raise (Invalid_Argument "Logistics tuple malformed (not the same length for both dicts)")
+  | (e, _) :: _, (r, _) :: _ when e <> r -> raise (Invalid_Argument "Logistics tuple malformed (Ressources do not match across dicts)")
   | [], [] -> []
   | (e, d) :: q, (_, f) :: s -> (e, d * 100 / f) :: get_ratio (q, s)
 
 (* Evaluates to the amount of the passed ressource that is con/cal *)
 let rec search (data : data) ressource =
   match data with
-  | [] -> failwith "4.Not Defined"
+  | [] -> raise (Invalid_Argument "Ressource not found in data dict")
   | (e, x) :: _ when e = ressource -> x
   | _ :: q -> search q ressource
 
@@ -61,7 +62,6 @@ let calcul_of_people (data : data) : data =
           (Wood, 0);
         ]
 
-(*  *)
 let update_people (logistics : logistics) : logistics =
   match logistics with stock, need -> ((calcul_of_people stock : data), need)
 
@@ -72,28 +72,35 @@ let update_all_logistics (logistics : logistics) =
   (new_logistics : logistics)
 
 (* Set None to the tile i j on the chunk x y *)
-let set_None_to (map : map) (i : int) (j : int) (x : int) (y : int) : unit =
+(* let set_None_to (map : map) (i : int) (j : int) (x : int) (y : int) : unit =
   let chunk = map.(x).(y) in
   let tile_z = get_tile_z (get_chunk_tiles chunk).(i).(j) in
-  (get_chunk_tiles chunk).(i).(j) <- Tile (None, tile_z)
+  (get_chunk_tiles chunk).(i).(j) <- Tile (None, tile_z) *)
 
 (* Calcule la nouvelle table de donnée en modifiant la map *)
+(* T'aurais pas moyen de clarifier ta fonction stp ? *)
 let destroy_build (logistics : logistics) (position_list : position list)
     (map : map) : logistics =
   let temp_logistics = update_people logistics in
   let stoc, _ = temp_logistics in
   let rec parcours_chunk (i : int) (j : int) (chunk : chunk) (stock : data)
       (x : int) (y : int) =
+    (* Stp Sylvain mets une boucle for à la place *)
     match (i, j) with
     | i, _ when i = 0 -> void_data
     | i, j when j = 0 -> parcours_chunk (i - 1) chunk_width chunk stock x y
     | i, j ->
-        let w = get_production_from_tile (get_chunk_tiles chunk).(i - 1).(j - 1) in
+        (* Explicite tes noms de variable stp, j'ai aucune idée de ce que tu veux faire *)
+        let w =
+          get_production_from_tile (get_chunk_tiles chunk).(i - 1).(j - 1)
+        in
         let a = search w People in
         let b = search stock People in
         if a < b then parcours_chunk i (j - 1) chunk (sum_data w stock) x y
         else (
-          set_None_to map (i - 1) (j - 1) x y;
+          (* set_None_to map (i - 1) (j - 1) x y; *)
+          let chunk = map.(x).(y) in
+          mutate_building_in_chunk chunk None i j
           parcours_chunk i j map.(x).(y) stock x y)
   in
   let rec parcours_list (l : position list) (stock : data) =
@@ -145,4 +152,3 @@ let lack_of_people (logistics : logistics) (old_logistics : logistics)
    in
    eval tree
 *)
-

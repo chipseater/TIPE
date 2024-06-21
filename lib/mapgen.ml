@@ -203,16 +203,6 @@ let submatrix matrix corner n =
   done;
   submatrix
 
-let print_int_map map =
-  let n = Array.length map in
-  for i = 0 to n - 1 do
-    for j = 0 to n - 1 do
-      print_int map.(i).(j);
-      print_char ' '
-    done;
-    print_char '\n'
-  done
-
 let gen_map n nb_biomes z_width octaves =
   let nb_of_chunk = n / chunk_width in
   let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
@@ -227,55 +217,3 @@ let gen_map n nb_biomes z_width octaves =
   done;
   map
 
-let print_float_map map =
-  let n = Array.length map in
-  for i = 0 to n - 2 do
-    for j = 0 to n - 2 do
-      print_float map.(i).(j);
-      print_char ' '
-    done;
-    print_float map.(i).(n - 1);
-    print_char '\n'
-  done
-
-let isNone chunk = match chunk with Chunk (_, _) -> false | None -> true
-let biome_to_string = function Forest -> "F" | Desert -> "D" | Plains -> "P"
-
-let building_to_string = function
-  | Some House -> "H"
-  | Some Quarry -> "Q"
-  | Some Sawmill -> "S"
-  | Some Farm -> "F"
-  | None -> "N"
-
-(* type building = House | Quarry | Sawmill | Farm  *)
-let print_biome biome = biome |> biome_to_string |> print_string
-
-let get_chunk_biome = function
-  | Chunk (_, biome) -> biome
-  | None -> raise (Invalid_argument "Manipulating an empty chunk")
-
-let print_chunk_biome chunk =
-  assert (not (isNone chunk));
-  chunk |> get_chunk_biome |> print_biome
-
-let get_tile_z = function Tile (_, z) -> z
-let get_tile_building = function Tile (building, _) -> building
-
-let get_chunk_tiles chunk =
-  match chunk with
-  | Chunk (tiles, _) -> tiles
-  | None -> raise (Invalid_argument "Manipulating an empty chunk")
-
-let get_chunk_z chunk =
-  assert (not (isNone chunk));
-  let chunk_z = Array.make_matrix chunk_width chunk_width 0 in
-  for i = 0 to chunk_width - 1 do
-    for j = 0 to chunk_width - 1 do
-      let tile = (get_chunk_tiles chunk).(i).(j) in
-      chunk_z.(i).(j) <- get_tile_z tile
-    done
-  done;
-  chunk_z
-
-let print_chunk_z chunk = chunk |> get_chunk_z |> print_int_map
