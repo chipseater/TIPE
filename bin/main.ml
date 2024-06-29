@@ -54,3 +54,8 @@ let village_exp =let a =
         let mock_map =  [|[|mock_chunk2;mock_chunk2|];
                           [|mock_chunk1;mock_chunk3|]|]
 
+
+  ;;
+  assert (sum_data stock_exp needed_exp = stock_exp )
+
+                          
