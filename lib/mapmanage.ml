@@ -39,9 +39,9 @@ let get_chunk_z chunk =
     done
   done;
   chunk_z
-(* 
+
 let mutate_building_in_chunk chunk building i j =
-  let tile_z = get_chunk_z (get_chunk_tiles chunk).(i).(j) in
-  (get_chunk_tiles chunk).(i).(j) <- Chunk (tile_z, building) *)
+  let tile_z = get_tile_z (get_chunk_tiles chunk).(i).(j) in
+  (get_chunk_tiles chunk).(i).(j) <- Tile (building,tile_z)
 
   
