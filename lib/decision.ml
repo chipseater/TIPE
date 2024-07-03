@@ -1,67 +1,57 @@
 open Village
-open Mapmanage
-open Mapgen
-
+(* open Mapmanage *)
+(* open Mapgen *)
 
 (* Create the ratio of all ressources
-let rec get_ratio (logistics : logistics) : data =
-  match logistics with
-  | [], _ :: _ | _ :: _, [] -> raise (Invalid_argument "Logistics tuple malformed (not the same length for both dicts)")
-  | (e, _) :: _, (r, _) :: _ when e <> r -> raise (Invalid_argument "Logistics tuple malformed (Ressources do not match across dicts)")
-  | [], [] -> []
-  | (e, d) :: q, (_, f) :: s -> (e, d * 100 / f) :: get_ratio (q, s) *)
+   let rec get_ratio (logistics : logistics) : data =
+     match logistics with
+     | [], _ :: _ | _ :: _, [] -> raise (Invalid_argument "Logistics tuple malformed (not the same length for both dicts)")
+     | (e, _) :: _, (r, _) :: _ when e <> r -> raise (Invalid_argument "Logistics tuple malformed (Ressources do not match across dicts)")
+     | [], [] -> []
+     | (e, d) :: q, (_, f) :: s -> (e, d * 100 / f) :: get_ratio (q, s) *)
 
-
-  let ingpercent r1 r2 ing x donnee:bool =
-    let nr1 = search donnee r1 in
-    let nr2 = search donnee r2 in
-    match ing with
-    |More -> begin 
-      let dif = (nr1 - nr2)*100/nr1 in
-      if nr1 > nr2 then (dif > x) else false
-    end
-    |Less -> begin 
-      let dif = (nr1 - nr2)*100/nr1 in
-      if nr1 < nr2 then (dif > x) else false
-    end
-  ;;
-  let ingflat r1 r2 ing x donnee:bool =
-    let nr1 = search donnee r1 in
-    let nr2 = search donnee r2 in
-    match ing with
-    |More -> begin 
-      let dif = nr1 - nr2 in
-      if nr1 > nr2 then (dif > x) else false
-    end
-    |Less -> begin 
-      let dif = nr1 - nr2 in
-      if nr1 < nr2 then (dif > x) else false
-    end
-  ;;
-let equalpercent r1 r2 x donnee =  
+let ingpercent r1 r2 ing x donnee : bool =
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
-  let dif = nr1 - nr2 in 
+  match ing with
+  | More ->
+      let dif = (nr1 - nr2) * 100 / nr1 in
+      if nr1 > nr2 then dif > x else false
+  | Less ->
+      let dif = (nr1 - nr2) * 100 / nr1 in
+      if nr1 < nr2 then dif > x else false
+
+let ingflat r1 r2 ing x donnee : bool =
+  let nr1 = search donnee r1 in
+  let nr2 = search donnee r2 in
+  match ing with
+  | More ->
+      let dif = nr1 - nr2 in
+      if nr1 > nr2 then dif > x else false
+  | Less ->
+      let dif = nr1 - nr2 in
+      if nr1 < nr2 then dif > x else false
+
+let equalpercent r1 r2 x donnee =
+  let nr1 = search donnee r1 in
+  let nr2 = search donnee r2 in
+  let dif = nr1 - nr2 in
   let som = nr1 + nr2 in
-  (dif*100/som < x)
-;;
-let equalflat r1 r2 x donnee = 
+  dif * 100 / som < x
+
+let equalflat r1 r2 x donnee =
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
-  let dif = nr1 - nr2 in 
-  let test = if dif < 0 then -dif else dif in 
+  let dif = nr1 - nr2 in
+  let test = if dif < 0 then -dif else dif in
   test < x
-;;
 
-  let test (donnee:data) (condition:condition):bool = 
+let test (donnee : data) (condition : condition) : bool =
   match condition with
-  |Ingpercent   (r1,r2,ing,x) -> ingpercent r1 r2 ing x donnee
-  |Ingflat      (r1,r2,ing,x) -> ingflat r1 r2 ing x donnee
-  |Equalflat    (r1,r2,x)     -> equalflat r1 r2 x donnee
-  |Equalpercent (r1,r2,x)     -> equalpercent r1 r2 x donnee
-
-
-;;
+  | Ingpercent (r1, r2, ing, x) -> ingpercent r1 r2 ing x donnee
+  | Ingflat (r1, r2, ing, x) -> ingflat r1 r2 ing x donnee
+  | Equalflat (r1, r2, x) -> equalflat r1 r2 x donnee
+  | Equalpercent (r1, r2, x) -> equalpercent r1 r2 x donnee
 
 (* Make all action in one turn *)
 (* let evolution_par_tour (village : village) (map : map) =
