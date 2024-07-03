@@ -203,6 +203,9 @@ let submatrix matrix corner n =
   done;
   submatrix
 
+(* Fonction de génération de la carte
+n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
+(*  *)
 let gen_map n nb_biomes z_width octaves =
   let nb_of_chunk = n / chunk_width in
   let map = Array.make_matrix nb_of_chunk nb_of_chunk None in

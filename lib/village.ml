@@ -17,7 +17,6 @@ type ing = More | Less
 type verb = Build
 type action = verb * building
 
-(*  *)
 type condition =
   | Ingpercent of ressource * ressource * ing * int
   | Ingflat of ressource * ressource * ing * int
