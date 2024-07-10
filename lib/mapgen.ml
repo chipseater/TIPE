@@ -204,7 +204,7 @@ let submatrix matrix corner n =
   submatrix
 
 (* Fonction de génération de la carte
-n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
+   n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
 (*  *)
 let gen_map n nb_biomes z_width octaves =
   let nb_of_chunk = n / chunk_width in
@@ -213,7 +213,9 @@ let gen_map n nb_biomes z_width octaves =
   let z_map = perlin_map n z_width octaves |> upscale_matrix_to_int z_max in
   for i = 0 to nb_of_chunk - 1 do
     for j = 0 to nb_of_chunk - 1 do
-      let z_values = submatrix z_map (i, j) chunk_width in
+      let z_values =
+        submatrix z_map (i * chunk_width, j * chunk_width) chunk_width
+      in
       let biome = biomes.(i).(j) in
       map.(i).(j) <- gen_empty_chunk z_values biome
     done
