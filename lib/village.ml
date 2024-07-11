@@ -12,10 +12,9 @@ type position = int * int
 
 (* Arbre *)
 type ing = More | Less
-
-(* Soit le type verb sera suprimé, soit il y aura d'autres constructeurs à l'avenir *)
-type verb = Build
-type action = verb * building
+type argument = InCity | OutCity
+type prio = Random | Pref of biome
+type action = argument * building * prio
 
 type condition =
   | Ingpercent of ressource * ressource * ing * int

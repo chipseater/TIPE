@@ -1,4 +1,3 @@
-open Village
 open Mapgen
 open Dumpmap
 
