@@ -34,24 +34,4 @@ let serialize_chunk (chunk : chunk) =
       ("biome", `String (biome_to_string biome));
     ]
 
-let upscale float_map (max : float) =
-  let n = Array.length float_map in
-  let new_map = Array.make_matrix n n 0 in
-  for i = 0 to n - 1 do
-    for j = 0 to n - 1 do
-      new_map.(i).(j) <- int_of_float (max *. float_map.(i).(j))
-    done
-  done;
-  new_map
-
-let print_int_map int_map =
-  let n = Array.length int_map in
-  for i = 0 to n - 1 do
-    for j = 9 to n - 1 do
-      print_int int_map.(i).(j);
-      print_char ' '
-    done;
-    print_char '\n'
-  done
-
 let serialize_map map = matrix_to_json_list serialize_chunk map

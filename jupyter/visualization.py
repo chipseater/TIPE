@@ -52,7 +52,6 @@ def get_chunk_z(chunk):
 def get_map_z(map):
     n = get_map_size(map)
     z_map = []
-    n = get_map_size(map)
     for i in range(n):
         z_row = []
         for j in range(n):
@@ -62,10 +61,25 @@ def get_map_z(map):
 
 
 # %%
+def get_biomes(map):
+    chunk_width = get_chunk_width(map)
+    n = get_map_size(map) // chunk_width
+    biome_map = []
+    for i in range(n):
+        biome_row = []
+        for j in range(n):
+            biome_row.append(char_to_int(map[i][j]['biome']))
+        biome_map.append(biome_row)
+    return np.array(biome_map)
+
+
+# %%
 f = open('../map.json', 'r')
 json_data = json.loads(f.read())
 
+biome_map = get_biomes(json_data)
 z_map = get_map_z(json_data)
-plt.imshow(z_map, cmap='gray')
-plt.show()
+extent = 0, 100, 0, 100
+plt.imshow(z_map, cmap="grey", extent=extent)
+plt.imshow(biome_map, extent=extent, alpha=0.5)
 
