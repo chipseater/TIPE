@@ -1,16 +1,43 @@
 open Village
-(* open Mapmanage *)
-(* open Mapgen *)
+open Mapmanage
+open Mapgen
 
-(* Create the ratio of all ressources
-   let rec get_ratio (logistics : logistics) : data =
-     match logistics with
-     | [], _ :: _ | _ :: _, [] -> raise (Invalid_argument "Logistics tuple malformed (not the same length for both dicts)")
-     | (e, _) :: _, (r, _) :: _ when e <> r -> raise (Invalid_argument "Logistics tuple malformed (Ressources do not match across dicts)")
-     | [], [] -> []
-     | (e, d) :: q, (_, f) :: s -> (e, d * 100 / f) :: get_ratio (q, s) *)
-
-let ingpercent r1 r2 ing x donnee : bool =
+let shuffle arr =
+  let n = Array.length arr in
+  for i = n - 1 downto 1 do
+    let j = Random.int (i + 1) in
+    let temp = arr.(i) in
+    arr.(i) <- arr.(j);
+    arr.(j) <- temp
+  done
+;;
+  let ingpercent r1 r2 ing x donnee:bool =
+    let nr1 = search donnee r1 in
+    let nr2 = search donnee r2 in
+    match ing with
+    |More -> begin 
+      let dif = (nr1 - nr2)*100/nr1 in
+      if nr1 > nr2 then (dif > x) else false
+    end
+    |Less -> begin 
+      let dif = (nr1 - nr2)*100/nr1 in
+      if nr1 < nr2 then (dif > x) else false
+    end
+  ;;
+  let ingflat r1 r2 ing x donnee:bool =
+    let nr1 = search donnee r1 in
+    let nr2 = search donnee r2 in
+    match ing with
+    |More -> begin 
+      let dif = nr1 - nr2 in
+      if nr1 > nr2 then (dif > x) else false
+    end
+    |Less -> begin 
+      let dif = nr1 - nr2 in
+      if nr1 < nr2 then (dif > x) else false
+    end
+  ;;
+let equalpercent r1 r2 x donnee =  
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
   match ing with
@@ -52,32 +79,83 @@ let test (donnee : data) (condition : condition) : bool =
   | Ingflat (r1, r2, ing, x) -> ingflat r1 r2 ing x donnee
   | Equalflat (r1, r2, x) -> equalflat r1 r2 x donnee
   | Equalpercent (r1, r2, x) -> equalpercent r1 r2 x donnee
+;;
 
-(* Make all action in one turn *)
-(* let evolution_par_tour (village : village) (map : map) =
-   let _, tree, logistics, _, chunk_list = village in
-   let stock_temp, _ = logistics in
-   let logistics1 = (stock_temp, chunk_list_parcour chunk_list map) in
-   let temp_logistics = update_all_logistics logistics1 in
-   let new_logistics = lack_of_people temp_logistics logistics chunk_list map in
+let test_not_full (chunk:chunk) : bool =
+    match chunk with
+      | None -> failwith("izeovoap")
+      | Chunk(x,_) -> 
+  begin
+    let t = ref false in
+    for i= 0 to chunk_width do 
+      for j = 0 to chunk_width do 
+        let Tile(c,_) = x.(i).(j) in 
+        if c == None then t := true
+      done 
+    done; !t
+  end
 
-   let a, _ = new_logistics in
+;;
+let buildtile (build:building) (map:map) (table:(int*int) array)= 
+shuffle table ;
 
-   (* let stockpile = match with *)
+()
 
-   (* Do action defined by the node, lack of the implementation of the village *)
-   let to_do action = () in
-
-   let rec eval tree =
-     match tree with
-     | Vide -> failwith "1.Invalid Argument"
-     | Node (cond, tree_verif, tree_not_verif, act) -> (
-         let is_condition_fulfilled = test ratio cond in
-         match (tree_verif, tree_not_verif) with
-         | Vide, Vide -> to_do act
-         | Vide, a -> if is_condition_fulfilled then to_do act else eval a
-         | a, Vide -> if is_condition_fulfilled then eval a else to_do act
-         | a, b -> if is_condition_fulfilled then eval a else eval b)
-   in
-   eval tree
+;;
+let buildin (build:building) (map:map) (pos_list:position list) =
+  
+(*
+let buildin  (build:building) (map:map) (pos_list:position list) = 
+  let n =   List.length pos_list in
+  if n < 230 then begin
+  let table = Array.make (n) (0,0) in 
+    let rec parc pos_list compt = match pos_list with
+    | e::q -> table.(compt) <- e; parc q (compt+1)
+    |[] -> ()
+in parc pos_list 0
+; buildtile build map table
+end
+else begin 
+  let x = (n / 230)+1 in
+let table = Array.make_matrix x (n) (0,0) in 
+  let rec parc pos_list comptcolone compt = match pos_list,compt with
+  | _, c when c = 230 -> parc pos_list (comptcolone+1) 0
+  | e::q,_ -> table.(comptcolone).(compt) <- e; parc q comptcolone (compt+1)
+  |[],_ -> ()
+in parc pos_list 0 0 
+;
+let () = Random.self_init () in
+buildtile build map table.(Random.int x)
+end
+;;
 *)
+let buildout (build:building) (map:map) (pos_list:position list) = 
+
+;;
+
+let to_do (action:action) (map:map) (pos_list:position list) : unit = 
+  let arg,build,pref = action in 
+  if pref = Random then
+  match arg with
+  | InCity  -> buildin build map pos_list
+  | OutCity -> buildout build map pos_list
+  else 
+;;
+
+let rec eval_node (node:tree) (ressource:data) (pos_list:position list) (map:map) = match node with
+| Vide -> failwith ("Empty node")
+| Node(cond,sub_tree_left, sub_tree_right,action) -> match (test ressource cond) with
+| true -> (match sub_tree_left with
+          | Vide -> to_do action map pos_list
+          | Node(a,b,c,d) -> eval_node (Node(a,b,c,d)) ressource
+  )
+|false -> (match sub_tree_right with
+          | Vide -> to_do action map pos_list
+          | Node(a,b,c,d) -> eval_node (Node(a,b,c,d)) ressource
+)
+
+
+
+
+
+

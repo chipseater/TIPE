@@ -14,15 +14,15 @@ type position = int * int
 type ing = More | Less
 
 (* Soit le type verb sera suprimé, soit il y aura d'autres constructeurs à l'avenir *)
-type verb = Build
-type action = verb * building
-
-type condition =
-  | Ingpercent of ressource * ressource * ing * int
-  | Ingflat of ressource * ressource * ing * int
-  | Equalpercent of ressource * ressource * int
-  | Equalflat of ressource * ressource * int
-
+type argument = InCity | OutCity 
+type prio = Random | Pref of biome 
+type action = argument * building * prio
+(*  *)
+type condition = Ingpercent of ressource * ressource * ing * int 
+                |Ingflat of ressource * ressource * ing * int 
+                |Equalpercent of ressource * ressource * int 
+                |Equalflat of ressource * ressource * int
+                
 type tree = Vide | Node of condition * tree * tree * action
 
 (* Id / arbre de décision/ table de ressource
