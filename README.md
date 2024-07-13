@@ -26,7 +26,7 @@ dune exec TIPE
 
 ## Visualisations
 
-Pour générer des visuels à partir d'un fichier `.json`, il faut avoir un setup python capable de lancer des notebook jupyter. On peut utiliser par exemple `pyenv` ou `conda` pour gérer les environnements python, j'utilise pour ma part `pyenv` pour me simplifier la vie.
+Pour générer des visuels à partir d'un fichier `.json`, il faut avoir une installation python capable de lancer des notebook jupyter, j'utilise pour ma part `pyenv`.
 
 ### Pour installer `pyenv` et les dépendances
 
@@ -36,21 +36,44 @@ Pour installer `pyenv`, on peut utiliser le script d'installation automatique
 curl https://pyenv.run | bash
 ```
 
-puis il faut suivre les instructions données en fin d'installation pour ajouter le chargement de `pyenv` au `.bashrc` (ou assimilé).
+Puis il faut ajouter ces lignes à son `~/.bashrc`
 
-Il faut ensuite installer pythonen utilisant `pyenv` puis les dépendences qui conviennent avec `pip`.
+```
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+```
+
+Il faut ensuite installer python en utilisant `pyenv` après avoir redémarré son shell
 
 ```
 pyenv install 3.12
-cd jupyter
-pyenv activate
+```
+
+Il faut ensuite créer un environnement virtuel en se plaçant dans le répertoire `jupyter/` du projet
+
+```
+pyenv virtualenv visualisation
+pyenv activate visualisation
+```
+
+On installe enfin les dépendances nécessaires avec
+
+```
 pip install jupyter jupytext numpy matplotlib
-jupyter notebook
 ```
 
 ### Utilisation du notebook
 
-Pour ouvrir le notebook, il faut aller sur `localhost:8888` et ouvrir `visualization.py` en tant que notebook grâce à `jupytext`.
+Pour lancer le notebook, il faut d'abord activer l'environnement virtuel en se plaçant dans `jupyter/`, puis démarrer jupyter
+```
+pyenv activate visualisation
+jupyter notebook
+```
+
+Pour l'ouvrir, il faut aller sur `localhost:8888` et ouvrir `visualization.py` en tant que notebook.
 
 ![Screenshot pour ouvrir le notebook](./images/open_with_notebook.png)
 
