@@ -10,7 +10,6 @@ let building_to_string = function
   | Some Farm -> "F"
   | None -> "N"
 
-(* type building = House | Quarry | Sawmill | Farm  *)
 let print_biome biome = biome |> biome_to_string |> print_string
 
 let get_chunk_biome = function

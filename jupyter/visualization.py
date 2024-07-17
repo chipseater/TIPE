@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.2
+#       jupytext_version: 1.16.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -79,7 +79,7 @@ json_data = json.loads(f.read())
 
 biome_map = get_biomes(json_data)
 z_map = get_map_z(json_data)
-extent = 0, 100, 0, 100
+extent = 0, 100, 100, 0
 plt.imshow(z_map, cmap="grey", extent=extent)
 plt.imshow(biome_map, extent=extent, alpha=0.5)
 

@@ -1,5 +1,6 @@
 open Mapgen
 open Mapmanage
+open Village
 
 let tile_to_json tile =
   let z = get_tile_z tile in
@@ -32,6 +33,117 @@ let serialize_chunk (chunk : chunk) =
     [
       ("tiles", matrix_to_json_list tile_to_json tiles);
       ("biome", `String (biome_to_string biome));
+    ]
+
+let serialize_ing inequality =
+  match inequality with More -> `String "M" | Less -> `String "L"
+
+let serialize_argument argument =
+  match argument with InCity -> `String "In" | OutCity -> `String "Out"
+
+let serialize_prio prio =
+  match prio with
+  | Random -> `String "RND"
+  | Pref biome -> `String (biome_to_string biome)
+
+let serialize_building building =
+  match building with
+  | House -> `String "H"
+  | Quarry -> `String "Q"
+  | Sawmill -> `String "S"
+  | Farm -> `String "F"
+
+let serialize_action action =
+  let arg, building, prio = action in
+  `Assoc
+    [
+      ("argument", serialize_argument arg);
+      ("building", serialize_building building);
+      ("prio", serialize_prio prio);
+    ]
+
+(* type ressource = Food | People | Stone | Wood | Bed *)
+let serialize_ressource ressource =
+  match ressource with
+  | Food -> `String "F"
+  | People -> `String "P"
+  | Stone -> `String "S"
+  | Wood -> `String "W"
+  | Bed -> `String "B"
+
+(* Fonction stupide qui renvoie le type de la condition sous forme de string *)
+let condition_type_to_string = function
+  | Ingpercent (_, _, _, _) -> "Ingpercent"
+  | Ingflat (_, _, _, _) -> "Ingpercent"
+  | Equalpercent (_, _, _) -> "Equalpercent"
+  | Equalflat (_, _, _) -> "Equalflat"
+
+let serialize_condition condition =
+  match condition with
+  | Ingpercent (rss1, rss2, ing, int) | Ingflat (rss1, rss2, ing, int) ->
+      `Assoc
+        [
+          ("type", `String (condition_type_to_string condition));
+          ("ressource1", serialize_ressource rss1);
+          ("ressource2", serialize_ressource rss2);
+          ("ing", serialize_ing ing);
+          ("int", `Int int);
+        ]
+  | Equalpercent (rss1, rss2, int) | Equalflat (rss1, rss2, int) ->
+      `Assoc
+        [
+          ("type", `String (condition_type_to_string condition));
+          ("ressource1", serialize_ressource rss1);
+          ("ressource2", serialize_ressource rss2);
+          ("int", `Int int);
+        ]
+
+let rec serialize_tree node =
+  match node with
+  | Vide -> `String "V"
+  | Node (cndt, l_child, r_child, action) ->
+      `Assoc
+        [
+          ("condition", serialize_condition cndt);
+          ("l_child", serialize_tree l_child);
+          ("r_child", serialize_tree r_child);
+          ("action", serialize_action action);
+        ]
+
+let serialize_pos position =
+  let x, y = position in
+  `Assoc [ ("x", `Int x); ("y", `Int y) ]
+
+let rec serialize_pos_list pos_list =
+  match pos_list with
+  | pos :: q -> serialize_pos pos :: serialize_pos_list q
+  | [] -> []
+
+let serialize_data data =
+  let rec data_to_list = function
+    | [] -> []
+    | (ressource, qt) :: q ->
+        `Assoc
+          [
+            ("ressource", serialize_ressource ressource); ("quantity", `Int qt);
+          ]
+        :: data_to_list q
+  in
+  `List (data_to_list data)
+
+let serialize_logistics logistics =
+  let stock, prod = logistics in
+  `Assoc [ ("stock", serialize_data stock); ("prod", serialize_data prod) ]
+
+let serialize_village (village : village) =
+  let id, tree, logistics, position, pos_list = village in
+  `Assoc
+    [
+      ("id", `Int id);
+      ("tree", serialize_tree tree);
+      ("logistics", serialize_logistics logistics);
+      ("position", serialize_pos position);
+      ("pos_list", `List (serialize_pos_list pos_list));
     ]
 
 let serialize_map map = matrix_to_json_list serialize_chunk map

@@ -6,7 +6,7 @@ type ressource = Food | People | Stone | Wood | Bed
 (* Dictionnaire contenant des ressources et leur quantités *)
 type data = (ressource * int) list
 
-(* Contient à la fois les ressources nécessaires et les stocks du village *)
+(* Contient à la fois les stocks du village et les ressources produites*)
 type logistics = data * data
 type position = int * int
 
@@ -136,7 +136,10 @@ let update_all_logistics (logistics : logistics) =
   (new_logistics : logistics)
 
 (* Calcule la nouvelle table de donnée en modifiant la map *)
-(* Calcule la logistics a chaque tuile et a chaque fois que la resource main d'oeuvre devient négative je change la case en none et je recalcule la nouvelle table   *)
+(* Calcule la logistics a chaque tuile et a chaque fois que la
+   resource main d'oeuvre devient négative je change la case en none
+   et je recalcule la nouvelle table
+*)
 let destroy_build (logistics : logistics) (position_list : position list)
     (map : map) : logistics =
   let temp_logistics = update_people logistics in
@@ -159,14 +162,12 @@ let destroy_build (logistics : logistics) (position_list : position list)
     done;
     !temp_stock
   in
-
   let rec parcours_list (l : position list) (stock : data) =
     match l with
     | [] -> failwith "Invalid Arg d.1"
     | (x, y) :: [] -> parcours_chunk map.(x).(y) (stock : data)
     | (x, y) :: q -> parcours_list q (parcours_chunk map.(x).(y) (stock : data))
   in
-
   let new_prod = parcours_list position_list stoc in
   update_all_logistics (stoc, new_prod)
 

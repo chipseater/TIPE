@@ -15,7 +15,7 @@
 (library
  (name dumpmap)
  (modules dumpmap)
- (libraries mapgen mapmanage yojson))
+ (libraries mapgen mapmanage yojson village))
 
 (library
  (name mapmanage)
