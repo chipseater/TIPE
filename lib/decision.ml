@@ -74,45 +74,88 @@ let test_not_full (chunk:chunk) : bool =
   end
 
 ;;
+let possibilite chunk =
+  let arr = Array.make 16 (-1,-1) in 
+  match chunk with
+  | None -> failwith("izviuaebiazvbaui") 
+  |Chunk(tab,_) -> begin 
+  let c = ref 0 in
+  for i=0 to chunk_width do 
+    for j=0 to chunk_width do 
+      let Tile(b,_) = (tab.(i).(j)) in 
+      if b == None then arr.(!c) <- (i,j); c := !c +1 
+      done
+    done;
+  end;
+  arr
+;;
 let buildtile (build:building) (map:map) (table:(int*int) array)= 
-shuffle table ;
-
-()
-
+  shuffle table ;
+  let (x,y) = table.(0) in 
+  let temp = map.(x).(y) in 
+  let arr = possibilite temp in 
+  shuffle arr ; 
+  let rec choice arr c = match arr.(c) with
+    |(-1,-1) -> choice arr (c+1)
+    |(i,j) -> mutate_building_in_chunk (map.(x).(y)) (Some build) i j 
+  in choice arr 0 
 ;;
+
+let pos_card (pos_list: position list) = 
+  match pos_list with
+  | [] -> failwith ("nbevoibqaogv")
+  | a :: _ ->  begin  let (x,y) = a  in let (top,left,right,bot) = (ref x,ref y,ref y ,ref x) in 
+  (* corner, largeur, hauteur *)
+  let rec parc (pos_list: position list) = 
+    match pos_list with
+    | [] -> let ((b),(d),(e),(g)) = (!left,!right,!top,!bot) in  ((e+1,b+1) ,d-b,g-e)
+    | (a,b):: q ->  if a > !bot then bot := a ; if a < !top then top := a; if b < !left then left := b ; if b > !right then right := b ;parc q
+  in
+  parc pos_list
+end 
+;;
+let proxi (arr : int array array) (pos_list : position list) (corner: position) = 
+  let (p,m) = corner in 
+  match pos_list with 
+  |[] -> ()
+  |(x,y)::[] -> begin  
+    arr.(x-1-p).(y-1-m) <- arr.(x-1-p).(y-1-m) +1 ;arr.(x-1-p).(y-m) <- arr.(x-1-p).(y-m) +1 ;arr.(x-1-p).(y+1-m) <- arr.(x-1-p).(y+1-m) +1 ;
+    arr.(x  -p).(y-1-m) <- arr.(x -p ).(y-1-m) +1 ;arr.(x-p).(y-m) <- -10                    ;arr.(x -p ).(y+1-m) <- arr.(x-p  ).(y+1-m) +1 ;
+    arr.(x+1-p).(y-1-m) <- arr.(x+1-p).(y-1-m) +1 ;arr.(x+1-p).(y-m) <- arr.(x+1-p).(y-m) +1 ;arr.(x+1-p).(y+1-m) <- arr.(x+1-p).(y+1-m) +1 ;  
+ end
+;;
+let parc_mat (arr : int array array) (h:int) (l:int) = 
+  let c = ref 0 in
+  let list = ref [] in 
+  for i=0 to h do 
+    for j = 0 to l do 
+      if arr.(i).(j) > !c then list :=  [(i,j)] else 
+        if arr.(i).(j) = !c then list := (i,j) :: !list
+        else ()
+      done
+    done;
+    !list
+;;
+let buildout (build:building) (map:map) (pos_list:position list) :unit = 
+  let (coner, larg, haut) = pos_card pos_list in
+  let mat = Array.make_matrix (haut + 2) (larg + 2) 0 in 
+  proxi mat pos_list coner ;
+  let list = parc_mat mat haut larg in 
+  let arr = Array.of_list list in
+  buildtile build map arr 
+;;
+
 let buildin (build:building) (map:map) (pos_list:position list) =
-
-
-
-
-  
-(*
-let buildin  (build:building) (map:map) (pos_list:position list) = 
-  let n =   List.length pos_list in
-  if n < 230 then begin
-  let table = Array.make (n) (0,0) in 
-    let rec parc pos_list compt = match pos_list with
-    | e::q -> table.(compt) <- e; parc q (compt+1)
-    |[] -> ()
-in parc pos_list 0
-; buildtile build map table
-end
-else begin 
-  let x = (n / 230)+1 in
-let table = Array.make_matrix x (n) (0,0) in 
-  let rec parc pos_list comptcolone compt = match pos_list,compt with
-  | _, c when c = 230 -> parc pos_list (comptcolone+1) 0
-  | e::q,_ -> table.(comptcolone).(compt) <- e; parc q comptcolone (compt+1)
-  |[],_ -> ()
-in parc pos_list 0 0 
-;
-let () = Random.self_init () in
-buildtile build map table.(Random.int x)
-end
-;;
-*)
-let buildout (build:building) (map:map) (pos_list:position list) = 
-
+  let rec empile (pos_list: position list) : (int * int) list = 
+    match pos_list with
+    | [  ] -> []
+    | (x,y) :: q when test_not_full (map.(x).(y)) == false  -> empile q 
+    | (x,y) :: q -> (x,y) :: empile q 
+  in 
+  let temp = empile pos_list in
+  match temp with
+  | [] ->  buildout build map pos_list
+  | _::_ ->   let tab = Array.of_list temp in buildtile build  map tab
 ;;
 
 let to_do (action:action) (map:map) (pos_list:position list) : unit = 
@@ -121,7 +164,7 @@ let to_do (action:action) (map:map) (pos_list:position list) : unit =
   match arg with
   | InCity  -> buildin build map pos_list
   | OutCity -> buildout build map pos_list
-  else 
+  else ()
 ;;
 
 let rec eval_node (node:tree) (ressource:data) (pos_list:position list) (map:map) = match node with
@@ -129,11 +172,11 @@ let rec eval_node (node:tree) (ressource:data) (pos_list:position list) (map:map
 | Node(cond,sub_tree_left, sub_tree_right,action) -> match (test ressource cond) with
 | true -> (match sub_tree_left with
           | Vide -> to_do action map pos_list
-          | Node(a,b,c,d) -> eval_node (Node(a,b,c,d)) ressource
+          | Node(a,b,c,d) -> eval_node (Node(a,b,c,d)) ressource pos_list map
   )
 |false -> (match sub_tree_right with
           | Vide -> to_do action map pos_list
-          | Node(a,b,c,d) -> eval_node (Node(a,b,c,d)) ressource
+          | Node(a,b,c,d) -> eval_node (Node(a,b,c,d)) ressource pos_list map
 )
 
 
