@@ -1,6 +1,7 @@
 open Mapgen
 open Mapmanage
 open Village
+(* open Game *)
 
 let tile_to_json tile =
   let z = get_tile_z tile in
@@ -10,12 +11,7 @@ let tile_to_json tile =
 (* Converts an array to a json object *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
 let array_to_json_list to_json (array : 'a array) =
-  let n = Array.length array in
-  (* Converts an array to a list *)
-  let rec listify index =
-    if index = n then [] else to_json array.(index) :: listify (index + 1)
-  in
-  `List (listify 0)
+  `List (Array.to_list (Array.map to_json array))
 
 (* Converts a 2-dimensional array to a json object *)
 let matrix_to_json_list to_json matrix =
@@ -146,4 +142,20 @@ let serialize_village (village : village) =
       ("pos_list", `List (serialize_pos_list pos_list));
     ]
 
+let serialize_village_array village_array =
+  array_to_json_list serialize_village village_array
+
 let serialize_map map = matrix_to_json_list serialize_chunk map
+
+let serialize_gen generation =
+  let villages, map = generation in
+  `Assoc
+    [
+      ("villages", serialize_village_array villages); ("map", serialize_map map);
+    ]
+
+let serialize_game game =
+  let rec game_serializer = function
+    | [] -> []
+    | gen :: q -> serialize_gen gen :: (game_serializer q)
+  in `List (game_serializer game)

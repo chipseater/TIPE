@@ -13,9 +13,14 @@
  (libraries mapgen mapmanage village))
 
 (library
+ (name game)
+ (modules game)
+ (libraries village mapgen))
+
+(library
  (name dumpmap)
  (modules dumpmap)
- (libraries mapgen mapmanage yojson village))
+ (libraries mapgen mapmanage yojson village game))
 
 (library
  (name mapmanage)
