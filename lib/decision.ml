@@ -130,7 +130,7 @@ let rec proxi (arr : int array array) (pos_list : position list) (corner : posit
       arr.(x - p).(y + 1 - m) <- arr.(x - p).(y + 1 - m) + 1;
       arr.(x + 1 - p).(y - 1 - m) <- arr.(x + 1 - p).(y - 1 - m) + 1;
       arr.(x + 1 - p).(y - m) <- arr.(x + 1 - p).(y - m) + 1;
-      arr.(x + 1 - p).(y + 1 - m) <- arr.(x + 1 - p).(y + 1 - m) + 1 ; proxi q
+      arr.(x + 1 - p).(y + 1 - m) <- arr.(x + 1 - p).(y + 1 - m) + 1 ; proxi arr q corner
 
 
 
