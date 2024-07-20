@@ -216,4 +216,3 @@ let gen_map n nb_biomes z_width octaves =
     done
   done;
   map
-
