@@ -116,12 +116,12 @@ let pos_card (pos_list : position list) =
       in
       parc pos_list
 
-let proxi (arr : int array array) (pos_list : position list) (corner : position)
+let rec proxi (arr : int array array) (pos_list : position list) (corner : position)
     =
   let p, m = corner in
   match pos_list with
   | [] -> ()
-  | (x, y) :: _ ->
+  | (x, y) :: q ->
       arr.(x - 1 - p).(y - 1 - m) <- arr.(x - 1 - p).(y - 1 - m) + 1;
       arr.(x - 1 - p).(y - m) <- arr.(x - 1 - p).(y - m) + 1;
       arr.(x - 1 - p).(y + 1 - m) <- arr.(x - 1 - p).(y + 1 - m) + 1;
@@ -130,7 +130,9 @@ let proxi (arr : int array array) (pos_list : position list) (corner : position)
       arr.(x - p).(y + 1 - m) <- arr.(x - p).(y + 1 - m) + 1;
       arr.(x + 1 - p).(y - 1 - m) <- arr.(x + 1 - p).(y - 1 - m) + 1;
       arr.(x + 1 - p).(y - m) <- arr.(x + 1 - p).(y - m) + 1;
-      arr.(x + 1 - p).(y + 1 - m) <- arr.(x + 1 - p).(y + 1 - m) + 1
+      arr.(x + 1 - p).(y + 1 - m) <- arr.(x + 1 - p).(y + 1 - m) + 1 ; proxi q
+
+
 
 let parc_mat (arr : int array array) (h : int) (l : int) =
   let c = ref 0 in
