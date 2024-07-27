@@ -26,3 +26,8 @@
  (name mapmanage)
  (modules mapmanage)
  (libraries mapgen))
+
+(library
+ (name newgen)
+ (modules newgen)
+ (libraries village))
