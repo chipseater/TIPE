@@ -2,6 +2,7 @@ open Mapgen
 open Mapmanage
 open Decision
 open Village
+open Dumpmap
 
 let stock_exp : data =
   [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ]
@@ -249,7 +250,7 @@ let mock_chunk2 =
     
     ;;
 
-    let mock_chunk2 =
+    let mock_map2 =
       [| [| Chunk
         ( [|
             [| Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12); Tile (Some Farm, 13) |];
@@ -259,8 +260,8 @@ let mock_chunk2 =
           |],
           Forest )|]|]
     in
-  buildtile Farm mock_chunk2 [|0,0|] ;
-  assert (mock_chunk2=(      [| [| Chunk
+  buildtile Farm mock_map2 [|0,0|] ;
+  assert (mock_map2=(      [| [| Chunk
   ( [|
       [| Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12); Tile (Some Farm, 13) |];
       [| Tile (Some Farm, 9); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12) |];
@@ -269,9 +270,298 @@ let mock_chunk2 =
     |],
     Forest )|]|]))
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(*
+  let mock_chunk1 =
+    Chunk
+      ( [|
+          [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+          [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+          [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+          [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+        |],
+        Desert )
+  in
+
+ 
+  let mock_chunk2 =
+    Chunk
+      ( [|
+          [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+          [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+          [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+          [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+        |],
+        Forest )
+  in
+  let mock_map =
+    [|[|mock_chunk1;mock_chunk2;mock_chunk2|]; 
+      [|mock_chunk2;mock_chunk1;mock_chunk2|];
+      [|mock_chunk2;mock_chunk2;mock_chunk2|]|]
+  in
+  let printi a = match a with
+  | b,n -> print_int b ; print_char ' ' ; print_int n ;print_char '\n'
+  in
+  let rec print (l1,l2) = match (l1,l2) with
+  | e::q,_ -> (printi e ; print (q,l2); print_char '1')
+  |[],e::q -> (printi e ; print ([],q); print_char '2')
+  |[],[] -> ()
+in (* print (classif [(0,0);(1,0);(1,1)] mock_map Desert ); *)
+assert (([(1,1);(0,0)],[(1,0)])=classif [(0,0);(1,0);(1,1)] mock_map Desert )
+*)
+;;
+
+let mock_chunk1 = Chunk
+( [|
+    [| Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12); Tile (Some Farm, 13) |];
+    [| Tile (Some Farm, 9); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12) |];
+    [| Tile (Some Farm, 10); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 11) |];
+    [| Tile (Some Farm, 11); Tile (Some Farm, 10); Tile (Some Farm, 12); Tile (None, 10) |];
+  |],
+  Forest )
+in
+let mock_chunk2 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk3 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk4 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk5 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk6 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk7 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk8 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk9 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_map =
+  [|[|mock_chunk2;mock_chunk7;mock_chunk8|]; 
+    [|mock_chunk3;mock_chunk1;mock_chunk5|];
+    [|mock_chunk4;mock_chunk6;mock_chunk9|]|]
+in
+r_buildout Farm mock_map [(1,1)] ;
+let a = Yojson.to_file "map1.json" (serialize_map  mock_map)
+in ()
+;;
+assert ( mock_map <>( [|
+  [|mock_chunk2;mock_chunk2;mock_chunk2|]; 
+  [|mock_chunk2;mock_chunk1;mock_chunk2|];
+  [|mock_chunk2;mock_chunk2;mock_chunk2|]|])
+  )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+let mock_chunk1 = Chunk
+( [|
+    [| Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12); Tile (Some Farm, 13) |];
+    [| Tile (Some Farm, 9); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12) |];
+    [| Tile (Some Farm, 10); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 11) |];
+    [| Tile (Some Farm, 11); Tile (Some Farm, 10); Tile (Some Farm, 12); Tile (None, 10) |];
+  |],
+  Forest )
+in
+let mock_chunk2 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk3 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk4 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk5 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk6 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk7 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk8 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_chunk9 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+let mock_map =
+  [|[|mock_chunk2;mock_chunk7;mock_chunk8|]; 
+    [|mock_chunk3;mock_chunk1;mock_chunk5|];
+    [|mock_chunk4;mock_chunk6;mock_chunk9|]|]
+in
+r_buildin Farm mock_map [(1,1)] ;
+let a = Yojson.to_file "map1.json" (serialize_map  mock_map)
+in ()
+;;
+assert ( mock_map <>( [|
+  [|mock_chunk2;mock_chunk2;mock_chunk2|]; 
+  [|mock_chunk2;mock_chunk1;mock_chunk2|];
+  [|mock_chunk2;mock_chunk2;mock_chunk2|]|])
+  )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+let mock_chunk1 = Chunk
+( [|
+    [| Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12); Tile (Some Farm, 13) |];
+    [| Tile (Some Farm, 9); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12) |];
+    [| Tile (Some Farm, 10); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 11) |];
+    [| Tile (Some Farm, 11); Tile (Some Farm, 10); Tile (Some Farm, 12); Tile (None, 10) |];
+  |],
+  Forest )
+in
+let mock_chunk2 =
+  Chunk
+    ( [|
+        [| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];
+        [| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];
+        [| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];
+        [| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];
+      |],
+      Forest )
+in
+
+let mock_map =
+([|[|Chunk( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];[| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];[| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];[| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |]|],  Desert );
+Chunk( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];[| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];[| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];[| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];|],Forest );
+Chunk( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];[| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];[| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];[| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];|],Forest )|]; 
+[|Chunk( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];[| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];[| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];[| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];|],Forest );
+Chunk( [|    [| Tile (None, 10); Tile (None, 11); Tile (Some Farm, 12); Tile (Some Farm, 13) |];    [| Tile (Some Farm, 9); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 12) |];    [| Tile (Some Farm, 10); Tile (Some Farm, 10); Tile (Some Farm, 11); Tile (Some Farm, 11) |];    [| Tile (Some Farm, 11); Tile (Some Farm, 10); Tile (Some Farm, 12); Tile (None, 10) |];  |],  Forest );
+Chunk( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];[| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];[| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];[| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];|],Forest )|];
+[|Chunk( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];[| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];[| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];[| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];|],Forest );
+Chunk( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];[| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];[| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];[| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];|],Forest );
+Chunk( [|[| Tile (None, 10); Tile (None, 11); Tile (None, 12); Tile (None, 13) |];[| Tile (None, 9); Tile (None, 10); Tile (None, 11); Tile (None, 12) |];[| Tile (None, 10); Tile (None, 10); Tile (None, 11); Tile (None, 11) |];[| Tile (None, 11); Tile (None, 10); Tile (None, 12); Tile (None, 10) |];|],Desert )|]|])
+in
+to_do (OutCity, Farm, Random) mock_map [(1,1)]; 
+to_do (OutCity, Farm, Pref(Desert)) mock_map [(1,1)]; 
+to_do (InCity, Farm, Random) mock_map [(1,1)]; 
+to_do (InCity, Farm, Pref(Desert)) mock_map [(1,1)]; 
+let a = Yojson.to_file "map1.json" (serialize_map  mock_map)
+in a
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 

@@ -147,6 +147,7 @@ let rec proxi (arr : int array array) (pos_list : position list) (corner : posit
   let p, m = corner in
   match pos_list with
   | [] -> ()
+  | (0,_) ::_ |(_,0) :: _ -> failwith("World limit")
   | (x, y) :: q ->
       arr.(x - 1 - p).(y - 1 - m) <- arr.(x - 1 - p).(y - 1 - m) + 1;
       arr.(x - 1 - p).(y - m) <- arr.(x - 1 - p).(y - m) + 1;
@@ -160,27 +161,31 @@ let rec proxi (arr : int array array) (pos_list : position list) (corner : posit
 
                               (* OK *)
 
-let parc_mat (arr : int array array) (h : int) (l : int) =
+let parc_mat (arr : int array array) (h : int) (l : int) (corner :(int*int)) =
+  let (a,b) = corner in 
   let c = ref 0 in
   let list = ref [] in
-  for i = 0 to h do
-    for j = 0 to l do
+  for i = 0 to h-1 do
+    for j = 0 to l-1 do
       if arr.(i).(j) > !c then (list := [ (i, j) ]; c := (arr.(i).(j)) ;)
-      else if arr.(i).(j) = !c then list := (i, j) :: !list
+      else if arr.(i).(j) = !c then list := (i+a, j+b) :: !list
       else ()
     done
   done;
   !list
 
                             (* OK *)
-
+;;
 let r_buildout (build : building) (map : map) (pos_list : position list) : unit =
   let coner, larg, haut = pos_card pos_list in
-  let mat = Array.make_matrix (haut + 2) (larg + 2) 0 in
+  let mat = Array.make_matrix (haut) (larg) 0 in
   proxi mat pos_list coner;
-  let list = parc_mat mat haut larg in
+  let list = parc_mat mat haut larg coner in
   let arr = Array.of_list list in
   buildtile build map arr
+(* OK *)
+;;
+
 
 let r_buildin (build : building) (map : map) (pos_list : position list) =
   let rec empile (pos_list : position list) : (int * int) list =
@@ -194,7 +199,53 @@ let r_buildin (build : building) (map : map) (pos_list : position list) =
   | [] -> r_buildout build map pos_list
   | _ :: _ ->
       let tab = Array.of_list temp in
-      buildtile build map tab
+      buildtile build map tab  
+  (* OK *)
+    ;;
+
+
+    let classif (list:(int*int) list) (map:map) (biome :biome) = 
+      let rec parc l1 l2 l3 = match l1 with
+        |(a,b)::q when get_chunk_biome map.(a).(b) = biome -> parc q ((a,b):: l2) l3
+        |(a,b)::q -> parc q l2 ((a,b)::l3)
+        |[] -> l2,l3
+    in parc list [] []
+      ;;  
+      (* OK *)
+
+
+    let pref_buildout (build:building) (map:map) (pos_list :position list) (biome :biome) : unit =
+    let corner, larg,haut = pos_card pos_list in 
+    let mat = Array.make_matrix haut larg 0 in 
+      proxi mat pos_list corner;
+    let list = parc_mat mat haut larg corner in 
+    let pref,autre = classif list map biome in
+    match pref with
+    |[] -> let arr = Array.of_list autre in   buildtile build map arr
+    |_ -> let arr = Array.of_list pref in   buildtile build map arr
+(* OK *)
+    ;;
+let pref_buildin (build : building) (map : map) (pos_list : position list) (biome:biome) =
+  let rec empile (pos_list : position list) : (int * int) list =
+    match pos_list with
+    | [] -> []
+    | (x, y) :: q when test_not_full map.(x).(y) == false -> empile q
+    | (x, y) :: q -> (x, y) :: empile q
+  in
+  let temp = empile pos_list in
+  let pref,autre = classif temp map biome in
+  match pref with
+  | [] -> begin
+        match autre with
+        | [] -> r_buildout build map pos_list
+        | _ :: _ ->
+            let tab = Array.of_list autre in
+            buildtile build map tab  
+        end 
+  | _ :: _ -> let tab = Array.of_list pref in buildtile build map tab 
+ ;;
+(* OK *)
+
 
 let to_do (action : action) (map : map) (pos_list : position list) : unit =
   let arg, build, pref = action in
@@ -203,12 +254,13 @@ let to_do (action : action) (map : map) (pos_list : position list) : unit =
     | InCity -> r_buildin build map pos_list
     | OutCity -> r_buildout build map pos_list
   else match pref with
-  | Pref(Forest) -> ()
-  | Pref(Desert) -> ()
-  | Pref(Plains) -> ()
+  | Pref(a) -> begin match arg with  
+    |InCity ->pref_buildin build map pos_list a
+    |OutCity->pref_buildout build map pos_list a
+  end
   |_ -> failwith("fnzqpvn")
 
-
+(* OK *)
 ;;
 
 let rec eval_node (node : tree) (ressource : data) (pos_list : position list)
@@ -227,3 +279,4 @@ let rec eval_node (node : tree) (ressource : data) (pos_list : position list)
           | Vide -> to_do action map pos_list
           | Node (a, b, c, d) ->
               eval_node (Node (a, b, c, d)) ressource pos_list map))
+(* Suppose *)
