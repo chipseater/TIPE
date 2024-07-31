@@ -2,6 +2,7 @@ open Village
 open Mapmanage
 open Mapgen
 
+(* Mélange de façon aléatoire un tableau *)
 let shuffle arr =
   Random.self_init ();
   let n = Array.length arr in
@@ -11,71 +12,65 @@ let shuffle arr =
     arr.(i) <- arr.(j);
     arr.(j) <- temp
   done
-
-                            (* OK *)
-
 ;;
 
-
-
-let ingpercent r1 r2 ing x donnee : bool =
+(* Test si la ressource n1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le pourcentage est inférieur à la diférence *)
+let ingpercent r1 r2 ing pourcent donnee : bool =
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
   match ing with
   | More ->
       let dif = (nr1 - nr2) * 100 / nr1 in
-      if nr1 > nr2 then dif > x else false
+      if nr1 > nr2 then dif > pourcent else false
   | Less ->
       let dif = (nr2 - nr1) * 100 / nr2 in
-      if nr1 < nr2 then dif > x else false
+      if nr1 < nr2 then dif > pourcent else false
   ;;
 
-(* OK *)
-
-let ingflat r1 r2 ing x donnee : bool =
+(* Test si la ressource n1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le minimum est inférieur à la diférence *)
+let ingflat r1 r2 ing min donnee : bool =
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
   match ing with
   | More ->
       let dif = nr1 - nr2 in
-      if nr1 > nr2 then dif > x else false
+      if nr1 > nr2 then dif > min else false
   | Less ->
       let dif = nr1 - nr2 in
-      if nr1 < nr2 then -dif > x else false
+      if nr1 < nr2 then -dif > min else false
   ;;
 
-(* OK *)
-
-let equalpercent r1 r2 x donnee =
+  (* Test si la ressource n1 égal à la ressource 2 et si le pourcentage est inférieur à l'écart *)
+let equalpercent r1 r2 pourcent donnee =
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
   let dif = nr1 - nr2 in
   let som = nr1 + nr2 in
-  dif * 100 / som < x
-
+  dif * 100 / som < pourcent
 ;;
 
-(* OK *)
-let equalflat r1 r2 x donnee =
+  (* Test si la ressource n1 égal à la ressource 2 et si le minimum est inférieur à l'écart *)
+  let equalflat r1 r2 min donnee =
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
   let dif = nr1 - nr2 in
   let test = if dif < 0 then -dif else dif in
-  test < x
+  test < min
 ;;
-(* OK *)
+
+(* Effectue le test selon l'objet *)
 let test (donnee : data) (condition : condition) : bool =
   match condition with
-  | Ingpercent (r1, r2, ing, x) -> ingpercent r1 r2 ing x donnee
-  | Ingflat (r1, r2, ing, x) -> ingflat r1 r2 ing x donnee
-  | Equalflat (r1, r2, x) -> equalflat r1 r2 x donnee
-  | Equalpercent (r1, r2, x) -> equalpercent r1 r2 x donnee
-
+  | Ingpercent (r1, r2, ing, pourcent) -> ingpercent r1 r2 ing pourcent donnee
+  | Ingflat (r1, r2, ing, min) -> ingflat r1 r2 ing min donnee
+  | Equalflat (r1, r2, pourcent) -> equalflat r1 r2 pourcent donnee
+  | Equalpercent (r1, r2, min) -> equalpercent r1 r2 min donnee
 (* Suppose *)
 
+(* Test si il y a une tuile du chunk qui est vide *)
 let test_not_full (chunk : chunk) : bool =
   match chunk with
-  | None -> failwith "izeovoap"
+  | None -> failwith "Not a Chunk"
   | Chunk (x, _) ->
       let t = ref false in
       for i = 0 to chunk_width-1 do
@@ -86,12 +81,12 @@ let test_not_full (chunk : chunk) : bool =
       done;
       !t
     ;;
-    (* OK *)
 
+(* Ajoute dans un tableau toutes les cases qui sont constructibles *)
 let possibilite chunk =
   let arr = Array.make 16 (-1, -1) in
   match chunk with
-  | None -> failwith "izviuaebiazvbaui"
+  | None -> failwith "Not a Chunk"
   | Chunk (tab, _) ->
       (let c = ref 0 in
        for i = 0 to chunk_width-1 do
@@ -102,9 +97,9 @@ let possibilite chunk =
          done
        done);
       arr
+;;
 
-(* OK *)
-
+(* Place le batiment dans un des chunks  *)
 let buildtile (build : building) (map : map) (table : (int * int) array) =
   shuffle table;
   let x, y = table.(0) in
@@ -117,12 +112,12 @@ let buildtile (build : building) (map : map) (table : (int * int) array) =
     | i, j -> mutate_building_in_chunk map.(x).(y) (Some build) i j
   in
   choice arr 0
-(* OK *)
+;;
 
-
+(* Calcule la taille et la position en haut à gauche du tableau *)
 let pos_card (pos_list : position list) =
   match pos_list with
-  | [] -> failwith "nbevoibqaogv"
+  | [] -> failwith "No Chunk"
   | a :: _ ->
       let x, y = a in
       let top, left, right, bot = (ref x, ref y, ref y, ref x) in
@@ -140,8 +135,9 @@ let pos_card (pos_list : position list) =
             parc q
       in
       parc pos_list
-                              (* OK *)
+;;
 
+(* Remplis le tableau avec les positions des chunks *)
 let rec proxi (arr : int array array) (pos_list : position list) (corner : position)
     =
   let p, m = corner in
@@ -158,9 +154,9 @@ let rec proxi (arr : int array array) (pos_list : position list) (corner : posit
       arr.(x + 1 - p).(y - 1 - m) <- arr.(x + 1 - p).(y - 1 - m) + 1;
       arr.(x + 1 - p).(y - m) <- arr.(x + 1 - p).(y - m) + 1;
       arr.(x + 1 - p).(y + 1 - m) <- arr.(x + 1 - p).(y + 1 - m) + 1 ; proxi arr q corner
+  ;;
 
-                              (* OK *)
-
+  (* Parcours la matrice pour lister les positions les plus probable *)
 let parc_mat (arr : int array array) (h : int) (l : int) (corner :(int*int)) =
   let (a,b) = corner in 
   let c = ref 0 in
@@ -173,9 +169,9 @@ let parc_mat (arr : int array array) (h : int) (l : int) (corner :(int*int)) =
     done
   done;
   !list
-
-                            (* OK *)
 ;;
+
+(* Construit le batiment à l'extérieur du village sans biome privilegier *)
 let r_buildout (build : building) (map : map) (pos_list : position list) : unit =
   let coner, larg, haut = pos_card pos_list in
   let mat = Array.make_matrix (haut) (larg) 0 in
@@ -183,10 +179,9 @@ let r_buildout (build : building) (map : map) (pos_list : position list) : unit 
   let list = parc_mat mat haut larg coner in
   let arr = Array.of_list list in
   buildtile build map arr
-(* OK *)
 ;;
 
-
+(* Construit le batiment à l'intérieur du village sans biome privilegier *)
 let r_buildin (build : building) (map : map) (pos_list : position list) =
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
@@ -200,10 +195,9 @@ let r_buildin (build : building) (map : map) (pos_list : position list) =
   | _ :: _ ->
       let tab = Array.of_list temp in
       buildtile build map tab  
-  (* OK *)
     ;;
 
-
+    (* Classe la liste en deux listes qui regroupe ceux du biome privilégier et les autres dans un autre *)
     let classif (list:(int*int) list) (map:map) (biome :biome) = 
       let rec parc l1 l2 l3 = match l1 with
         |(a,b)::q when get_chunk_biome map.(a).(b) = biome -> parc q ((a,b):: l2) l3
@@ -211,9 +205,8 @@ let r_buildin (build : building) (map : map) (pos_list : position list) =
         |[] -> l2,l3
     in parc list [] []
       ;;  
-      (* OK *)
 
-
+(* Construit le batiment à l'extérieur du village avec un biome privilegier *)
     let pref_buildout (build:building) (map:map) (pos_list :position list) (biome :biome) : unit =
     let corner, larg,haut = pos_card pos_list in 
     let mat = Array.make_matrix haut larg 0 in 
@@ -223,8 +216,9 @@ let r_buildin (build : building) (map : map) (pos_list : position list) =
     match pref with
     |[] -> let arr = Array.of_list autre in   buildtile build map arr
     |_ -> let arr = Array.of_list pref in   buildtile build map arr
-(* OK *)
     ;;
+
+(* Construit le batiment à l'intérieur du village avec un biome privilegier *)
 let pref_buildin (build : building) (map : map) (pos_list : position list) (biome:biome) =
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
@@ -244,9 +238,8 @@ let pref_buildin (build : building) (map : map) (pos_list : position list) (biom
         end 
   | _ :: _ -> let tab = Array.of_list pref in buildtile build map tab 
  ;;
-(* OK *)
 
-
+ (* Effectue le type de construonction en fonction des paramètres *)
 let to_do (action : action) (map : map) (pos_list : position list) : unit =
   let arg, build, pref = action in
   if pref = Random then
@@ -258,11 +251,10 @@ let to_do (action : action) (map : map) (pos_list : position list) : unit =
     |InCity ->pref_buildin build map pos_list a
     |OutCity->pref_buildout build map pos_list a
   end
-  |_ -> failwith("fnzqpvn")
-
-(* OK *)
+  |_ -> failwith("No other possibility")
 ;;
 
+(* Evalue un noeud et fait ce qu'il faut *)
 let rec eval_node (node : tree) (ressource : data) (pos_list : position list)
     (map : map) =
   match node with
