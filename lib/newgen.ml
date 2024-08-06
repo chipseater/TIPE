@@ -1,5 +1,3 @@
-exception ExitLoop
-
 open Village
 open Mapgen
 open Random
@@ -46,10 +44,9 @@ let gen_village_roots n k =
         if !nb_of_roots < k then (
           roots := random_pos (x, y) (x + quadrant_width, y + quadrant_width) :: !roots;
           nb_of_roots := !nb_of_roots + 1)
-        else raise ExitLoop
+        else raise Exit
       done
     done;
-    raise ExitLoop
+    raise Exit
   with
-  | ExitLoop -> !roots
   | _ -> !roots

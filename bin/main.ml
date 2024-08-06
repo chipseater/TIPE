@@ -1,6 +1,6 @@
-open Mapgen
-open Dumpmap
-open Village
+(* open Mapgen *)
+(* open Dumpmap *)
+(* open Village *)
 
 (* let map = gen_map 100 100 10 3
 
@@ -25,7 +25,7 @@ open Village
    let () = Yojson.to_file "game.json" (serialize_game game) *)
 
 let () =
-  Newgen.gen_village_roots 100 8
+  Newgen.gen_village_roots 100 7
   |> List.iter (fun (a, b) ->
          print_int a;
          print_char ' ';
