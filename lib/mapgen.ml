@@ -20,15 +20,15 @@ type pole = int * int * biome
 (* Sets the balance between the diffrent biomes,
    here 8 plains for 1 desert and 1 tundra *)
 let int_to_biome b =
-  assert (b >= 0 && b < 10);
-  if b < 5 then Plains else if b = 5 then Desert else Forest
+  assert (b >= 0 && b < 3);
+  if b = 0 then Plains else if b = 1 then Desert else Forest
 
 (* Generates k random poles between 0 and n - 1 *)
 let rec gen_poles n k =
   let () = Random.self_init () in
   if k = 0 then []
   else
-    let pole_biome = int_to_biome (Random.int 10) in
+    let pole_biome = Random.int 3 |> int_to_biome in
     (Random.int n, Random.int n, pole_biome) :: gen_poles n (k - 1)
 
 (* Returns the euclidian distance between p2 and p1 *)
@@ -108,8 +108,6 @@ let smoothstep x =
   +. (70. *. (x ** 6.))
   -. (84. *. (x ** 5.))
   +. (35. *. (x ** 4.))
-
-(* let smoothstep x = x;; *)
 
 (* Gives a smooth appearance to the noise *)
 let interpolate a b x =
@@ -203,6 +201,8 @@ let submatrix matrix corner n =
   done;
   submatrix
 
+(* Fonction de génération de la carte
+   n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
 let gen_map n nb_biomes z_width octaves =
   let nb_of_chunk = n / chunk_width in
   let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
@@ -210,7 +210,9 @@ let gen_map n nb_biomes z_width octaves =
   let z_map = perlin_map n z_width octaves |> upscale_matrix_to_int z_max in
   for i = 0 to nb_of_chunk - 1 do
     for j = 0 to nb_of_chunk - 1 do
-      let z_values = submatrix z_map (i, j) chunk_width in
+      let z_values =
+        submatrix z_map (i * chunk_width, j * chunk_width) chunk_width
+      in
       let biome = biomes.(i).(j) in
       map.(i).(j) <- gen_empty_chunk z_values biome
     done

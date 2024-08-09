@@ -10,7 +10,6 @@ let building_to_string = function
   | Some Farm -> "F"
   | None -> "N"
 
-(* type building = House | Quarry | Sawmill | Farm  *)
 let print_biome biome = biome |> biome_to_string |> print_string
 
 let get_chunk_biome = function
@@ -43,5 +42,3 @@ let get_chunk_z chunk =
 let mutate_building_in_chunk chunk building i j =
   let tile_z = get_tile_z (get_chunk_tiles chunk).(i).(j) in
   (get_chunk_tiles chunk).(i).(j) <- Tile (building, tile_z)
-
-let a = 4;;
