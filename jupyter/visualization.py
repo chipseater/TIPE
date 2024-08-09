@@ -17,7 +17,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-import functools as ft
 
 # %%
 def char_to_int(char):
@@ -82,4 +81,3 @@ z_map = get_map_z(json_data)
 extent = 0, 100, 100, 0
 plt.imshow(z_map, cmap="grey", extent=extent)
 plt.imshow(biome_map, extent=extent, alpha=0.5)
-
