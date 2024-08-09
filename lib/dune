@@ -1,4 +1,8 @@
 (library
+ (name utils)
+ (modules utils))
+
+(library
  (name mapgen)
  (modules mapgen))
 
@@ -10,7 +14,7 @@
 (library
  (name decision)
  (modules decision)
- (libraries mapgen mapmanage village))
+ (libraries mapgen mapmanage village utils))
 
 (library
  (name dumpmap)

@@ -54,7 +54,7 @@ let sawmill_data_prodution : data =
 (* Additionne deux dictionnaires de ressources *)
 let rec sum_data (l1 : data) (l2 : data) : data =
   match (l1, l2) with
-  | (r1, _) :: _, (r2, _) :: _ when r1 != r2 ->
+  | (r1, _) :: _, (r2, _) :: _ when r1 <> r2 ->
       raise (Invalid_argument "Not the same ressource's place")
   | [], [] -> []
   | _, [] | [], _ -> raise (Invalid_argument "Not the same size")
@@ -68,7 +68,6 @@ let get_production_from_tile (tile : tile) : data =
   | Some Farm -> farm_data_prodution
   | Some Sawmill -> sawmill_data_prodution
   | None -> void_data
-;;
 
 (* Somme la prodution dans un chunk *)
 let sum_chunk_production chunk =
@@ -130,9 +129,8 @@ let calcul_of_people (data : data) : data =
           (Stone, 0);
           (Wood, 0);
         ]
-    ;;
 
-    (* Actualise le nombre de main d'oeuvre *)
+(* Actualise le nombre de main d'oeuvre *)
 let update_people (logistics : logistics) : logistics =
   match logistics with stock, prod -> ((calcul_of_people stock : data), prod)
 
@@ -173,8 +171,6 @@ let destroy_build (logistics : logistics) (position_list : position list)
   in
   let new_prod = parcours_list position_list stoc in
   update_all_logistics (stoc, new_prod)
-;;
-
 
 let lack_of_people (logistics : logistics) (old_logistics : logistics)
     (chunk_list : position list) (map : map) =
