@@ -1,6 +1,6 @@
 open Village
-(* open Mapmanage *)
-(* open Mapgen *)
+open Mapmanage
+open Mapgen
 
 (* Vérifie si un noeud est vide *)
 let isEmpty = function Vide -> true | _ -> false
@@ -251,7 +251,6 @@ let rec eval_node (node : tree) (ressource : data) (pos_list : position list)
       else if test ressource cond then
         eval_node sub_tree_left ressource pos_list map
       else eval_node sub_tree_right ressource pos_list map
-  test < x
 
 let test (donnee : data) (condition : condition) : bool =
   match condition with

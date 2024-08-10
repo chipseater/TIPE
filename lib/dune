@@ -22,11 +22,6 @@
  (libraries village mapgen))
 
 (library
- (name village)
- (modules village)
- (libraries mapgen))
-
-(library
  (name dumpmap)
  (modules dumpmap)
  (libraries mapgen mapmanage yojson village game))
