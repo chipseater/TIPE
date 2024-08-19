@@ -4,8 +4,7 @@ let chunk_width = 4
 type biome = Forest | Desert | Plains
 type building = House | Quarry | Sawmill | Farm
 
-(* A tile is made out of the eventual building it
-   contains associated with its elevation *)
+(* A tile is made out of the eventual building it contains associated with its elevation *)
 type tile = Tile of building option * int
 
 (* A chunk is a 4*4 tile matrix associated with its biome *)
@@ -203,7 +202,7 @@ let submatrix matrix corner n =
 
 (* Fonction de génération de la carte
    n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
-let gen_map n nb_biomes z_width octaves =
+let gen_map ?(n=200) ?(nb_biomes=40) ?(z_width=20) ?(octaves=2) () =
   let nb_of_chunk = n / chunk_width in
   let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
   let biomes = gen_biomes n nb_biomes in
