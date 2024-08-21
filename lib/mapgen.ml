@@ -25,31 +25,6 @@ let int_to_biome b =
 (* Checks if the point is not outside of a nxn map *)
 let is_valid n i j = not (i < 0 || i >= n || j < 0 || j >= n)
 
-(* Returns the average of the neighbouring square in a nxn map *)
-let average_adjacent map n i j =
-  let sum = ref 0. in
-  let count = ref 0. in
-  (* Cycles through the adjacent tiles and counts
-     their number while summing their values to average them *)
-  for k = 0 to 3 do
-    let i_offset, j_offset = [| (-1, 0); (1, 0); (0, -1); (0, 1) |].(k) in
-    let new_i, new_j = (i + i_offset, j + j_offset) in
-    if is_valid n new_i new_j then (
-      sum := !sum +. map.(new_i).(new_j);
-      count := !count +. 1.)
-  done;
-  !sum /. !count
-
-let average_map map =
-  let n = Array.length map in
-  let interpolated_map = Array.make_matrix n n 0. in
-  for i = 0 to n - 1 do
-    for j = 0 to n - 1 do
-      interpolated_map.(i).(j) <- average_adjacent map n i j
-    done
-  done;
-  interpolated_map
-
 (* Generates a (n / grid_width)^2 grid with
    a random noramlized vector at each node *)
 let gen_rand_grad n grid_width =
