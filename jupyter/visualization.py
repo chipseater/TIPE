@@ -98,5 +98,3 @@ for village in villages:
 plt.imshow(z_map, cmap="grey", extent=extent)
 plt.imshow(biome_map, extent=extent, alpha=0.3)
 
-for village in villages:
-    print(tree_height(village['tree']))

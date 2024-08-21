@@ -1,5 +1,5 @@
 let z_max = 100.
-let chunk_width = 4
+let chunk_width = 8
 
 type biome = Forest | Desert | Plains
 type building = House | Quarry | Sawmill | Farm
@@ -21,43 +21,6 @@ type pole = int * int * biome
 let int_to_biome b =
   assert (b >= 0 && b < 10);
   if b < 4 then Plains else if b < 8 then Forest else Desert
-
-(* Generates k random poles between 0 and n - 1 *)
-let rec gen_poles n k =
-  let () = Random.self_init () in
-  if k = 0 then []
-  else
-    let pole_biome = Random.int 10 |> int_to_biome in
-    (Random.int n, Random.int n, pole_biome) :: gen_poles n (k - 1)
-
-(* Returns the euclidian distance between p2 and p1 *)
-let distance p1 p2 =
-  let x1, y1 = p1 in
-  let x2, y2 = p2 in
-  Stdlib.sqrt (float_of_int (((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1))))
-
-(* Returns the nearest pole from the p point *)
-let rec nearest_biome p poles =
-  match poles with
-  | [] -> raise (Invalid_argument "Empty list")
-  | [ (_, _, b) ] -> b
-  (* Removes the farthest distance from the pole list *)
-  | (x1, y1, b1) :: (x2, y2, b2) :: q ->
-      nearest_biome p
-        ((if distance (x1, y1) p < distance (x2, y2) p then (x1, y1, b1)
-          else (x2, y2, b2))
-        :: q)
-
-(* Generates a nxn sized map with k biomes *)
-let gen_biomes n nb_biomes =
-  let map = Array.make_matrix n n Plains in
-  let poles = gen_poles n nb_biomes in
-  for i = 0 to n - 1 do
-    for j = 0 to n - 1 do
-      map.(i).(j) <- nearest_biome (i, j) poles
-    done
-  done;
-  map
 
 (* Checks if the point is not outside of a nxn map *)
 let is_valid n i j = not (i < 0 || i >= n || j < 0 || j >= n)
@@ -148,8 +111,9 @@ let perlin_layer (map : float array array) n grid_width factor =
     for j = 0 to n - 1 do
       let raw_z = perlin grad_grid grid_width i j in
       assert (raw_z >= -0.71 && raw_z <= 0.71);
-      let z = map.(i).(j) +. (((0.5 *. raw_z) +. 0.25) /. factor) in
+      let z = map.(i).(j) +. (((0.5 *. raw_z) +. 0.5) /. factor) in
       assert (z <= 1.);
+      assert (z >= 0.);
       map.(i).(j) <- z
     done
   done
@@ -169,12 +133,30 @@ let upscale_matrix_to_int factor (matrix : float array array) =
 (* Superposes octaves of noises to create fractal noise with cell width m *)
 let perlin_map n cell_width octaves =
   let map = Array.make_matrix n n 0. in
-  let factor = ref 1 in
+  let factor = ref 2 in
   for _ = 1 to octaves do
     (* Weights the layer by factor = 2^i *)
     let width = cell_width / !factor in
     perlin_layer map n width (float_of_int !factor);
     factor := !factor * 2
+  done;
+  map
+
+let hv_to_biome h v =
+  if h *. v < 0. then Plains
+  else if h < 0. then Desert
+  else Forest
+
+let gen_biomes n biome_width =
+  let map = Array.make_matrix n n Plains in
+  let humidity_grad = gen_rand_grad n biome_width in
+  let vegetation_grad = gen_rand_grad n biome_width in
+  for i = 0 to n - 1 do
+    for j = 0 to n - 1 do
+      let h = perlin humidity_grad (2 * biome_width) i j in
+      let v = perlin vegetation_grad (2 * biome_width) i j in
+      map.(i).(j) <- hv_to_biome h v
+    done
   done;
   map
 
@@ -202,18 +184,17 @@ let submatrix matrix corner n =
 
 (* Fonction de génération de la carte
    n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
-let gen_map ?(nb_biomes=100) ?(z_width=100) ?(octaves=7) n =
+let gen_map ?(biome_width = 10) ?(z_width = 100) ?(octaves = 6) n =
   let nb_of_chunk = n / chunk_width in
   let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
-  let biomes = gen_biomes n nb_biomes in
+  let biomes = gen_biomes n biome_width in
   let z_map = perlin_map n z_width octaves |> upscale_matrix_to_int z_max in
   for i = 0 to nb_of_chunk - 1 do
     for j = 0 to nb_of_chunk - 1 do
       let z_values =
         submatrix z_map (i * chunk_width, j * chunk_width) chunk_width
       in
-      let biome = biomes.(i).(j) in
-      map.(i).(j) <- gen_empty_chunk z_values biome
+      map.(i).(j) <- gen_empty_chunk z_values biomes.(i).(j)
     done
   done;
   map

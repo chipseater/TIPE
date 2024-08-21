@@ -25,8 +25,9 @@ let gen_cond () =
 let gen_placement () = match Random.int 2 with 1 -> InCity | _ -> OutCity
 
 let gen_prio () =
-  let biome_nb = Random.int 3 in
-  match Random.int 2 with 1 -> Pref (int_to_biome biome_nb) | _ -> Random
+  match Random.int 2 with
+  | 1 -> Pref (Random.int 3 |> int_to_biome)
+  | _ -> Random
 
 let gen_building () =
   match Random.int 4 with 1 -> Quarry | 2 -> Sawmill | 3 -> Farm | _ -> House
