@@ -19,15 +19,15 @@ type pole = int * int * biome
 (* Sets the balance between the diffrent biomes,
    here 8 plains for 1 desert and 1 tundra *)
 let int_to_biome b =
-  assert (b >= 0 && b < 3);
-  if b = 0 then Plains else if b = 1 then Desert else Forest
+  assert (b >= 0 && b < 10);
+  if b < 4 then Plains else if b < 8 then Forest else Desert
 
 (* Generates k random poles between 0 and n - 1 *)
 let rec gen_poles n k =
   let () = Random.self_init () in
   if k = 0 then []
   else
-    let pole_biome = Random.int 3 |> int_to_biome in
+    let pole_biome = Random.int 10 |> int_to_biome in
     (Random.int n, Random.int n, pole_biome) :: gen_poles n (k - 1)
 
 (* Returns the euclidian distance between p2 and p1 *)
@@ -202,7 +202,7 @@ let submatrix matrix corner n =
 
 (* Fonction de génération de la carte
    n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
-let gen_map ?(n=200) ?(nb_biomes=40) ?(z_width=20) ?(octaves=2) () =
+let gen_map ?(nb_biomes=100) ?(z_width=100) ?(octaves=7) n =
   let nb_of_chunk = n / chunk_width in
   let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
   let biomes = gen_biomes n nb_biomes in

@@ -2,18 +2,6 @@ open Village
 open Mapgen
 open Random
 
-(* Example tree, will be changed to a randomly generated tree later *)
-let tree =
-  Node
-    ( Equalflat (Wood, Food, 5),
-      Vide,
-      Node
-        ( Ingpercent (People, Stone, More, 2),
-          Vide,
-          Vide,
-          (InCity, Quarry, Random) ),
-      (OutCity, House, Pref Plains) )
-
 let rnd_ressource () =
   match Random.int 5 with
   | 0 -> Food
@@ -29,13 +17,10 @@ let gen_cond () =
     (rnd_ressource (), rnd_ressource (), rnd_ing (), Random.int 10)
   in
   match Random.int 4 with
-  | 1 ->
-      Ingpercent (ress1, ress2, ing, threshold)
+  | 1 -> Ingpercent (ress1, ress2, ing, threshold)
   | 2 -> Ingflat (ress1, ress2, ing, threshold)
-  | 3 ->
-      Equalpercent (ress1, ress2, threshold)
-  | _ ->
-      Equalflat (ress1, ress2, threshold)
+  | 3 -> Equalpercent (ress1, ress2, threshold)
+  | _ -> Equalflat (ress1, ress2, threshold)
 
 let gen_placement () = match Random.int 2 with 1 -> InCity | _ -> OutCity
 
@@ -48,10 +33,13 @@ let gen_building () =
 
 let gen_action () = (gen_placement (), gen_building (), gen_prio ())
 
-let rec gen_tree () =
-  if Random.int 2 = 0 then
-    Node (gen_cond (), gen_tree (), gen_tree (), gen_action ())
-  else Vide
+let gen_tree () =
+  let rec tree_generator () =
+    if Random.int 3 = 0 then
+      Node (gen_cond (), tree_generator (), tree_generator (), gen_action ())
+    else Vide
+  in
+  Node (gen_cond (), tree_generator (), tree_generator (), gen_action ())
 
 let random_pos min max =
   let x_min, y_min = min in
@@ -62,7 +50,7 @@ let random_pos min max =
    divisée en secteurs de taille n / k *)
 let gen_village_roots n k =
   let () = self_init () in
-  let quadrants_per_side = 1 + (float_of_int k |> Float.sqrt |> int_of_float) in
+  let quadrants_per_side = float_of_int k |> sqrt |> ceil |> int_of_float in
   let quadrant_width = n / quadrants_per_side in
   let roots = Array.make k (0, 0) in
   (* Ajoute à roots une coordonée de racine aléatoire
@@ -71,16 +59,14 @@ let gen_village_roots n k =
     (* x, y sont les coordonées du coin haut-gauche
        du quadrant en cours *)
     let x, y =
-      ( i * quadrant_width mod (n - quadrant_width),
-        i * quadrant_width / (n - quadrant_width) )
+      (i * quadrant_width mod n, i * quadrant_width * quadrant_width / n)
     in
-    let new_pos = random_pos (x, y) (x + quadrant_width, y + quadrant_width) in
-    roots.(i) <- new_pos
+    roots.(i) <- random_pos (x, y) (x + quadrant_width, y + quadrant_width)
   done;
   roots
 
 (* Returns an array with randomly positioned villages *)
-let new_gen map_width nb_villages =
+let new_villages map_width nb_villages =
   (* The default village stocks and production *)
   let stock = [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ] in
   let prod = [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ] in
@@ -90,7 +76,7 @@ let new_gen map_width nb_villages =
   let village_array = Array.make nb_villages empty_village in
   for i = 0 to nb_villages - 1 do
     (* A village containing only one chunk *)
-    let village = (i, tree, (stock, prod), roots.(i), [ roots.(i) ]) in
-    village_array.(i) <- village
+    village_array.(i) <-
+      (i, gen_tree (), (stock, prod), roots.(i), [ roots.(i) ])
   done;
   village_array

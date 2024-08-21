@@ -73,11 +73,30 @@ def get_biomes(map):
 
 
 # %%
-f = open('../map.json', 'r')
-json_data = json.loads(f.read())
+def tree_height(tree):
+    if tree == 'V':
+        return 0
+    else:
+        return 1 + max(tree_height(tree['l_child']), tree_height(tree['r_child']))
 
-biome_map = get_biomes(json_data)
-z_map = get_map_z(json_data)
-extent = 0, 100, 100, 0
+
+# %%
+f = open('../test_gen.json', 'r')
+json_data = json.loads(f.read())
+map_data = json_data['map']
+villages = json_data['villages']
+chunk_width = get_chunk_width(map_data)
+
+biome_map = get_biomes(map_data)
+z_map = get_map_z(map_data)
+extent = 0, get_map_size(map_data), get_map_size(map_data), 0
+
+for village in villages:
+    pos = village['position']
+    plt.plot(chunk_width * pos['x'], chunk_width * pos['y'], marker='x', color="red") 
+
 plt.imshow(z_map, cmap="grey", extent=extent)
-plt.imshow(biome_map, extent=extent, alpha=0.5)
+plt.imshow(biome_map, extent=extent, alpha=0.3)
+
+for village in villages:
+    print(tree_height(village['tree']))
