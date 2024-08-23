@@ -4,8 +4,7 @@
 
 (library
  (name mapgen)
- (modules mapgen )
- (libraries domainslib))
+ (modules mapgen))
 
 (library
  (name village)
@@ -20,7 +19,7 @@
 (library
  (name game)
  (modules game)
- (libraries village mapgen newgen))
+ (libraries village mapgen))
 
 (library
  (name dumpmap)

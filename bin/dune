@@ -2,4 +2,4 @@
  (public_name TIPE)
  (name main)
  (modules main)
- (libraries mapgen village yojson domainslib dumpmap decision newgen))
+ (libraries mapgen village yojson dumpmap decision newgen))

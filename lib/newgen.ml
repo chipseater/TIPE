@@ -60,10 +60,8 @@ let gen_village_roots n k =
     (* x, y sont les coordonées du coin haut-gauche
        du quadrant en cours *)
     let x, y =
-      ( i * quadrant_width mod (n - quadrant_width),
-        quadrant_width * (quadrant_width * i / n) )
+      (i * quadrant_width mod n, i * quadrant_width * quadrant_width / n)
     in
-    assert (x + quadrant_width <= n && y + quadrant_width <= n);
     roots.(i) <- random_pos (x, y) (x + quadrant_width, y + quadrant_width)
   done;
   roots
