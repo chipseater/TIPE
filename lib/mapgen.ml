@@ -1,3 +1,5 @@
+open Domainslib.Task
+
 let z_max = 100.
 let chunk_width = 8
 
@@ -87,8 +89,7 @@ let perlin_layer (map : float array array) n grid_width factor =
       let raw_z = perlin grad_grid grid_width i j in
       assert (raw_z >= -0.71 && raw_z <= 0.71);
       let z = map.(i).(j) +. (((0.5 *. raw_z) +. 0.5) /. factor) in
-      assert (z <= 1.);
-      assert (z >= 0.);
+      assert (z >= 0. && z <= 1.);
       map.(i).(j) <- z
     done
   done
@@ -105,22 +106,30 @@ let upscale_matrix_to_int factor (matrix : float array array) =
   done;
   new_matrix
 
+(* Computes n^k *)
+let rec pow n k =
+  if k = 0 then 1
+  else if k = 1 then n
+  else if k mod 2 = 0 then pow n (k / 2) * pow n (k / 2)
+  else n * pow n (k / 2) * pow n (k / 2)
+
 (* Superposes octaves of noises to create fractal noise with cell width m *)
 let perlin_map n cell_width octaves =
   let map = Array.make_matrix n n 0. in
-  let factor = ref 2 in
-  for _ = 1 to octaves do
-    (* Weights the layer by factor = 2^i *)
-    let width = cell_width / !factor in
-    perlin_layer map n width (float_of_int !factor);
-    factor := !factor * 2
-  done;
+  (* Sets up a pool of threads to compute the layers asyncronously *)
+  let perlin_pool =
+    setup_pool ~name:"perlin_layer_pool" ~num_domains:octaves ()
+  in
+  let make_layer i =
+    perlin_layer map n (cell_width / pow 2 i) (pow 2 i |> float_of_int)
+  in
+  (fun () -> parallel_for ~start:1 ~finish:octaves ~body:make_layer perlin_pool)
+    |> run perlin_pool;
+  teardown_pool perlin_pool;
   map
 
 let hv_to_biome h v =
-  if h *. v < 0. then Plains
-  else if h < 0. then Desert
-  else Forest
+  if h *. v < 0. then Plains else if h < 0. then Desert else Forest
 
 let gen_biomes n biome_width =
   let map = Array.make_matrix n n Plains in
@@ -146,6 +155,9 @@ let gen_empty_chunk (z_values : int array array) (biome : biome) =
   done;
   Chunk (chunk, biome)
 
+let gen_z n z_width octaves =
+  perlin_map n z_width octaves |> upscale_matrix_to_int z_max
+
 (* Extracts a nxn submatrix from the top-left corner *)
 let submatrix matrix corner n =
   let x, y = corner in
@@ -159,11 +171,11 @@ let submatrix matrix corner n =
 
 (* Fonction de génération de la carte
    n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
-let gen_map ?(biome_width = 10) ?(z_width = 100) ?(octaves = 6) n =
+let gen_map ?(biome_width = 20) ?(z_width = 100) ?(octaves = 6) n =
   let nb_of_chunk = n / chunk_width in
   let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
   let biomes = gen_biomes n biome_width in
-  let z_map = perlin_map n z_width octaves |> upscale_matrix_to_int z_max in
+  let z_map = gen_z n z_width octaves in
   for i = 0 to nb_of_chunk - 1 do
     for j = 0 to nb_of_chunk - 1 do
       let z_values =
