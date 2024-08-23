@@ -97,4 +97,5 @@ for village in villages:
 
 plt.imshow(z_map, cmap="grey", extent=extent)
 plt.imshow(biome_map, extent=extent, alpha=0.3)
-
+# [(village['position']['x'] * chunk_width, village['position']['y'] * chunk_width) for village in villages]
+# [tree_height(village['tree']) for village in villages]
