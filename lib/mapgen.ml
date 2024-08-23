@@ -84,15 +84,22 @@ let perlin grad_grid grid_width i j =
 let perlin_layer (map : float array array) n grid_width factor =
   (* Generates a gradient grid with enough padding to work with *)
   let grad_grid = gen_rand_grad (n + (2 * grid_width)) grid_width in
-  for i = 0 to n - 1 do
-    for j = 0 to n - 1 do
-      let raw_z = perlin grad_grid grid_width i j in
-      assert (raw_z >= -0.71 && raw_z <= 0.71);
-      let z = map.(i).(j) +. (((0.5 *. raw_z) +. 0.5) /. factor) in
-      assert (z >= 0. && z <= 1.);
-      map.(i).(j) <- z
-    done
-  done
+  let perlin_pool = setup_pool ~name:"perlin_pool" ~num_domains:5 () in
+  let make_cell i j =
+    let raw_z = perlin grad_grid grid_width i j in
+    assert (raw_z >= -0.71 && raw_z <= 0.71);
+    let z = map.(i).(j) +. (((0.5 *. raw_z) +. 0.5) /. factor) in
+    assert (z >= 0. && z <= 1.);
+    map.(i).(j) <- z
+  in
+  (* Sequentially computes the perlin noise for the i-th row *)
+  let make_row i =
+    (fun () -> parallel_for ~start:0 ~finish:(n - 1) ~body:(make_cell i) perlin_pool)
+      |> run perlin_pool;
+  in
+  (fun () -> parallel_for ~start:0 ~finish:(n - 1) ~body:make_row perlin_pool)
+  |> run perlin_pool;
+  teardown_pool perlin_pool
 
 (* Converts a float matrix width values ranging from 0 to 1
    to a int matrix with values ranging from 0 to the factor *)
@@ -106,26 +113,17 @@ let upscale_matrix_to_int factor (matrix : float array array) =
   done;
   new_matrix
 
-(* Computes n^k *)
-let rec pow n k =
-  if k = 0 then 1
-  else if k = 1 then n
-  else if k mod 2 = 0 then pow n (k / 2) * pow n (k / 2)
-  else n * pow n (k / 2) * pow n (k / 2)
-
 (* Superposes octaves of noises to create fractal noise with cell width m *)
 let perlin_map n cell_width octaves =
   let map = Array.make_matrix n n 0. in
   (* Sets up a pool of threads to compute the layers asyncronously *)
-  let perlin_pool =
-    setup_pool ~name:"perlin_layer_pool" ~num_domains:octaves ()
-  in
+  let layer_pool = setup_pool ~name:"layer_pool" ~num_domains:2 () in
   let make_layer i =
-    perlin_layer map n (cell_width / pow 2 i) (pow 2 i |> float_of_int)
+    perlin_layer map n (cell_width / Utils.pow 2 i) (Utils.pow 2 i |> float_of_int)
   in
-  (fun () -> parallel_for ~start:1 ~finish:octaves ~body:make_layer perlin_pool)
-    |> run perlin_pool;
-  teardown_pool perlin_pool;
+  (fun () -> parallel_for ~start:1 ~finish:octaves ~body:make_layer layer_pool)
+  |> run layer_pool;
+  teardown_pool layer_pool;
   map
 
 let hv_to_biome h v =

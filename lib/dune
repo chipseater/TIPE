@@ -4,8 +4,8 @@
 
 (library
  (name mapgen)
- (modules mapgen )
- (libraries domainslib))
+ (modules mapgen)
+ (libraries utils domainslib))
 
 (library
  (name village)

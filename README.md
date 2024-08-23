@@ -11,7 +11,7 @@ Il faut tout d'abord installer `opam` avec le package manager de sa distribution
 Pour installer les dépendances requises, il faut lancer
 
 ```
-opam install dune yojson
+opam install dune yojson domainslib
 ```
 
 `dune` est l'outil utilisé pour gérer les projets ocaml, `yojson` est la bibliothèque qui permet d'utiliser des fichiers en `.json` pour stocker l'état du jeu.
