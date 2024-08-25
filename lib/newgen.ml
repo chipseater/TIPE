@@ -10,17 +10,15 @@ let rnd_ressource () =
   | 3 -> Wood
   | _ -> Bed
 
-let rnd_ing () = match Random.int 2 with 1 -> More | _ -> Less
+let rnd_ing () = match Random.int 3 with 2 -> More | 1 -> Less | _ -> Equal
 
 let gen_cond () =
   let ress1, ress2, ing, threshold =
     (rnd_ressource (), rnd_ressource (), rnd_ing (), Random.int 10)
   in
-  match Random.int 4 with
+  match Random.int 2 with
   | 1 -> Ingpercent (ress1, ress2, ing, threshold)
-  | 2 -> Ingflat (ress1, ress2, ing, threshold)
-  | 3 -> Equalpercent (ress1, ress2, threshold)
-  | _ -> Equalflat (ress1, ress2, threshold)
+  | _ -> Ingflat (ress1, ress2, ing, threshold)
 
 let gen_placement () = match Random.int 2 with 1 -> InCity | _ -> OutCity
 

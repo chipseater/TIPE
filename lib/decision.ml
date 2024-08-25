@@ -16,6 +16,8 @@ let ingpercent r1 r2 ing pourcent donnee : bool =
   | Less ->
       let dif = (nr2 - nr1) * 100 / nr2 in
       if nr1 < nr2 then dif > pourcent else false
+  | Equal ->
+      abs ((nr1 - nr2) * 100 / nr2) < pourcent
 
 (* Test si la ressource n1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le minimum est inférieur à la diférence *)
 let ingflat r1 r2 ing min donnee : bool =
@@ -28,30 +30,14 @@ let ingflat r1 r2 ing min donnee : bool =
   | Less ->
       let dif = nr1 - nr2 in
       if nr1 < nr2 then -dif > min else false
-
-(* Test si la ressource n1 égal à la ressource 2 et si le pourcentage est inférieur à l'écart *)
-let equalpercent r1 r2 pourcent donnee =
-  let nr1 = search donnee r1 in
-  let nr2 = search donnee r2 in
-  let dif = nr1 - nr2 in
-  let som = nr1 + nr2 in
-  dif * 100 / som < pourcent
-
-(* Teste si la ressource n1 égal à la ressource 2 et si le minimum est inférieur à l'écart *)
-let equalflat r1 r2 min donnee =
-  let nr1 = search donnee r1 in
-  let nr2 = search donnee r2 in
-  let dif = nr1 - nr2 in
-  let test = if dif < 0 then -dif else dif in
-  test < min
+  | Equal ->
+      abs (nr2 - nr1) < min
 
 (* Effectue le test selon l'objet *)
 let test (donnee : data) (condition : condition) : bool =
   match condition with
   | Ingpercent (r1, r2, ing, pourcent) -> ingpercent r1 r2 ing pourcent donnee
   | Ingflat (r1, r2, ing, min) -> ingflat r1 r2 ing min donnee
-  | Equalflat (r1, r2, pourcent) -> equalflat r1 r2 pourcent donnee
-  | Equalpercent (r1, r2, min) -> equalpercent r1 r2 min donnee
 
 (* Teste s' il y a une tuile du chunk qui est vide *)
 let test_not_full (chunk : chunk) : bool =
@@ -256,8 +242,6 @@ let test (donnee : data) (condition : condition) : bool =
   match condition with
   | Ingpercent (r1, r2, ing, x) -> ingpercent r1 r2 ing x donnee
   | Ingflat (r1, r2, ing, x) -> ingflat r1 r2 ing x donnee
-  | Equalflat (r1, r2, x) -> equalflat r1 r2 x donnee
-  | Equalpercent (r1, r2, x) -> equalpercent r1 r2 x donnee
 
 (* Make all action in one turn *)
 (* let evolution_par_tour (village : village) (map : map) =

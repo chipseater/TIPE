@@ -32,7 +32,10 @@ let serialize_chunk (chunk : chunk) =
     ]
 
 let serialize_ing inequality =
-  match inequality with More -> `String "M" | Less -> `String "L"
+  match inequality with
+  | More -> `String "M"
+  | Less -> `String "L"
+  | Equal -> `String "E"
 
 let serialize_argument argument =
   match argument with InCity -> `String "In" | OutCity -> `String "Out"
@@ -71,8 +74,6 @@ let serialize_ressource ressource =
 let condition_type_to_string = function
   | Ingpercent (_, _, _, _) -> "Ingpercent"
   | Ingflat (_, _, _, _) -> "Ingpercent"
-  | Equalpercent (_, _, _) -> "Equalpercent"
-  | Equalflat (_, _, _) -> "Equalflat"
 
 let serialize_condition condition =
   match condition with
@@ -83,14 +84,6 @@ let serialize_condition condition =
           ("ressource1", serialize_ressource rss1);
           ("ressource2", serialize_ressource rss2);
           ("ing", serialize_ing ing);
-          ("int", `Int int);
-        ]
-  | Equalpercent (rss1, rss2, int) | Equalflat (rss1, rss2, int) ->
-      `Assoc
-        [
-          ("type", `String (condition_type_to_string condition));
-          ("ressource1", serialize_ressource rss1);
-          ("ressource2", serialize_ressource rss2);
           ("int", `Int int);
         ]
 
@@ -157,5 +150,6 @@ let serialize_gen generation =
 let serialize_game game =
   let rec game_serializer = function
     | [] -> []
-    | gen :: q -> serialize_gen gen :: (game_serializer q)
-  in `List (game_serializer game)
+    | gen :: q -> serialize_gen gen :: game_serializer q
+  in
+  `List (game_serializer game)

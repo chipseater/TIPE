@@ -11,7 +11,7 @@ type logistics = data * data
 type position = int * int
 
 (* Arbre *)
-type ing = More | Less
+type ing = More | Less | Equal
 
 (* Action *)
 type argument = InCity | OutCity
@@ -22,8 +22,6 @@ type action = argument * building * prio
 type condition =
   | Ingpercent of ressource * ressource * ing * int
   | Ingflat of ressource * ressource * ing * int
-  | Equalpercent of ressource * ressource * int
-  | Equalflat of ressource * ressource * int
 
 type tree = Vide | Node of condition * tree * tree * action
 
