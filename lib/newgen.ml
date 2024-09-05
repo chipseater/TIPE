@@ -33,12 +33,17 @@ let gen_building () =
 let gen_action () = (gen_placement (), gen_building (), gen_prio ())
 
 let gen_tree () =
-  let rec tree_generator () =
-    if Random.int 3 = 0 then
-      Node (gen_cond (), tree_generator (), tree_generator (), gen_action ())
+  let rec tree_generator height =
+    if height > 0 then
+      Node
+        ( gen_cond (),
+          tree_generator (height - 1),
+          tree_generator (height - 1),
+          gen_action () )
     else Vide
   in
-  Node (gen_cond (), tree_generator (), tree_generator (), gen_action ())
+  let tree_height = Utils.rand_normal 3. 1. |> ceil |> int_of_float in
+  tree_generator tree_height
 
 let random_pos min max =
   let x_min, y_min = min in

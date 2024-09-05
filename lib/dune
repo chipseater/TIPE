@@ -36,3 +36,8 @@
  (name newgen)
  (modules newgen)
  (libraries village))
+
+(library
+ (name mutation)
+ (modules mutation)
+ (libraries village utils))

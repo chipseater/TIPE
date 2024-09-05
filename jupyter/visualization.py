@@ -81,8 +81,8 @@ def tree_height(tree):
 
 
 # %%
-f = open('../test_gen.json', 'r')
-json_data = json.loads(f.read())
+f = open('../test_game.json', 'r')
+json_data = json.loads(f.read())[0]
 map_data = json_data['map']
 villages = json_data['villages']
 chunk_width = get_chunk_width(map_data)
@@ -98,4 +98,4 @@ for village in villages:
 plt.imshow(z_map, cmap="grey", extent=extent)
 plt.imshow(biome_map, extent=extent, alpha=0.3)
 # [(village['position']['x'] * chunk_width, village['position']['y'] * chunk_width) for village in villages]
-# [tree_height(village['tree']) for village in villages]
+np.array([tree_height(village['tree']) for village in villages])

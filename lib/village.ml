@@ -18,24 +18,32 @@ type argument = InCity | OutCity
 type prio = Random | Pref of biome
 type action = argument * building * prio
 
-(* Différentes conditions *)
+(* Ingpercent représente une inégalité en pourcentage de stocks tandis que
+   Ingflat représente une inégalité en quantité de ressources
+   La première ressource sera comparée avec la deuxième d'après
+   les constructeurs de ing
+*)
 type condition =
   | Ingpercent of ressource * ressource * ing * int
   | Ingflat of ressource * ressource * ing * int
 
+(* Un arbre de décision est soit vide, soit constitué d'une condition
+   qui décidera si le premier ou le deuxième sous-arbre sera évalué:
+   à gauche si la condition est remplie, à droite sinon. Si la condition
+   du noeud est vérifié, alors l'action de ce noeud sera exécutée.
+*)
 type tree = Vide | Node of condition * tree * tree * action
 
-(* Id / arbre de décision/ table de ressource
-   / coordonées du centre / liste des chunks du village
+(* Un village est caractérisé par son identifiant, son arbre de décision,
+   son état de logistique et la liste des chunks qu'il possède.
 *)
 type village = int * tree * logistics * position * position list
 
-(* Valeurs globales *)
-(* Les productions seront divisés par un certain coeficient dans le futur *)
+(* Un objet de type data vide *)
 let void_data : data =
   [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ]
 
-(* À équilibrer *)
+(* Les valeurs de production des différents bâtiments *)
 let house_data_prodution : data =
   [ (Bed, 5); (Food, 0); (People, -1); (Stone, 0); (Wood, 0) ]
 
@@ -147,7 +155,7 @@ let destroy_build (logistics : logistics) (position_list : position list)
   let temp_logistics = update_people logistics in
   let stoc, _ = temp_logistics in
 
-let parcours_chunk (chunk : chunk) (stock : data) =
+  let parcours_chunk (chunk : chunk) (stock : data) =
     let people = ref (search stock People) in
     let temp_stock = ref stock in
     for i = 0 to chunk_width - 1 do

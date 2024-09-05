@@ -1,3 +1,4 @@
 open Game
+open Dumpmap
 
-let _ = new_game 800 64
+let () = new_game 800 64 |> serialize_game |> Yojson.to_file "test_game.json"
