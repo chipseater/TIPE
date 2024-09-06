@@ -1,6 +1,5 @@
 (executable
-  (public_name TIPE)
-  (name main)
-  (modules main)
-  (libraries mapgen village)
-)
+ (public_name TIPE)
+ (name main)
+ (modules main)
+ (libraries mapgen village yojson domainslib dumpmap decision newgen))

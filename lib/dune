@@ -1,11 +1,43 @@
 (library
- (name mapgen)
- (modules mapgen)
-)
+ (name utils)
+ (modules utils))
 
 (library
-  (name village)
-  (modules village)
-  (libraries mapgen)
-)
+ (name mapgen)
+ (modules mapgen)
+ (libraries utils domainslib))
 
+(library
+ (name village)
+ (modules village)
+ (libraries mapgen mapmanage))
+
+(library
+ (name decision)
+ (modules decision)
+ (libraries mapgen mapmanage village utils))
+
+(library
+ (name game)
+ (modules game)
+ (libraries village mapgen newgen))
+
+(library
+ (name dumpmap)
+ (modules dumpmap)
+ (libraries mapgen mapmanage yojson village game))
+
+(library
+ (name mapmanage)
+ (modules mapmanage)
+ (libraries mapgen))
+
+(library
+ (name newgen)
+ (modules newgen)
+ (libraries village))
+
+(library
+ (name mutation)
+ (modules mutation)
+ (libraries village utils))
