@@ -144,7 +144,7 @@ let update_all_logistics (logistics : logistics) =
   let temp_logistics = update_people logistics in
   let new_logistics = update_logistics temp_logistics in
   (new_logistics : logistics)
-
+;;
 (* Calcule la nouvelle table de donnée en modifiant la map *)
 (* Calcule la logistics a chaque tuile et a chaque fois que la
    resource main d'oeuvre devient négative je change la case en none
@@ -180,7 +180,7 @@ let destroy_build (logistics : logistics) (position_list : position list)
   in
   let new_prod = parcours_list position_list stoc in
   update_all_logistics (stoc, new_prod)
-
+;;
 let lack_of_people (logistics : logistics) (old_logistics : logistics)
     (chunk_list : position list) (map : map) =
   let data, _ = logistics in

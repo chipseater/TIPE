@@ -141,10 +141,10 @@ let serialize_village_array village_array =
 let serialize_map map = matrix_to_json_list serialize_chunk map
 
 let serialize_gen generation =
-  let villages, map = generation in
+  let tree, map , pos_list = generation in
   `Assoc
     [
-      ("villages", serialize_village_array villages); ("map", serialize_map map);
+      ("tree", serialize_tree tree); ("map", serialize_map map); ("pos_list", serialize_pos_list pos_list) ;
     ]
 
 let serialize_game game =

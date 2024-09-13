@@ -1,7 +1,7 @@
 open Domainslib.Task
 
 let z_max = 100.
-let chunk_width = 8
+let chunk_width = 4
 
 type biome = Forest | Desert | Plains
 type building = House | Quarry | Sawmill | Farm

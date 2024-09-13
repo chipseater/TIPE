@@ -104,7 +104,7 @@ let pos_card (pos_list : position list) =
       parc pos_list
 
 (* Remplis le tableau avec les positions des chunks *)
-let rec proxi (arr : int array array) (pos_list : position list)
+let rec proxi (arr : int array array) (pos_list : position list) (world_limit:int)
     (corner : position) =
   let p, m = corner in
   (* J'aurais pu mettre [| (-1, -1), (-1, 0), ..., (1, 1) |] *)
@@ -112,6 +112,8 @@ let rec proxi (arr : int array array) (pos_list : position list)
   match pos_list with
   | [] -> ()
   | (0, _) :: _ | (_, 0) :: _ -> failwith "World limit"
+  | (x, _) :: _ when x = world_limit -> failwith "World limit"
+  | (_, x) :: _ when x = world_limit -> failwith "World limit"
   | (x, y) :: q ->
       for i = 0 to 8 do
         (* Prends successivement les 9 positions adjacentes à (0, 0) *)
@@ -121,7 +123,7 @@ let rec proxi (arr : int array array) (pos_list : position list)
         else
           arr.(x - p).(y - m) <- -10;
       done;
-      proxi arr q corner
+      proxi arr q world_limit corner
 
 (* Parcours la matrice pour lister les positions les plus probables *)
 let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int) =
@@ -143,7 +145,8 @@ let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int) =
 let r_buildout (build : building) (map : map) (pos_list : position list) =
   let coner, larg, haut = pos_card pos_list in
   let mat = Array.make_matrix haut larg 0 in
-  proxi mat pos_list coner;
+  let world_limit = Array.length map in
+  proxi mat pos_list world_limit coner;
   let list = parc_mat mat haut larg coner in
   let arr = Array.of_list list in
   buildtile build map arr
@@ -178,8 +181,9 @@ let classif (list : (int * int) list) (map : map) (biome : biome) =
 let pref_buildout (build : building) (map : map) (pos_list : position list)
     (biome : biome) : unit =
   let corner, larg, haut = pos_card pos_list in
+  let world_limit = Array.length map in
   let mat = Array.make_matrix haut larg 0 in
-  proxi mat pos_list corner;
+  proxi mat pos_list world_limit corner;
   let list = parc_mat mat haut larg corner in
   let pref, autre = classif list map biome in
   match pref with
@@ -243,31 +247,3 @@ let test (donnee : data) (condition : condition) : bool =
   | Ingpercent (r1, r2, ing, x) -> ingpercent r1 r2 ing x donnee
   | Ingflat (r1, r2, ing, x) -> ingflat r1 r2 ing x donnee
 
-(* Make all action in one turn *)
-(* let evolution_par_tour (village : village) (map : map) =
-   let _, tree, logistics, _, chunk_list = village in
-   let stock_temp, _ = logistics in
-   let logistics1 = (stock_temp, chunk_list_parcour chunk_list map) in
-   let temp_logistics = update_all_logistics logistics1 in
-   let new_logistics = lack_of_people temp_logistics logistics chunk_list map in
-
-   let a, _ = new_logistics in
-
-   (* let stockpile = match with *)
-
-   (* Do action defined by the node, lack of the implementation of the village *)
-   let to_do action = () in
-
-   let rec eval tree =
-     match tree with
-     | Vide -> failwith "1.Invalid Argument"
-     | Node (cond, tree_verif, tree_not_verif, act) -> (
-         let is_condition_fulfilled = test ratio cond in
-         match (tree_verif, tree_not_verif) with
-         | Vide, Vide -> to_do act
-         | Vide, a -> if is_condition_fulfilled then to_do act else eval a
-         | a, Vide -> if is_condition_fulfilled then eval a else to_do act
-         | a, b -> if is_condition_fulfilled then eval a else eval b)
-   in
-   eval tree
-*)
