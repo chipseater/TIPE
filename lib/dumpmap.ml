@@ -1,19 +1,18 @@
 open Mapgen
 open Mapmanage
 open Village
-(* open Game *)
 
 let tile_to_json tile =
   let z = get_tile_z tile in
   let building = get_tile_building tile in
   `Assoc [ ("z", `Int z); ("building", `String (building_to_string building)) ]
 
-(* Converts an array to a json object *)
+(* Convertit un tableau en objet json *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
 let array_to_json_list to_json (array : 'a array) =
   `List (Array.to_list (Array.map to_json array))
 
-(* Converts a 2-dimensional array to a json object *)
+(* Transforme un tableau bidimentionel en objet json *)
 let matrix_to_json_list to_json matrix =
   let n = Array.length matrix in
   let rec listify index =
@@ -70,7 +69,7 @@ let serialize_ressource ressource =
   | Wood -> `String "W"
   | Bed -> `String "B"
 
-(* Fonction stupide qui renvoie le type de la condition sous forme de string *)
+(* Fonction bien stupide qui renvoie le type de la condition sous forme de string *)
 let condition_type_to_string = function
   | Ingpercent (_, _, _, _) -> "Ingpercent"
   | Ingflat (_, _, _, _) -> "Ingpercent"

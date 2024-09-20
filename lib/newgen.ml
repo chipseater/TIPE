@@ -71,17 +71,17 @@ let gen_village_roots n k =
   done;
   roots
 
-(* Returns an array with randomly positioned villages *)
+(* Renvoie un tableau avec des villages positionnés aléatoirement *)
 let new_villages map_width nb_villages =
-  (* The default village stocks and production *)
+  (* Les stocks et les productions de chaque village *)
   let stock = [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ] in
   let prod = [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ] in
   let roots = gen_village_roots (map_width / chunk_width) nb_villages in
-  (* A token village to avoid type issues *)
+  (* Un village générique pour éviter les erreurs de typage *)
   let empty_village = (0, Vide, ([], []), (0, 0), []) in
   let village_array = Array.make nb_villages empty_village in
   for i = 0 to nb_villages - 1 do
-    (* A village containing only one chunk *)
+    (* Un village ne possédant qu'un seul chunk *)
     village_array.(i) <-
       (i, gen_tree (), (stock, prod), roots.(i), [ roots.(i) ])
   done;
