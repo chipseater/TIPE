@@ -1,5 +1,5 @@
 open Mapgen
-
+(* Fonctions utilitaires pour gérer les objets de la carte *)
 let isNone = function Chunk (_, _) -> false | None -> true
 let biome_to_string = function Forest -> "F" | Desert -> "D" | Plains -> "P"
 

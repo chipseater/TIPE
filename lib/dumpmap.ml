@@ -1,19 +1,18 @@
 open Mapgen
 open Mapmanage
 open Village
-(* open Game *)
 
 let tile_to_json tile =
   let z = get_tile_z tile in
   let building = get_tile_building tile in
   `Assoc [ ("z", `Int z); ("building", `String (building_to_string building)) ]
 
-(* Converts an array to a json object *)
+(* Convertit un tableau en objet json *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
 let array_to_json_list to_json (array : 'a array) =
   `List (Array.to_list (Array.map to_json array))
 
-(* Converts a 2-dimensional array to a json object *)
+(* Transforme un tableau bidimentionel en objet json *)
 let matrix_to_json_list to_json matrix =
   let n = Array.length matrix in
   let rec listify index =
@@ -98,6 +97,8 @@ let rec serialize_tree node =
           ("r_child", serialize_tree r_child);
           ("action", serialize_action action);
         ]
+let serialize_tree_array tree_array =
+  array_to_json_list serialize_tree tree_array  
 
 let serialize_pos position =
   let x, y = position in
@@ -134,7 +135,7 @@ let serialize_village (village : village) =
       ("position", serialize_pos position);
       ("pos_list", `List (serialize_pos_list pos_list));
     ]
-
+(*
 let serialize_village_array village_array =
   array_to_json_list serialize_village village_array
 
@@ -153,3 +154,4 @@ let serialize_game game =
     | gen :: q -> serialize_gen gen :: game_serializer q
   in
   `List (game_serializer game)
+*)

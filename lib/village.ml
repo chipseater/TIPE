@@ -51,7 +51,7 @@ let quarry_data_prodution : data =
   [ (Bed, 0); (Food, 0); (People, -20); (Stone, 100); (Wood, 0) ]
 
 let farm_data_prodution : data =
-  [ (Bed, 0); (Food, 10); (People, -25); (Stone, 0); (Wood, 0) ]
+  [ (Bed, 0); (Food, 100); (People, -25); (Stone, 0); (Wood, 0) ]
 
 let sawmill_data_prodution : data =
   [ (Bed, 0); (Food, 0); (People, -10); (Stone, 0); (Wood, 50) ]
@@ -102,7 +102,7 @@ let rec search (data : data) ressource =
   | (e, x) :: _ when e = ressource -> x
   | _ :: q -> search q ressource
 
-(* Create the new logistics *)
+(* Inititalisation d'un objet logistique *)
 let rec update_logistics (logistics : logistics) : logistics =
   match logistics with
   | [], _ :: _ | _ :: _, [] -> failwith "2.Lack ressource"
@@ -146,7 +146,7 @@ let update_all_logistics (logistics : logistics) =
   (new_logistics : logistics)
 ;;
 (* Calcule la nouvelle table de donnée en modifiant la map *)
-(* Calcule la logistics a chaque tuile et a chaque fois que la
+(* Calcule la logistics a chaque tuile et à chaque fois que la
    resource main d'oeuvre devient négative je change la case en none
    et je recalcule la nouvelle table
 *)
@@ -184,5 +184,8 @@ let destroy_build (logistics : logistics) (position_list : position list)
 let lack_of_people (logistics : logistics) (old_logistics : logistics)
     (chunk_list : position list) (map : map) =
   let data, _ = logistics in
-  if search data People < 0 then destroy_build old_logistics chunk_list map
+  if search data People < 0 then 
+  destroy_build old_logistics chunk_list map
   else logistics
+
+

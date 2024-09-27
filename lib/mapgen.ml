@@ -59,23 +59,23 @@ let local_coord x n =
   frac (float_of_int x /. float_of_int n)
 
 let perlin grad_grid grid_width i j =
-  (* The local coordinates in the grid cells *)
+  (* Les coordonnées locales des cellules de grille *)
   let li, lj = (local_coord i grid_width, local_coord j grid_width) in
-  (* The bottom-left coner coordinates of the grid cell *)
+  (* Les coordonées du coin en bas à gauche de la cellule de grille *)
   let tl_i_corner, tl_j_corner = (i / grid_width, j / grid_width) in
-  (* Gets each gradient vector at each corner of the grid cell *)
+   (* Récupère chaque vecteur de gradien pour chaque cellule de grille *)
   let tl_grad_i, tl_grad_j = grad_grid.(tl_i_corner).(tl_j_corner) in
   let tr_grad_i, tr_grad_j = grad_grid.(tl_i_corner).(tl_j_corner + 1) in
   let bl_grad_i, bl_grad_j = grad_grid.(tl_i_corner + 1).(tl_j_corner) in
   let br_grad_i, br_grad_j = grad_grid.(tl_i_corner + 1).(tl_j_corner + 1) in
-  (* Computes the dot product between the local coordinates
+  (* Calcule le produit scalaire entre les coordonnées locales
      and the gradient vector at each corner *)
   let tl_dot_prod = (li *. tl_grad_j) +. (lj *. tl_grad_i) in
   let tr_dot_prod = (li *. tr_grad_j) +. ((lj -. 1.) *. tr_grad_i) in
   let bl_dot_prod = ((li -. 1.) *. bl_grad_j) +. (lj *. bl_grad_i) in
   let br_dot_prod = ((li -. 1.) *. br_grad_j) +. ((lj -. 1.) *. br_grad_i) in
   (* Interpolates the dot products from left to right
-     then from bottom to top *)
+     et le vecteur gradien de chaque coin *)
   let top_interpolation = interpolate tl_dot_prod tr_dot_prod lj in
   let bottom_interpolation = interpolate bl_dot_prod br_dot_prod lj in
   interpolate top_interpolation bottom_interpolation li
@@ -94,8 +94,9 @@ let perlin_layer (map : float array array) n grid_width factor =
   in
   (* Sequentially computes the perlin noise for the i-th row *)
   let make_row i =
-    (fun () -> parallel_for ~start:0 ~finish:(n - 1) ~body:(make_cell i) perlin_pool)
-      |> run perlin_pool;
+    (fun () ->
+      parallel_for ~start:0 ~finish:(n - 1) ~body:(make_cell i) perlin_pool)
+    |> run perlin_pool
   in
   (fun () -> parallel_for ~start:0 ~finish:(n - 1) ~body:make_row perlin_pool)
   |> run perlin_pool;
@@ -119,7 +120,9 @@ let perlin_map n cell_width octaves =
   (* Sets up a pool of threads to compute the layers asyncronously *)
   let layer_pool = setup_pool ~name:"layer_pool" ~num_domains:2 () in
   let make_layer i =
-    perlin_layer map n (cell_width / Utils.pow 2 i) (Utils.pow 2 i |> float_of_int)
+    perlin_layer map n
+    (cell_width / Utils.pow 2 i)
+    (Utils.pow 2 i |> float_of_int)
   in
   (fun () -> parallel_for ~start:1 ~finish:octaves ~body:make_layer layer_pool)
   |> run layer_pool;

@@ -12,15 +12,15 @@ let arr_cartesian_product arr1 arr2 =
 
 let arr_cartesian_square arr = arr_cartesian_product arr arr
 
-(* Computes n^k *)
+(* calcule n^k *)
 let rec pow n k =
   if k = 0 then 1
   else if k = 1 then n
   else if k mod 2 = 0 then pow n (k / 2) * pow n (k / 2)
   else n * pow n (k / 2) * pow n (k / 2)
 
-(* Generates a random number according to the normal distribution
-   using the Box-Muller method *)
+(* Génère une distribution normale en utilisant 
+   l'algorithme de Box-Muller *)
 let rand_normal mean std_deviation =
   let phi = 2.0 *. Float.pi *. Random.float 1.0 in
   let r = sqrt (-2. *. log (Random.float 1.0)) in
