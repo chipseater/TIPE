@@ -42,7 +42,6 @@ let test (donnee : data) (condition : condition) : bool =
 (* Teste s' il y a une tuile du chunk qui est vide *)
 let test_not_full (chunk : chunk) : bool =
   match chunk with
-  | None -> failwith "Not a Chunk"
   | Chunk (x, _) ->
       let t = ref false in
       for i = 0 to chunk_width - 1 do

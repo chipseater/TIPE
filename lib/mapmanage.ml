@@ -1,7 +1,7 @@
 open Mapgen
 
 (* Fonctions utilitaires pour gérer les objets de la carte *)
-let isNone = function Chunk (_, _) -> false | None -> true
+let isNone = function Chunk (_, _) -> false
 let biome_to_string = function Forest -> "F" | Desert -> "D" | Plains -> "P"
 
 let building_to_string = function
@@ -15,7 +15,6 @@ let print_biome biome = biome |> biome_to_string |> print_string
 
 let get_chunk_biome = function
   | Chunk (_, biome) -> biome
-  | None -> raise (Invalid_argument "Manipulating an empty chunk")
 
 let print_chunk_biome chunk =
   assert (not (isNone chunk));
@@ -27,7 +26,6 @@ let get_tile_building = function Tile (building, _) -> building
 let get_chunk_tiles chunk =
   match chunk with
   | Chunk (tiles, _) -> tiles
-  | None -> raise (Invalid_argument "Manipulating an empty chunk")
 
 let get_chunk_z chunk =
   assert (not (isNone chunk));

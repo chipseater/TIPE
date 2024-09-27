@@ -10,13 +10,10 @@ type building = House | Quarry | Sawmill | Farm
 type tile = Tile of building option * int
 
 (* A chunk is a 4*4 tile matrix associated with its biome *)
-type chunk = Chunk of tile array array * biome | None
+type chunk = Chunk of tile array array * biome
 
 (* A n*n map is a n/4*n/4 chunk matrix *)
 type map = chunk array array
-
-(* Contains the pole coordinates and biome *)
-type pole = int * int * biome
 
 (* Sets the balance between the diffrent biomes,
    here 8 plains for 1 desert and 1 tundra *)
@@ -147,13 +144,8 @@ let gen_biomes n biome_width =
 
 (* Generates an empty chunk according to z_values and a biome *)
 let gen_empty_chunk (z_values : int array array) (biome : biome) =
-  let chunk = Array.make_matrix chunk_width chunk_width (Tile (None, 0)) in
-  for i = 0 to chunk_width - 1 do
-    for j = 0 to chunk_width - 1 do
-      let z = z_values.(i).(j) in
-      chunk.(i).(j) <- Tile (None, z)
-    done
-  done;
+  let get_empty_tile i j = Tile (None, z_values.(i).(j)) in
+  let chunk = Array.init_matrix chunk_width chunk_width get_empty_tile in
   Chunk (chunk, biome)
 
 let gen_z n z_width octaves =
@@ -174,15 +166,12 @@ let submatrix matrix corner n =
    n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
 let gen_map ?(biome_width = 20) ?(z_width = 100) ?(octaves = 6) n =
   let nb_of_chunk = n / chunk_width in
-  let map = Array.make_matrix nb_of_chunk nb_of_chunk None in
   let biomes = gen_biomes n biome_width in
   let z_map = gen_z n z_width octaves in
-  for i = 0 to nb_of_chunk - 1 do
-    for j = 0 to nb_of_chunk - 1 do
-      let z_values =
-        submatrix z_map (i * chunk_width, j * chunk_width) chunk_width
-      in
-      map.(i).(j) <- gen_empty_chunk z_values biomes.(i).(j)
-    done
-  done;
-  map
+  let gen_chunk i j =
+    let z_values =
+      submatrix z_map (i * chunk_width, j * chunk_width) chunk_width
+    in
+    gen_empty_chunk z_values biomes.(i).(j)
+  in
+  Array.init_matrix nb_of_chunk nb_of_chunk gen_chunk

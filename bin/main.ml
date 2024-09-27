@@ -1,5 +1,5 @@
 open Game
-open Dumpmap
+(* open Dumpmap *)
 
-let roots, trees = new_game 800 8
+let _, _ = new_game 800 8
 
