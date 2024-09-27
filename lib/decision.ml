@@ -39,6 +39,8 @@ let test (donnee : data) (condition : condition) : bool =
   | Ingpercent (r1, r2, ing, pourcent) -> ingpercent r1 r2 ing pourcent donnee
   | Ingflat (r1, r2, ing, min) -> ingflat r1 r2 ing min donnee
 
+ 
+
 (* Teste s' il y a une tuile du chunk qui est vide *)
 let test_not_full (chunk : chunk) : bool =
   match chunk with
@@ -68,11 +70,26 @@ let possibilite chunk =
   arr
 
 (* Place le batiment dans un des chunks  *)
-let buildtile (build : building) (map : map) (table : (int * int) array) (village:village) =
+let buildtile (build : building) (map : map) (table : (int * int) array) 
+ (village:village) =
   Array.shuffle ~rand:Random.int table;
   let x, y = table.(0) in
   let temp = map.(x).(y) in
-  
+  village.position_list <- (x,y) :: village.position_list;
+  let arr = possibilite temp in
+  Array.shuffle ~rand:Random.int arr;
+  let rec choice arr c =
+    match arr.(c) with
+    | -1, -1 -> choice arr (c + 1)
+    | i, j -> mutate_building_in_chunk map.(x).(y) (Some build) i j
+  in
+  choice arr 0
+;;
+  (* Place le batiment dans un des chunks  *)
+let build_tile_in (build : building) (map : map) (table : (int * int) array) =
+  Array.shuffle ~rand:Random.int table;
+  let x, y = table.(0) in
+  let temp = map.(x).(y) in
   let arr = possibilite temp in
   Array.shuffle ~rand:Random.int arr;
   let rec choice arr c =
@@ -143,17 +160,17 @@ let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int) =
   !list
 
 (* Construit le batiment à l'extérieur du village sans biome privilegié *)
-let r_buildout (build : building) (map : map) (pos_list : position list) tree_tab (village:village) =
-  let coner, larg, haut = pos_card pos_list in
+let r_buildout (build : building) (map : map) (pos_list : position list)  (village:village) =
+  (let coner, larg, haut = pos_card pos_list in
   let mat = Array.make_matrix haut larg 0 in
   let world_limit = Array.length map in
   proxi mat pos_list world_limit coner;
   let list = parc_mat mat haut larg coner in
   let arr = Array.of_list list in
-  buildtile build map arr tree_tab village
-
+  buildtile build map arr  village
+  )
 (* Construit le batiment à l'intérieur du village sans biome privilegié *)
-let r_buildin (build : building) (map : map) (pos_list : position list) =
+let r_buildin (build : building) (map : map) (pos_list : position list) (village:village) : unit =
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
@@ -162,10 +179,10 @@ let r_buildin (build : building) (map : map) (pos_list : position list) =
   in
   let temp = empile pos_list in
   match temp with
-  | [] -> r_buildout build map pos_list
+  | [] -> r_buildout build map pos_list village
   | _ :: _ ->
       let tab = Array.of_list temp in
-      buildtile build map tab
+      build_tile_in build map tab
 
 (* Classe la liste en deux listes qui regroupe ceux du biome privilégier et les autres dans un autre *)
 let classif (list : (int * int) list) (map : map) (biome : biome) =
@@ -180,8 +197,8 @@ let classif (list : (int * int) list) (map : map) (biome : biome) =
 
 (* Construit le batiment à l'extérieur du village avec un biome privilegié *)
 let pref_buildout (build : building) (map : map) (pos_list : position list)
-    (biome : biome) tree_tab village : unit =
-  let corner, larg, haut = pos_card pos_list in
+    (biome : biome)  village : unit =
+  (let corner, larg, haut = pos_card pos_list in
   let world_limit = Array.length map in
   let mat = Array.make_matrix haut larg 0 in
   proxi mat pos_list world_limit corner;
@@ -190,14 +207,14 @@ let pref_buildout (build : building) (map : map) (pos_list : position list)
   match pref with
   | [] ->
       let arr = Array.of_list autre in
-      buildtile build map arr tree_tab village
+      buildtile build map arr  village
   | _ ->
       let arr = Array.of_list pref in
-      buildtile build map arr tree_tab village
+      buildtile build map arr  village)
 
 (* Construit le batiment à l'intérieur du village avec un biome privilegié *)
 let pref_buildin (build : building) (map : map) (pos_list : position list)
-    (biome : biome) =
+    (biome : biome) (village:village) =
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
@@ -209,44 +226,38 @@ let pref_buildin (build : building) (map : map) (pos_list : position list)
   match pref with
   | [] -> (
       match autre with
-      | [] -> r_buildout build map pos_list
+      | [] -> r_buildout build map pos_list village
       | _ :: _ ->
           let tab = Array.of_list autre in
-          buildtile build map tab)
+          build_tile_in build map tab)
   | _ :: _ ->
       let tab = Array.of_list pref in
-      buildtile build map tab
+      build_tile_in build map tab
 
 (* Effectue le type de construonction en fonction des paramètres *)
-let to_do (action : action) (map : map) (pos_list : position list) tree_tab village : unit =
+let to_do (action : action) (map : map) (pos_list : position list) (village:village) : unit =
   let arg, build, pref = action in
   if pref = Random then
     match arg with
-    | InCity -> r_buildin build map pos_list
-    | OutCity -> r_buildout build map pos_list tree_tab village
+    | InCity -> r_buildin build map pos_list village
+    | OutCity -> r_buildout build map pos_list  village
   else
     match pref with
     | Pref a -> (
         match arg with
-        | InCity -> pref_buildin build map pos_list a
-        | OutCity -> pref_buildout build map pos_list a tree_tab village)
+        | InCity -> pref_buildin build map pos_list a village
+        | OutCity -> pref_buildout build map pos_list a  village)
     | _ -> failwith "No other possibility"
   ;;
-
-    let test (donnee : data) (condition : condition) : bool =
-      match condition with
-      | Ingpercent (r1, r2, ing, x) -> ingpercent r1 r2 ing x donnee
-      | Ingflat (r1, r2, ing, x) -> ingflat r1 r2 ing x donnee
-    
-    
+   
 (* Evalue un noeud et fait ce qu'il faut *)
 let rec eval_node (node : tree) (ressource : data) (pos_list : position list)
-    (map : map) tree_tab village =
+    (map : map) (village:village) =
   match node with
   | Vide -> failwith "Empty node"
   | Node (cond, sub_tree_left, sub_tree_right, action) ->
-      if isEmpty node then to_do action map pos_list tree_tab village
+      if isEmpty node then to_do action map pos_list  village
       else if test ressource cond then
-        eval_node sub_tree_left ressource pos_list map tree_tab village
-      else eval_node sub_tree_right ressource pos_list map tree_tab village
+        eval_node sub_tree_left ressource pos_list map  village
+      else eval_node sub_tree_right ressource pos_list map  village
 

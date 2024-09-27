@@ -8,40 +8,45 @@ type score = int array
 type evaluation = score array 
 type generation = tree array * map * position array * evaluation
 type game = generation array
+;;
 
+let new_game map_width nb_villages =
+  let map = gen_map map_width in
+  let roots = gen_village_roots (map_width / chunk_width) nb_villages in
+  let trees = gen_trees nb_villages in
+  roots, trees
+;;
 
-let nombre_de_tour_par_simulation = 10 in 
-
-
-
+(* let roots, trees = new_game 800 8;; *)
 
   (* Make all action in one turn *)
-let evolution_par_tour (village : village) (map : map) tree_tab =
+(* let evolution_par_tour (village : village) (map : map) tree_tab =
   let id, tree, logistics, _, chunk_list = village in
   let temp_logistics = update_all_logistics logistics in
    let new_logistics = lack_of_people temp_logistics logistics chunk_list map in
  ()
   
+;;  *)
 
-;; 
-
-let init_logistique ()= ([],[])
-;;
-
+let init_logistique () = ([],[])
 
  let createvillage (tree:tree) (pos:position) (map:map) (id:int) : village = (*init le village*)
- {id:id;
- tree:tree;
- logistics:(init_logistique ());
- pos:pos;
- pos_list: [pos]}
-
+ {
+  id = id;
+  tree = tree;
+  logistics = init_logistique ();
+  root_position = pos;
+  position_list = [ pos ]
+  }
 ;;
+let nombre_de_tour_par_simulation = 10 in 
 
 let evalvilage a b = 
   for i = 0 to nombre_de_tour_par_simulation do 
     evolution_par_tour a b 
-  ;;
+  done;
+  a
+
 
 (* Fonctionne *)
 let selection  (score:evaluation) (tree_tab : tree array) : tree array = (* selectionne les 20 meilleurs*)

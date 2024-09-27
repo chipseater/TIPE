@@ -42,8 +42,10 @@ let gen_tree () =
           gen_action () )
     else Vide
   in
-  let tree_height = Utils.rand_normal 3. 1. |> ceil |> int_of_float in
-  tree_generator tree_height
+  Utils.rand_normal 3. 1. |> ceil |> int_of_float |> tree_generator
+  
+  let gen_trees nb_of_trees =
+   Array.init nb_of_trees (fun _ -> gen_tree ())
 
 let random_pos min max =
   let x_min, y_min = min in
@@ -71,18 +73,3 @@ let gen_village_roots n k =
   done;
   roots
 
-(* Renvoie un tableau avec des villages positionnés aléatoirement *)
-let new_villages map_width nb_villages =
-  (* Les stocks et les productions de chaque village *)
-  let stock = [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ] in
-  let prod = [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ] in
-  let roots = gen_village_roots (map_width / chunk_width) nb_villages in
-  (* Un village générique pour éviter les erreurs de typage *)
-  let empty_village = (0, Vide, ([], []), (0, 0), []) in
-  let village_array = Array.make nb_villages empty_village in
-  for i = 0 to nb_villages - 1 do
-    (* Un village ne possédant qu'un seul chunk *)
-    village_array.(i) <-
-      (i, gen_tree (), (stock, prod), roots.(i), [ roots.(i) ])
-  done;
-  village_array

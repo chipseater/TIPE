@@ -37,7 +37,14 @@ type tree = Vide | Node of condition * tree * tree * action
 (* Un village est caractérisé par son identifiant, son arbre de décision,
    son état de logistique et la liste des chunks qu'il possède.
 *)
-type village = int * tree * logistics * position * position list
+(* type village = int * tree * logistics * position * position list *)
+type village = {
+  id: int;
+  tree: tree;
+  mutable logistics: logistics;
+  root_position: position;
+  mutable position_list: position list;
+}
 
 (* Un objet de type data vide *)
 let void_data : data =
@@ -167,7 +174,9 @@ let destroy_build (logistics : logistics) (position_list : position list)
         if !people > -people_need then (
           people := !people - people_need;
           temp_stock := sum_data !temp_stock tile_data)
-        else mutate_building_in_chunk chunk None i j
+        else ( mutate_building_in_chunk chunk None i j;
+          
+        )
       done
     done;
     !temp_stock
