@@ -124,14 +124,13 @@ let serialize_logistics logistics =
   `Assoc [ ("stock", serialize_data stock); ("prod", serialize_data prod) ]
 
 let serialize_village (village : village) =
-  let id, tree, logistics, position, pos_list = village in
   `Assoc
     [
-      ("id", `Int id);
-      ("tree", serialize_tree tree);
-      ("logistics", serialize_logistics logistics);
-      ("position", serialize_pos position);
-      ("pos_list", `List (serialize_pos_list pos_list));
+      ("id", `Int village.id);
+      ("tree", serialize_tree village.tree);
+      ("logistics", serialize_logistics village.logistics);
+      ("position", serialize_pos village.root_position);
+      ("pos_list", `List (serialize_pos_list village.position_list));
     ]
 
 let serialize_village_array village_array =

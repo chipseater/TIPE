@@ -37,7 +37,14 @@ type tree = Vide | Node of condition * tree * tree * action
 (* Un village est caractérisé par son identifiant, son arbre de décision,
    son état de logistique et la liste des chunks qu'il possède.
 *)
-type village = int * tree * logistics * position * position list
+(* type village = int * tree * logistics * position * position list *)
+type village = {
+  id: int;
+  tree: tree;
+  logistics: logistics;
+  root_position: position;
+  position_list: position list;
+}
 
 (* Un objet de type data vide *)
 let void_data : data =
