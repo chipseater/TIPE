@@ -129,7 +129,7 @@ let rec proxi (arr : int array array) (pos_list : position list) (world_limit:in
   let range = Utils.arr_cartesian_square [| -1; 0; 1 |] in
   match pos_list with
   | [] -> ()
-  | (0, _) :: _ | (_, 0) :: _ -> failwith "World limit"
+  | (0, _) :: _ | (_, 0) :: _ -> failwith "World limit" (* a ajouter les *)
   | (x, _) :: _ when x = world_limit -> failwith "World limit"
   | (_, x) :: _ when x = world_limit -> failwith "World limit"
   | (x, y) :: q ->

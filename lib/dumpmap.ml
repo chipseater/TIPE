@@ -134,23 +134,26 @@ let serialize_village (village : village) =
       ("position", serialize_pos village.root_position);
       ("pos_list", `List (serialize_pos_list village.position_list));
     ]
-(*
+
 let serialize_village_array village_array =
   array_to_json_list serialize_village village_array
 
 let serialize_map map = matrix_to_json_list serialize_chunk map
 
-let serialize_gen generation =
-  let tree, map , pos_list = generation in
+let serialize_int n = `Int n 
+ 
+let serialize_int_array_array int_array_array = matrix_to_json_list serialize_int int_array_array 
+
+let serialize_pos_array pos_array = array_to_json_list serialize_pos pos_array 
+
+let serialize_save generation =
+  let tree_array, pos_array, eval = generation in
   `Assoc
     [
-      ("tree", serialize_tree tree); ("map", serialize_map map); ("pos_list", serialize_pos_list pos_list) ;
+      ("tree_array",  (serialize_tree_array tree_array)); 
+      ("pos_list", (serialize_pos_array pos_array)); 
+      ("evaluation", (serialize_int_array_array eval));
     ]
 
-let serialize_game game =
-  let rec game_serializer = function
-    | [] -> []
-    | gen :: q -> serialize_gen gen :: game_serializer q
-  in
-  `List (game_serializer game)
-*)
+let serialize_save_array tab = 
+  array_to_json_list serialize_save tab

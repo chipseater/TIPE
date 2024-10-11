@@ -26,12 +26,12 @@
 (library
  (name game)
  (modules game)
- (libraries village mapgen newgen score))
+ (libraries village mapgen newgen score yojson dumpmap))
 
 (library
  (name dumpmap)
  (modules dumpmap)
- (libraries mapgen mapmanage yojson village game))
+ (libraries mapgen mapmanage yojson village))
 
 (library
  (name mapmanage)

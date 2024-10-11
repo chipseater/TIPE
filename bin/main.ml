@@ -1,6 +1,5 @@
-open Village
+(* open Village
 open Game 
 open Dumpmap
-open Score
-
-;;
+open Score *)
+ open Game
