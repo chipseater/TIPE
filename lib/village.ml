@@ -174,13 +174,12 @@ let destroy_build (logistics : logistics) (position_list : position list)
         if !people > -people_need then (
           people := !people - people_need;
           temp_stock := sum_data !temp_stock tile_data)
-        else ( mutate_building_in_chunk chunk None i j;
-          
-        )
+        else ( mutate_building_in_chunk chunk None i j;  ) (* Doit rajouter le fait de la destruction du dernier chunk  OE*)
       done
     done;
     !temp_stock
   in
+  
   let rec parcours_list (l : position list) (stock : data) =
     match l with
     | [] -> failwith "Invalid Arg d.1"

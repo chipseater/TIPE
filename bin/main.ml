@@ -1,5 +1,4 @@
-(* open Village
-open Game 
-open Dumpmap
-open Score *)
- open Game
+open Game
+
+(* let _ = game 2 *)
+

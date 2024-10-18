@@ -11,13 +11,14 @@ let ingpercent r1 r2 ing pourcent donnee : bool =
   let nr2 = search donnee r2 in
   match ing with
   | More ->
-      let dif = (nr1 - nr2) * 100 / nr1 in
-      if nr1 > nr2 then dif > pourcent else false
+      if nr1 = 0 then true else
+      let ratio = nr2 * 100 / nr1 in
+      if nr1 > nr2 then ratio > pourcent else false
   | Less ->
-      let dif = (nr2 - nr1) * 100 / nr2 in
-      if nr1 < nr2 then dif > pourcent else false
-  | Equal ->
-      abs ((nr1 - nr2) * 100 / nr2) < pourcent
+      if nr1 = 0 then false else
+      let ratio =  nr2 * 100 / nr1 in
+      if nr1 < nr2 then ratio > pourcent else false
+  | Equal -> false
 
 (* Test si la ressource n1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le minimum est inférieur à la diférence *)
 let ingflat r1 r2 ing min donnee : bool =
@@ -121,27 +122,28 @@ let pos_card (pos_list : position list) =
       in
       parc pos_list
 
-(* Remplis le tableau avec les positions des chunks *)
+
 let rec proxi (arr : int array array) (pos_list : position list) (world_limit:int)
-    (corner : position) =
+  (corner : position) =
+  let pas_valid n i j = (i < 0 || i >= n || j < 0 || j >= n) in 
   let p, m = corner in
   (* J'aurais pu mettre [| (-1, -1), (-1, 0), ..., (1, 1) |] *)
   let range = Utils.arr_cartesian_square [| -1; 0; 1 |] in
   match pos_list with
   | [] -> ()
-  | (0, _) :: _ | (_, 0) :: _ -> failwith "World limit" (* a ajouter les *)
-  | (x, _) :: _ when x = world_limit -> failwith "World limit"
-  | (_, x) :: _ when x = world_limit -> failwith "World limit"
   | (x, y) :: q ->
       for i = 0 to 8 do
         (* Prends successivement les 9 positions adjacentes à (0, 0) *)
-        let r_x, r_y = range.(i) in
-        if ((r_x, r_y) <> (0, 0)) then
+        let r_x, r_y = range.(i) in 
+        if (pas_valid world_limit (x+r_x) (y+r_y)) then arr.(x - p + r_x).(y - m + r_y) <- -100
+        else if ((r_x, r_y) <> (0, 0)) then
           arr.(x + r_x - p).(y + r_y - m) <- arr.(x + r_x - p).(y + r_y - m) + 1
         else
-          arr.(x - p).(y - m) <- -10;
+          arr.(x - p).(y - m) <- arr.(x - p).(y - m) -10;
       done;
       proxi arr q world_limit corner
+
+
 
 (* Parcours la matrice pour lister les positions les plus probables *)
 let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int) =
@@ -251,13 +253,15 @@ let to_do (action : action) (map : map) (pos_list : position list) (village:vill
   ;;
    
 (* Evalue un noeud et fait ce qu'il faut *)
-let rec eval_node (node : tree) (ressource : data) (pos_list : position list)
-    (map : map) (village:village) =
+let rec eval_node (node : tree) (map : map) (village:village) =
+  let (ressource,_) = village.logistics in 
+  let pos_list = village.position_list in 
   match node with
   | Vide -> failwith "Empty node"
-  | Node (cond, sub_tree_left, sub_tree_right, action) ->
-      if isEmpty node then to_do action map pos_list  village
-      else if test ressource cond then
-        eval_node sub_tree_left ressource pos_list map  village
-      else eval_node sub_tree_right ressource pos_list map  village
-
+  | Node (cond, sub_tree_left, sub_tree_right, action) ->  
+    begin 
+      if isEmpty sub_tree_left && test ressource cond then to_do action map pos_list  village 
+      else if isEmpty sub_tree_right && not (test ressource cond) then to_do action map pos_list  village
+      else if test ressource cond then eval_node sub_tree_left map village
+      else eval_node sub_tree_right map  village
+    end

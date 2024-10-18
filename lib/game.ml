@@ -4,6 +4,7 @@ open Newgen
 open Score
 open Dumpmap
 open Mapmanage
+open Decision
 
 
 (* A generation binds a map with the villages that live inside this map *)
@@ -24,13 +25,15 @@ let new_game map_width nb_villages =
 
   (* Make all action in one turn *)
 let evolution_par_tour (village : village) (map : map)  =
-  let temp_logistics = update_all_logistics village.logistics in
-   let new_logistics = lack_of_people temp_logistics village.logistics village.position_list map in
- ()
-  (* EN COUR A FINIR *)
-;;  
+  let temp_logistics = update_all_logistics village.logistics in  print_char 'A';print_int (0);
+  print_char 'B';print_int (0);
+  let new_logistics = lack_of_people temp_logistics village.logistics village.position_list map in
+  print_char 'B';print_int (1);
+  village.logistics <- new_logistics;
+  print_char 'B';print_int (2);
+  eval_node (village.tree) map village
 
-let init_logistique () = ([],[])
+let init_logistique () = (void_data,void_data)
 
 let starter_pack (map:map) (pos:position) =
   let x,y = pos in 
@@ -127,18 +130,29 @@ let generaliser (a:save) (map:map) :generation  =
   (h1 , map ,h2 ,h3)
 ;;
 
-let do_genertion (generation:generation) :(tree array * evaluation)  =
+let do_genertion (generation:generation): (tree array * evaluation)  =
   let tree_tab,map,pos_array,_ = generation in 
+  print_char 'A';print_int (0);
   let taille_pos = Array.length pos_array in 
+  print_char 'A';print_int (1);
   let taille_tree = Array.length tree_tab in
+  print_char 'A';print_int (2);
   let score = Array.make_matrix taille_tree taille_pos 0 in 
+  print_char 'A';print_int (3);
   for i = 0 to taille_pos-1 do 
+    print_char 'A';print_int (0+10*i);
     for j = 0 to taille_tree-1 do 
+      print_char 'A';print_int (0+10*i+100*j);
       let tempmap = Array.copy map in 
+      print_char 'A';print_int (1+10*i+100*j);
       let tempvilage = createvillage tree_tab.(j) pos_array.(i) tempmap j in
+      print_char 'A';print_int (2+10*i+100*j);
       let tempvilage = evalvilage tempvilage tempmap in
+      print_char 'A';print_int (3+10*i+100*j);
       let scoretour = scoring tempvilage tempmap in
+      print_char 'A';print_int (4+10*i+100*j);
       score.(i).(j) <- scoretour ;
+      print_char 'A';print_int (5+10*i+100*j);
     done
   done;
   let new_tree = selection score tree_tab in
@@ -147,20 +161,27 @@ let do_genertion (generation:generation) :(tree array * evaluation)  =
 ;;
 
 let game ?(nb_villages = 32) ?(nb_trees = 100) ?(taille_map = 800 ) (n:int) = 
-  let (tab:game) = Array.make n ( (Array.make nb_trees Vide), (Array.make nb_villages (-1,-1)), (Array.make_matrix nb_villages nb_trees (-1))) in
+  let (tab:game) = Array.make (n+1) ( (Array.make nb_trees Vide), (Array.make nb_villages (-1,-1)), (Array.make_matrix nb_villages nb_trees (-1))) in
   (* Init de la première gen d'arbre *)
   let tree_tab1 = gen_trees nb_trees in 
   (* Map gen *)
   let (map,pos_list) = new_game taille_map nb_villages in
   tab.(0) <- (tree_tab1,pos_list,[||]);
   for i = 1 to n-1 do 
+    print_int (Array.length tab); print_int i;
     let tree_tab,score = (do_genertion (generaliser (tab.(i-1)) map )) in 
+    print_int (1+10*i);
     let h1,h2,_= tab.(i-1) in 
+    print_int (2+10*i);
     tab.(i-1) <- (h1,h2,score) ;
     (* Map gen *)
+    print_int (3+10*i);
     let map,pos_list = new_game taille_map nb_villages in
+    print_int (4+10*i);
     Yojson.to_file "efopzvipbaqspivbvqsopvh" (serialize_map map);
-    tab.(i) <- (tree_tab,pos_list,[||])
+    print_int (5+10*i);
+    tab.(i) <- (tree_tab,pos_list,[||]);
+    print_int (9+10*i)
   done;
   Yojson.to_file "game.json" (serialize_save_array tab)
 ;;

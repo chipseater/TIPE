@@ -20,13 +20,12 @@
 (library
  (name score)
  (modules score)
- (libraries village mapgen ))
-
+ (libraries village mapgen))
 
 (library
  (name game)
  (modules game)
- (libraries village mapgen newgen score yojson dumpmap))
+ (libraries village mapgen newgen score yojson dumpmap decision))
 
 (library
  (name dumpmap)
