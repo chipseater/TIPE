@@ -40,4 +40,4 @@
 (library
  (name mutation)
  (modules mutation)
- (libraries village utils))
+ (libraries village utils mapgen))
