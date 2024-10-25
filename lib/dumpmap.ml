@@ -30,11 +30,14 @@ let serialize_chunk (chunk : chunk) =
       ("biome", `String (biome_to_string biome));
     ]
 
-let serialize_ing inequality =
+let serialize_flat_ing inequality =
   match inequality with
-  | More -> `String "M"
-  | Less -> `String "L"
-  | Equal -> `String "E"
+  | MoreFlat -> `String "MF"
+  | LessFlat -> `String "LF"
+  | EqualFlat -> `String "LF"
+
+let serialize_percent_ing inequality =
+  match inequality with MorePercent -> `String "MP" | LessPercent -> `String "LP"
 
 let serialize_argument argument =
   match argument with InCity -> `String "In" | OutCity -> `String "Out"
@@ -76,13 +79,22 @@ let condition_type_to_string = function
 
 let serialize_condition condition =
   match condition with
-  | Ingpercent (rss1, rss2, ing, int) | Ingflat (rss1, rss2, ing, int) ->
+  | Ingpercent (rss1, rss2, ing, int) ->
       `Assoc
         [
           ("type", `String (condition_type_to_string condition));
           ("ressource1", serialize_ressource rss1);
           ("ressource2", serialize_ressource rss2);
-          ("ing", serialize_ing ing);
+          ("ing", serialize_percent_ing ing);
+          ("int", `Int int);
+        ]
+  | Ingflat (rss1, rss2, ing, int) ->
+      `Assoc
+        [
+          ("type", `String (condition_type_to_string condition));
+          ("ressource1", serialize_ressource rss1);
+          ("ressource2", serialize_ressource rss2);
+          ("ing", serialize_flat_ing ing);
           ("int", `Int int);
         ]
 

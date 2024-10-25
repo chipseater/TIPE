@@ -11,7 +11,11 @@ type logistics = data * data
 type position = int * int
 
 (* Arbre *)
-type ing = More | Less | Equal
+(* Une égalité sur des rapports n'ayant pas de sens,
+   des types d'inégalité différents sont utilisés
+   pour Ingpercent et pour Ingflat *)
+type flat_ing = MoreFlat | LessFlat | EqualFlat
+type percent_ing = MorePercent | LessPercent
 
 (* Action *)
 type argument = InCity | OutCity
@@ -24,8 +28,8 @@ type action = argument * building * prio
    les constructeurs de ing
 *)
 type condition =
-  | Ingpercent of ressource * ressource * ing * int
-  | Ingflat of ressource * ressource * ing * int
+  | Ingflat of ressource * ressource * flat_ing * int
+  | Ingpercent of ressource * ressource * percent_ing * int
 
 (* Un arbre de décision est soit vide, soit constitué d'une condition
    qui décidera si le premier ou le deuxième sous-arbre sera évalué:

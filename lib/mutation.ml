@@ -18,13 +18,16 @@ let int_of_condition_type = function
   | Ingpercent (_, _, _, _) -> 0
   | Ingflat (_, _, _, _) -> 1
 
-let int_of_ing = function 2 -> More | 1 -> Equal | _ -> Less
+let int_of_flat_ing = function 2 -> MoreFlat | 1 -> EqualFlat | _ -> LessFlat
+let int_of_percent_ing = function 1 -> MorePercent | _ -> LessPercent
 
 (* Change une inégalité en pourcentage par une inégalité brute et inversement *)
 let switch_condition_type condition =
   match condition with
-  | Ingpercent (r1, r2, ing, int) -> Ingflat (r1, r2, ing, int)
-  | Ingflat (r1, r2, ing, int) -> Ingpercent (r1, r2, ing, int)
+  | Ingpercent (r1, r2, _, int) ->
+      Ingflat (r1, r2, int_of_flat_ing (Random.int 3), int)
+  | Ingflat (r1, r2, _, int) ->
+      Ingpercent (r1, r2, int_of_percent_ing (Random.int 2), int)
 
 let argument_of_int = function 1 -> OutCity | _ -> InCity
 
@@ -50,10 +53,11 @@ let rnd_increase_ress condition =
   increase_ress_amount condition rss_number increment
 
 let change_ing condition =
-  let new_ing = int_of_ing (Random.int 3) in
+  let new_flat_ing = int_of_flat_ing (Random.int 3) in
+  let new_percent_ing = int_of_percent_ing (Random.int 2) in
   match condition with
-  | Ingpercent (r1, r2, _, int) -> Ingpercent (r1, r2, new_ing, int)
-  | Ingflat (r1, r2, _, int) -> Ingflat (r1, r2, new_ing, int)
+  | Ingpercent (r1, r2, _, int) -> Ingpercent (r1, r2, new_percent_ing, int)
+  | Ingflat (r1, r2, _, int) -> Ingflat (r1, r2, new_flat_ing, int)
 
 let change_rss_type condition =
   let new_ress = ressource_of_int (Random.int 5) in
@@ -69,29 +73,25 @@ let change_rss_type condition =
 let change_preference_type prio =
   match prio with
   | Random -> Pref (int_to_biome (Random.int 5))
-  | Pref biome -> Random
+  | Pref _ -> Random
 
 let change_preference_biome prio =
   match prio with
+  | Pref _ -> Pref (int_to_biome (Random.int 5))
   | Random -> Random
-  | Pref biome -> Pref (int_to_biome (Random.int 5))
 
 let rand_change_prio prio =
   let new_prio =
     match Random.int 2 with 1 -> change_preference_biome prio | _ -> prio
   in
   match new_prio with
-  | Pref biome -> change_preference_type prio
-  | Random -> change_preference_type prio
+  | Pref _ -> change_preference_type new_prio
+  | Random -> change_preference_type new_prio
 
 let change_threshold condition =
   match condition with
   | Ingpercent (r1, r2, ing, old_threshold) ->
-      Ingpercent
-        ( r1,
-          r2,
-          ing,
-          Utils.int_rand_normal old_threshold 5)
+      Ingpercent (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
   | Ingflat (r1, r2, ing, old_threshold) ->
       Ingflat (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
 
@@ -130,10 +130,11 @@ let mutate_tree root_tree p0 =
     | Node (cond, l_tree, r_tree, action) ->
         if Utils.rand_bool p then
           let mutation_function = mutate_condition (Random.int 4) in
-          Node ( mutation_function cond,
-            tree_mutator l_tree (p *. 0.8),
-            tree_mutator r_tree (p *. 0.8),
-            mutate_action action )
+          Node
+            ( mutation_function cond,
+              tree_mutator l_tree (p *. 0.8),
+              tree_mutator r_tree (p *. 0.8),
+              mutate_action action )
         else tree
   in
   tree_mutator root_tree p0
@@ -145,6 +146,6 @@ let mutate tree_array p0 =
     mutated_trees.(i) <- tree_array.(i)
   done;
   for i = n to (5 * n) - 1 do
-    mutated_trees.(i) <- mutate_tree (tree_array.(i mod 5)) p0
+    mutated_trees.(i) <- mutate_tree tree_array.(i mod 5) p0
   done;
   mutated_trees

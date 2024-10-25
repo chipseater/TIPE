@@ -10,27 +10,25 @@ let ingpercent r1 r2 ing pourcent donnee : bool =
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
   match ing with
-  | More ->
+  | MorePercent ->
       let dif = (nr1 - nr2) * 100 / nr1 in
       if nr1 > nr2 then dif > pourcent else false
-  | Less ->
+  | LessPercent ->
       let dif = (nr2 - nr1) * 100 / nr2 in
       if nr1 < nr2 then dif > pourcent else false
-  | Equal ->
-      abs ((nr1 - nr2) * 100 / nr2) < pourcent
 
 (* Test si la ressource n1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le minimum est inférieur à la diférence *)
 let ingflat r1 r2 ing min donnee : bool =
   let nr1 = search donnee r1 in
   let nr2 = search donnee r2 in
   match ing with
-  | More ->
+  | MoreFlat ->
       let dif = nr1 - nr2 in
       if nr1 > nr2 then dif > min else false
-  | Less ->
+  | LessFlat ->
       let dif = nr1 - nr2 in
       if nr1 < nr2 then -dif > min else false
-  | Equal ->
+  | EqualFlat ->
       abs (nr2 - nr1) < min
 
 (* Effectue le test selon l'objet *)

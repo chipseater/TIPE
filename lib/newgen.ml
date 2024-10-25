@@ -10,15 +10,25 @@ let rnd_ressource () =
   | 3 -> Wood
   | _ -> Bed
 
-let rnd_ing () = match Random.int 3 with 2 -> More | 1 -> Less | _ -> Equal
+let rnd_flat_ing () =
+  match Random.int 3 with 2 -> MoreFlat | 1 -> LessFlat | _ -> EqualFlat
+
+let rnd_percent_ing () =
+  match Random.int 2 with
+  | 1 -> MorePercent
+  | _ -> LessPercent
 
 let gen_cond () =
-  let ress1, ress2, ing, threshold =
-    (rnd_ressource (), rnd_ressource (), rnd_ing (), Random.int 10)
+  let ress1, ress2, ing_flat, ing_percent, threshold =
+    ( rnd_ressource (),
+      rnd_ressource (),
+      rnd_flat_ing (),
+      rnd_percent_ing (),
+      Random.int 10 )
   in
   match Random.int 2 with
-  | 1 -> Ingpercent (ress1, ress2, ing, threshold)
-  | _ -> Ingflat (ress1, ress2, ing, threshold)
+  | 1 -> Ingpercent (ress1, ress2, ing_percent, threshold)
+  | _ -> Ingflat (ress1, ress2, ing_flat, threshold)
 
 let gen_placement () = match Random.int 2 with 1 -> InCity | _ -> OutCity
 
@@ -44,8 +54,7 @@ let gen_tree () =
   in
   Utils.rand_normal 3. 1. |> ceil |> int_of_float |> tree_generator
 
-let gen_trees nb_of_trees =
-  Array.init nb_of_trees (fun _ -> gen_tree ())
+let gen_trees nb_of_trees = Array.init nb_of_trees (fun _ -> gen_tree ())
 
 let random_pos min max =
   let x_min, y_min = min in
@@ -72,5 +81,3 @@ let gen_village_roots n k =
     roots.(i) <- random_pos (x, y) (x + quadrant_width, y + quadrant_width)
   done;
   roots
-
-
