@@ -2,6 +2,40 @@ open Village
 open Mapmanage
 open Mapgen
 
+
+
+
+
+
+
+
+let aff arr = 
+  let n = Array.length arr in
+  print_char '\n';
+  let m = Array.length arr.(1) in
+  for i = 0 to (n-1) do 
+    for j =0 to (m-1) do 
+      print_int (arr.(i).(j));print_char '\t' 
+    done ;
+    print_char '\n'
+  done
+let rec aff2 tab = 
+  match tab with 
+  |e::q -> let a,b = e in print_int a;print_char ' ' ; print_int b ;print_char '\n';  aff2 q
+  |[]->()
+  
+
+
+
+
+
+
+
+
+
+
+
+
 (* Vérifie si un noeud est vide *)
 let isEmpty = function Vide -> true | _ -> false
 
@@ -51,7 +85,7 @@ let test_not_full (chunk : chunk) : bool =
       for i = 0 to chunk_width - 1 do
         for j = 0 to chunk_width - 1 do
           let (Tile (c, _)) = x.(i).(j) in
-          if c == None then t := true
+          if c = None then t := true
         done
       done;
       !t
@@ -59,15 +93,20 @@ let test_not_full (chunk : chunk) : bool =
 (* Ajoute dans un tableau toutes les cases qui sont constructibles *)
 let possibilite chunk =
   let arr = Array.make 16 (-1, -1) in
+  print_char 'n';
   let tab = get_chunk_tiles chunk in
-  let c = ref 0 in
   for i = 0 to chunk_width - 1 do
     for j = 0 to chunk_width - 1 do
       let (Tile (b, _)) = tab.(i).(j) in
-      if b = None then arr.(!c) <- (i, j);
-      c := !c + 1
-    done
+      (* print_int !c; *)
+      if b = None then arr.(i*4+j) <- (i, j);
+    done ; 
+    (* print_char 'm' *)
   done;
+  print_char '\n';
+  let li = Array.to_list arr in 
+  aff2 li;
+  print_char '\n';  
   arr
 
 (* Place le batiment dans un des chunks  *)
@@ -79,21 +118,52 @@ let buildtile (build : building) (map : map) (table : (int * int) array)
   village.position_list <- (x,y) :: village.position_list;
   let arr = possibilite temp in
   Array.shuffle ~rand:Random.int arr;
+  print_char 'f';
+  print_char '\n';
+  print_int (Array.length arr);
   let rec choice arr c =
+    print_int c;
     match arr.(c) with
-    | -1, -1 -> choice arr (c + 1)
-    | i, j -> mutate_building_in_chunk map.(x).(y) (Some build) i j
+    | -1, -1 ->  (choice arr (c + 1))
+    | i, j ->   print_char '\n';print_char 'b';mutate_building_in_chunk map.(x).(y) (Some build) i j;print_char 'b'
   in
   choice arr 0
 ;;
+
+let nul table map = 
+  let n = Array.length table in
+  let o = ref 0 in 
+  try  
+  for t=0 to n-1 do
+    o := t ;
+    let x, y = table.(t) in
+    if (test_not_full (map.(x).(y))) then raise Exit
+  done;
+  raise Not_found
+  with Exit -> table.(!o)
+  |Not_found -> (-1,-1)
+  
+
+
+
+
+
   (* Place le batiment dans un des chunks  *)
 let build_tile_in (build : building) (map : map) (table : (int * int) array) =
+  print_char 'A';
   Array.shuffle ~rand:Random.int table;
-  let x, y = table.(0) in
-  let temp = map.(x).(y) in
+  let (x,y) = nul table map in (*A voir*)
+  if x = -1 then () else
+  let temp = map.(x).(y) in 
   let arr = possibilite temp in
   Array.shuffle ~rand:Random.int arr;
+  print_int x;
+  print_int y;
+  print_char '\n';
+  let li = Array.to_list arr in 
+  aff2 li;
   let rec choice arr c =
+    print_int c;
     match arr.(c) with
     | -1, -1 -> choice arr (c + 1)
     | i, j -> mutate_building_in_chunk map.(x).(y) (Some build) i j
@@ -146,19 +216,23 @@ let rec proxi (arr : int array array) (pos_list : position list) (world_limit:in
 
 
 (* Parcours la matrice pour lister les positions les plus probables *)
-let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int) =
+let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int) (map:map) =
   let a, b = corner in
   let c = ref 0 in
   let list = ref [] in
   for i = 0 to h - 1 do
     for j = 0 to l - 1 do
-      if arr.(i).(j) > !c then (
-        list := [ (i, j) ];
+      if (arr.(i).(j) > !c) && (test_not_full (map.(i+a).(j+b))) then (
+        list := [ (i+a, j+b) ];
         c := arr.(i).(j))
-      else if arr.(i).(j) = !c then list := (i + a, j + b) :: !list
+      else if arr.(i).(j) = !c && test_not_full (map.(i+a).(j+b)) then list := (i + a, j + b) :: !list
       else ()
     done
   done;
+  aff arr;
+  print_char 'm';
+  aff2 !list;
+  print_char 'n';
   !list
 
 (* Construit le batiment à l'extérieur du village sans biome privilegié *)
@@ -167,7 +241,8 @@ let r_buildout (build : building) (map : map) (pos_list : position list)  (villa
   let mat = Array.make_matrix haut larg 0 in
   let world_limit = Array.length map in
   proxi mat pos_list world_limit coner;
-  let list = parc_mat mat haut larg coner in
+  let list = parc_mat mat haut larg coner map in
+
   let arr = Array.of_list list in
   buildtile build map arr  village
   )
@@ -176,7 +251,7 @@ let r_buildin (build : building) (map : map) (pos_list : position list) (village
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
-    | (x, y) :: q when test_not_full map.(x).(y) == false -> empile q
+    | (x, y) :: q when test_not_full map.(x).(y) = true -> empile q
     | (x, y) :: q -> (x, y) :: empile q
   in
   let temp = empile pos_list in
@@ -190,9 +265,10 @@ let r_buildin (build : building) (map : map) (pos_list : position list) (village
 let classif (list : (int * int) list) (map : map) (biome : biome) =
   let rec parc l1 l2 l3 =
     match l1 with
-    | (a, b) :: q when get_chunk_biome map.(a).(b) = biome ->
+    | (a, b) :: q when get_chunk_biome map.(a).(b) = biome && test_not_full map.(a).(b) ->
         parc q ((a, b) :: l2) l3
-    | (a, b) :: q -> parc q l2 ((a, b) :: l3)
+    | (a, b) :: q when test_not_full map.(a).(b) -> parc q l2 ((a, b) :: l3)
+    | _::q -> parc q l2 l3 
     | [] -> (l2, l3)
   in
   parc list [] []
@@ -201,18 +277,25 @@ let classif (list : (int * int) list) (map : map) (biome : biome) =
 let pref_buildout (build : building) (map : map) (pos_list : position list)
     (biome : biome)  village : unit =
   (let corner, larg, haut = pos_card pos_list in
+  (* print_char 'a'; *)
   let world_limit = Array.length map in
   let mat = Array.make_matrix haut larg 0 in
+  (* print_char 'c'; *)
   proxi mat pos_list world_limit corner;
-  let list = parc_mat mat haut larg corner in
+  (* print_char 'd'; *)
+  let list = parc_mat mat haut larg corner map in
+  (* print_char 'e'; *)
   let pref, autre = classif list map biome in
+  (* print_char 'f'; *)
   match pref with
   | [] ->
       let arr = Array.of_list autre in
-      buildtile build map arr  village
+      (* print_char 'g'; *)
+      buildtile build map arr village
   | _ ->
       let arr = Array.of_list pref in
-      buildtile build map arr  village)
+      (* print_char 'h'; *)
+      buildtile build map arr village)
 
 (* Construit le batiment à l'intérieur du village avec un biome privilegié *)
 let pref_buildin (build : building) (map : map) (pos_list : position list)
@@ -220,7 +303,7 @@ let pref_buildin (build : building) (map : map) (pos_list : position list)
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
-    | (x, y) :: q when test_not_full map.(x).(y) == false -> empile q
+    | (x, y) :: q when test_not_full map.(x).(y) = true -> empile q
     | (x, y) :: q -> (x, y) :: empile q
   in
   let temp = empile pos_list in
@@ -241,21 +324,21 @@ let to_do (action : action) (map : map) (pos_list : position list) (village:vill
   let arg, build, pref = action in
   if pref = Random then
     match arg with
-    | InCity -> r_buildin build map pos_list village
-    | OutCity -> r_buildout build map pos_list  village
+    | InCity ->  print_char 'c';print_char 'w';r_buildin build map pos_list village
+    | OutCity -> print_char 'd';print_char 'w';r_buildout build map pos_list  village
   else
     match pref with
     | Pref a -> (
         match arg with
-        | InCity -> pref_buildin build map pos_list a village
-        | OutCity -> pref_buildout build map pos_list a  village)
+        | InCity -> print_char 'e';print_char 'w'; pref_buildin build map pos_list a village
+        | OutCity -> print_char 'f';print_char 'w'; pref_buildout build map pos_list a  village)
     | _ -> failwith "No other possibility"
   ;;
-   
 (* Evalue un noeud et fait ce qu'il faut *)
 let rec eval_node (node : tree) (map : map) (village:village) =
   let (ressource,_) = village.logistics in 
   let pos_list = village.position_list in 
+  print_char 'C';
   match node with
   | Vide -> failwith "Empty node"
   | Node (cond, sub_tree_left, sub_tree_right, action) ->  

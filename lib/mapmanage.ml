@@ -42,3 +42,19 @@ let get_chunk_z chunk =
 let mutate_building_in_chunk chunk building i j =
   let tile_z = get_tile_z (get_chunk_tiles chunk).(i).(j) in
   (get_chunk_tiles chunk).(i).(j) <- Tile (building, tile_z)
+
+let reset_chunk chunk = 
+  for i = 0 to chunk_width-1 do 
+    for j=0 to chunk_width-1 do 
+      let tile_z = get_tile_z (get_chunk_tiles chunk).(i).(j) in
+  (get_chunk_tiles chunk).(i).(j) <- Tile (None, tile_z)
+    done 
+  done
+
+let reset_map map = 
+  for i=0 to (Array.length map) -1 do 
+    for j=0 to (Array.length map.(0)) -1 do 
+      reset_chunk map.(i).(j)
+    done
+  done
+
