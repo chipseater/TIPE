@@ -222,6 +222,7 @@ let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int) (m
   let list = ref [] in
   for i = 0 to h - 1 do
     for j = 0 to l - 1 do
+      print_char 'x';
       if (arr.(i).(j) > !c) && (test_not_full (map.(i+a).(j+b))) then (
         list := [ (i+a, j+b) ];
         c := arr.(i).(j))
@@ -240,10 +241,12 @@ let r_buildout (build : building) (map : map) (pos_list : position list)  (villa
   (let coner, larg, haut = pos_card pos_list in
   let mat = Array.make_matrix haut larg 0 in
   let world_limit = Array.length map in
-  proxi mat pos_list world_limit coner;
+  proxi mat pos_list world_limit coner;  
+  print_char 'y';
   let list = parc_mat mat haut larg coner map in
-
+  print_char 'y';
   let arr = Array.of_list list in
+  print_char 'y';
   buildtile build map arr  village
   )
 (* Construit le batiment à l'intérieur du village sans biome privilegié *)
@@ -256,8 +259,9 @@ let r_buildin (build : building) (map : map) (pos_list : position list) (village
   in
   let temp = empile pos_list in
   match temp with
-  | [] -> r_buildout build map pos_list village
+  | [] ->  print_char 'h';r_buildout build map pos_list village
   | _ :: _ ->
+      print_char 'g';
       let tab = Array.of_list temp in
       build_tile_in build map tab
 
@@ -311,7 +315,7 @@ let pref_buildin (build : building) (map : map) (pos_list : position list)
   match pref with
   | [] -> (
       match autre with
-      | [] -> r_buildout build map pos_list village
+      | [] -> pref_buildout build map pos_list biome village
       | _ :: _ ->
           let tab = Array.of_list autre in
           build_tile_in build map tab)
