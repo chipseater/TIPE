@@ -218,7 +218,7 @@ let rec proxi (arr : int array array) (pos_list : position list) (world_limit:in
 (* Parcours la matrice pour lister les positions les plus probables *)
 let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int) (map:map) =
   let a, b = corner in
-  let c = ref 0 in
+  let c = ref 1 in
   let list = ref [] in
   for i = 0 to h - 1 do
     for j = 0 to l - 1 do
