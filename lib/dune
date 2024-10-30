@@ -30,7 +30,7 @@
 (library
  (name dumpmap)
  (modules dumpmap)
- (libraries mapgen mapmanage yojson village game))
+ (libraries mapgen mapmanage yojson village newgen))
 
 (library
  (name mapmanage)

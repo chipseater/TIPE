@@ -55,10 +55,9 @@ let rec pow n k =
   else if k mod 2 = 0 then pow n (k / 2) * pow n (k / 2)
   else n * pow n (k / 2) * pow n (k / 2)
 
-(* Génère une distribution normale en utilisant 
+(* Génère une distribution normale en utilisant
    l'algorithme de Box-Muller *)
 let rand_normal mean std_deviation =
   let phi = 2.0 *. Float.pi *. Random.float 1.0 in
   let r = sqrt (-2. *. log (Random.float 1.0)) in
-  mean +. std_deviation *. r *. cos phi
-
+  mean +. (std_deviation *. r *. cos phi)

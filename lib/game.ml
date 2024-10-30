@@ -6,13 +6,6 @@ open Dumpmap
 open Mapmanage
 open Decision
 
-(* A generation binds a map with the villages that live inside this map *)
-type score = int array
-type evaluation = score array
-type generation = tree array * map * position array * evaluation
-type save = tree array * position array * evaluation
-type game = save array
-
 let new_game map_width nb_villages =
   let map = gen_map map_width in
   let roots = gen_village_roots (map_width / chunk_width) nb_villages in
@@ -52,7 +45,7 @@ let nombre_de_tour_par_simulation = 10
 
 let evalvillage a b =
   for _ = 0 to nombre_de_tour_par_simulation do
-    evolution_par_tour a b
+    evolution_par_tour a b;
   done;
   a
 
@@ -112,9 +105,7 @@ let selection score tree_tab =
   done;
   arbres_tries
 
-let scoring (village : village) (map : map) : int =
-  calcul_score village map
-
+let scoring (village : village) (map : map) : int = calcul_score village map
 let mutate_trees (tree : tree array) = tree
 (* 'creer les 80 autres arbres *)
 (* Eric *)
@@ -134,14 +125,14 @@ let do_genertion (generation : generation) : tree array * evaluation =
       let tempvilage = createvillage tree_tab.(j) pos_array.(i) map j in
       let tempvilage = evalvillage tempvilage map in
       let scoretour = scoring tempvilage map in
-      score.(i).(j) <- scoretour
-    done
+      score.(i).(j) <- scoretour;
+    done;
   done;
   let new_tree = selection score tree_tab in
   let new_tree = mutate_trees new_tree in
   (new_tree, score)
 
-let game ?(nb_villages = 32) ?(nb_trees = 100) ?(taille_map = 800) (n : int) =
+let game ?(nb_villages = 10) ?(nb_trees = 11) ?(taille_map = 800) (n : int) =
   let (tab : game) =
     Array.make (n + 1)
       ( Array.make nb_trees Vide,
@@ -160,6 +151,6 @@ let game ?(nb_villages = 32) ?(nb_trees = 100) ?(taille_map = 800) (n : int) =
     (* Map gen *)
     let map, pos_list = new_game taille_map nb_villages in
     Yojson.to_file "efopzvipbaqspivbvqsopvh" (serialize_map map);
-    tab.(i) <- (tree_tab, pos_list, [||])
+    tab.(i) <- (tree_tab, pos_list, [||]);
   done;
   Yojson.to_file "game.json" (serialize_save_array tab)

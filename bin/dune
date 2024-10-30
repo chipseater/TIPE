@@ -2,5 +2,13 @@
  (public_name TIPE)
  (name main)
  (modules main)
- (libraries mapgen village yojson domainslib dumpmap decision newgen mutation game))
-
+ (libraries
+  mapgen
+  village
+  yojson
+  domainslib
+  dumpmap
+  decision
+  newgen
+  mutation
+  game))

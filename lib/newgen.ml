@@ -2,6 +2,13 @@ open Village
 open Mapgen
 open Random
 
+(* A generation binds a map with the villages that live inside this map *)
+type score = int array
+type evaluation = score array
+type generation = tree array * map * position array * evaluation
+type save = tree array * position array * evaluation
+type game = save array
+
 let rnd_ressource () =
   match Random.int 5 with
   | 0 -> Food
@@ -14,9 +21,7 @@ let rnd_flat_ing () =
   match Random.int 3 with 2 -> MoreFlat | 1 -> LessFlat | _ -> EqualFlat
 
 let rnd_percent_ing () =
-  match Random.int 2 with
-  | 1 -> MorePercent
-  | _ -> LessPercent
+  match Random.int 2 with 1 -> MorePercent | _ -> LessPercent
 
 let gen_cond () =
   let ress1, ress2, ing_flat, ing_percent, threshold =

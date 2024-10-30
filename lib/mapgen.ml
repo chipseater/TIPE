@@ -5,10 +5,7 @@ let chunk_width = 8
 
 type biome = Forest | Desert | Plains
 type building = House | Quarry | Sawmill | Farm
-type building = House | Quarry | Sawmill | Farm
 
-(* A tile is made out of the eventual building it contains associated with its elevation *)
-type tile = Tile of building option * int
 (* A tile is made out of the eventual building it contains associated with its elevation *)
 type tile = Tile of building option * int
 
@@ -22,14 +19,6 @@ type map = chunk array array
    here 8 plains for 1 desert and 1 tundra *)
 let int_to_biome b =
   assert (b >= 0 && b < 10);
-  if b < 4 then Plains else if b < 8 then Forest else Desert
-
-(* Checks if the point is not outside of a nxn map *)
-let is_valid n i j = not (i < 0 || i >= n || j < 0 || j >= n)
-
-(* Generates a (n / grid_width)^2 grid with
-   a random noramlized vector at each node *)
-let gen_rand_grad n grid_width =
   if b < 4 then Plains else if b < 8 then Forest else Desert
 
 (* Checks if the point is not outside of a nxn map *)

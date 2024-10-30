@@ -1,13 +1,6 @@
 open Mapgen
 open Mapmanage
-open Mapmanage
 
-type ressource = Food | People | Stone | Wood | Bed
-
-(* Dictionnaire contenant des ressources et leur quantités *)
-type data = (ressource * int) list
-
-(* Contient à la fois les stocks du village et les ressources produites*)
 type ressource = Food | People | Stone | Wood | Bed
 
 (* Dictionnaire contenant des ressources et leur quantités *)
@@ -50,11 +43,11 @@ type tree = Vide | Node of condition * tree * tree * action
 *)
 (* type village = int * tree * logistics * position * position list *)
 type village = {
-  id: int;
-  tree: tree;
-  mutable logistics: logistics;
-  root_position: position;
-  mutable position_list: position list;
+  id : int;
+  tree : tree;
+  mutable logistics : logistics;
+  root_position : position;
+  mutable position_list : position list;
 }
 
 (* Un objet de type data vide *)
