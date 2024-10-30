@@ -1,5 +1,13 @@
+Mamerde.ml
 _build
+<<<<<<< HEAD
 README.pdf
 ma_merde.ml
 map.json
 jupyter/.ipynb_checkpoints
+=======
+README.md 
+map.json 
+decision2.ml
+game2.ml
+>>>>>>> Paf

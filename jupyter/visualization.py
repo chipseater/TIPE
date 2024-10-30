@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.3
+#       jupytext_version: 1.16.4
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -93,10 +93,9 @@ extent = 0, get_map_size(map_data), get_map_size(map_data), 0
 
 for village in villages:
     pos = village['position']
-    # plt.plot(chunk_width * pos['x'], chunk_width * pos['y'], marker='x', color="red") 
+    plt.plot(chunk_width * pos['x'], chunk_width * pos['y'], marker='x', color="red") 
 
-# plt.imshow(z_map, cmap="grey", extent=extent)
-plt.imshow(biome_map, extent=extent)
+plt.imshow(z_map, cmap="grey", extent=extent)
+plt.imshow(biome_map, extent=extent, alpha=0.3)
 # [(village['position']['x'] * chunk_width, village['position']['y'] * chunk_width) for village in villages]
-#np.array([tree_height(village['tree']) for village in villages])
-plt.savefig('biome_map.png')
+np.array([tree_height(village['tree']) for village in villages])

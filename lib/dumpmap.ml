@@ -32,7 +32,7 @@ let serialize_chunk (chunk : chunk) =
 
 let serialize_flat_ing inequality =
   match inequality with
-  | MoreFlat -> `String "MF"
+  | Village.MoreFlat -> `String "MF"
   | LessFlat -> `String "LF"
   | EqualFlat -> `String "LF"
 
@@ -109,6 +109,8 @@ let rec serialize_tree node =
           ("r_child", serialize_tree r_child);
           ("action", serialize_action action);
         ]
+let serialize_tree_array tree_array =
+  array_to_json_list serialize_tree tree_array  
 
 let serialize_pos position =
   let x, y = position in
@@ -163,3 +165,20 @@ let serialize_game game =
     | gen :: q -> serialize_gen gen :: game_serializer q
   in
   `List (game_serializer game)
+let serialize_int n = `Int n 
+ 
+let serialize_int_array_array int_array_array = matrix_to_json_list serialize_int int_array_array 
+
+let serialize_pos_array pos_array = array_to_json_list serialize_pos pos_array 
+
+let serialize_save generation =
+  let tree_array, pos_array, eval = generation in
+  `Assoc
+    [
+      ("tree_array",  (serialize_tree_array tree_array)); 
+      ("pos_list", (serialize_pos_array pos_array)); 
+      ("evaluation", (serialize_int_array_array eval));
+    ]
+
+let serialize_save_array tab = 
+  array_to_json_list serialize_save tab

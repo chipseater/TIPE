@@ -1,5 +1,10 @@
 open Village
+open Mapgen
 
 let get_popuplation village =
-  let _, _, (stock, _), _, _ = village in
+  let (stock, _) = village.logistics in
   search stock People
+
+
+  let calcul_score (village:village) (map:map) : int =
+    get_popuplation village
