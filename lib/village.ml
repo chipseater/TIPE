@@ -11,7 +11,11 @@ type logistics = data * data
 type position = int * int
 
 (* Arbre *)
-type ing = More | Less | Equal
+(* Une égalité sur des rapports n'ayant pas de sens,
+   des types d'inégalité différents sont utilisés
+   pour Ingpercent et pour Ingflat *)
+type flat_ing = MoreFlat | LessFlat | EqualFlat
+type percent_ing = MorePercent | LessPercent
 
 (* Action *)
 type argument = InCity | OutCity
@@ -24,8 +28,8 @@ type action = argument * building * prio
    les constructeurs de ing
 *)
 type condition =
-  | Ingpercent of ressource * ressource * ing * int
-  | Ingflat of ressource * ressource * ing * int
+  | Ingflat of ressource * ressource * flat_ing * int
+  | Ingpercent of ressource * ressource * percent_ing * int
 
 (* Un arbre de décision est soit vide, soit constitué d'une condition
    qui décidera si le premier ou le deuxième sous-arbre sera évalué:
@@ -37,7 +41,14 @@ type tree = Vide | Node of condition * tree * tree * action
 (* Un village est caractérisé par son identifiant, son arbre de décision,
    son état de logistique et la liste des chunks qu'il possède.
 *)
-type village = int * tree * logistics * position * position list
+(* type village = int * tree * logistics * position * position list *)
+type village = {
+  id : int;
+  tree : tree;
+  mutable logistics : logistics;
+  root_position : position;
+  mutable position_list : position list;
+}
 
 (* Un objet de type data vide *)
 let void_data : data =
@@ -51,7 +62,7 @@ let quarry_data_prodution : data =
   [ (Bed, 0); (Food, 0); (People, -20); (Stone, 100); (Wood, 0) ]
 
 let farm_data_prodution : data =
-  [ (Bed, 0); (Food, 10); (People, -25); (Stone, 0); (Wood, 0) ]
+  [ (Bed, 0); (Food, 100); (People, -25); (Stone, 0); (Wood, 0) ]
 
 let sawmill_data_prodution : data =
   [ (Bed, 0); (Food, 0); (People, -10); (Stone, 0); (Wood, 50) ]
@@ -102,7 +113,7 @@ let rec search (data : data) ressource =
   | (e, x) :: _ when e = ressource -> x
   | _ :: q -> search q ressource
 
-(* Create the new logistics *)
+(* Inititalisation d'un objet logistique *)
 let rec update_logistics (logistics : logistics) : logistics =
   match logistics with
   | [], _ :: _ | _ :: _, [] -> failwith "2.Lack ressource"
@@ -113,7 +124,6 @@ let rec update_logistics (logistics : logistics) : logistics =
       let a, b = update_logistics (q, s) in
       (new_stock :: a, prod :: b)
 
-(* Calculate the number of people in the village *)
 let calcul_of_people (data : data) : data =
   let food = search data Food in
   let bed = search data Bed in
@@ -146,7 +156,7 @@ let update_all_logistics (logistics : logistics) =
   (new_logistics : logistics)
 
 (* Calcule la nouvelle table de donnée en modifiant la map *)
-(* Calcule la logistics a chaque tuile et a chaque fois que la
+(* Calcule la logistics à chaque tuile et a chaque fois que la
    resource main d'oeuvre devient négative je change la case en none
    et je recalcule la nouvelle table
 *)

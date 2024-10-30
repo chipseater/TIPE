@@ -49,7 +49,7 @@ eval "$(pyenv virtualenv-init -)"
 Il faut ensuite installer python en utilisant `pyenv` après avoir redémarré son shell
 
 ```
-pyenv install 3.12
+pyenv install 3.12.4
 ```
 
 Il faut ensuite créer un environnement virtuel en se plaçant dans le répertoire `jupyter/` du projet

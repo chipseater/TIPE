@@ -2,6 +2,13 @@ open Village
 open Mapgen
 open Random
 
+(* A generation binds a map with the villages that live inside this map *)
+type score = int array
+type evaluation = score array
+type generation = tree array * map * position array * evaluation
+type save = tree array * position array * evaluation
+type game = save array
+
 let rnd_ressource () =
   match Random.int 5 with
   | 0 -> Food
@@ -10,15 +17,23 @@ let rnd_ressource () =
   | 3 -> Wood
   | _ -> Bed
 
-let rnd_ing () = match Random.int 3 with 2 -> More | 1 -> Less | _ -> Equal
+let rnd_flat_ing () =
+  match Random.int 3 with 2 -> MoreFlat | 1 -> LessFlat | _ -> EqualFlat
+
+let rnd_percent_ing () =
+  match Random.int 2 with 1 -> MorePercent | _ -> LessPercent
 
 let gen_cond () =
-  let ress1, ress2, ing, threshold =
-    (rnd_ressource (), rnd_ressource (), rnd_ing (), Random.int 10)
+  let ress1, ress2, ing_flat, ing_percent, threshold =
+    ( rnd_ressource (),
+      rnd_ressource (),
+      rnd_flat_ing (),
+      rnd_percent_ing (),
+      Random.int 10 )
   in
   match Random.int 2 with
-  | 1 -> Ingpercent (ress1, ress2, ing, threshold)
-  | _ -> Ingflat (ress1, ress2, ing, threshold)
+  | 1 -> Ingpercent (ress1, ress2, ing_percent, threshold)
+  | _ -> Ingflat (ress1, ress2, ing_flat, threshold)
 
 let gen_placement () = match Random.int 2 with 1 -> InCity | _ -> OutCity
 
@@ -42,8 +57,9 @@ let gen_tree () =
           gen_action () )
     else Vide
   in
-  let tree_height = Utils.rand_normal 3. 1. |> ceil |> int_of_float in
-  tree_generator tree_height
+  Utils.rand_normal 3. 1. |> ceil |> int_of_float |> tree_generator
+
+let gen_trees nb_of_trees = Array.init nb_of_trees (fun _ -> gen_tree ())
 
 let random_pos min max =
   let x_min, y_min = min in
@@ -70,19 +86,3 @@ let gen_village_roots n k =
     roots.(i) <- random_pos (x, y) (x + quadrant_width, y + quadrant_width)
   done;
   roots
-
-(* Returns an array with randomly positioned villages *)
-let new_villages map_width nb_villages =
-  (* The default village stocks and production *)
-  let stock = [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ] in
-  let prod = [ (Bed, 0); (Food, 0); (People, 0); (Stone, 0); (Wood, 0) ] in
-  let roots = gen_village_roots (map_width / chunk_width) nb_villages in
-  (* A token village to avoid type issues *)
-  let empty_village = (0, Vide, ([], []), (0, 0), []) in
-  let village_array = Array.make nb_villages empty_village in
-  for i = 0 to nb_villages - 1 do
-    (* A village containing only one chunk *)
-    village_array.(i) <-
-      (i, gen_tree (), (stock, prod), roots.(i), [ roots.(i) ])
-  done;
-  village_array

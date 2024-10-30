@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{type} \PYG{n}{tile} \PYG{o}{=} \PYG{n+nc}{Tile} \PYG{k}{of} \PYG{n}{building} \PYG{n}{option} \PYG{o}{*} \PYG{k+kt}{int}
+\PYG{k}{type} \PYG{n}{chunk} \PYG{o}{=} \PYG{n+nc}{Chunk} \PYG{k}{of} \PYG{n}{tile} \PYG{k+kt}{array} \PYG{k+kt}{array} \PYG{o}{*} \PYG{n}{biome}
+\PYG{k}{type} \PYG{n}{map} \PYG{o}{=} \PYG{n}{chunk} \PYG{k+kt}{array} \PYG{k+kt}{array}
+\end{Verbatim}

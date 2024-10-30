@@ -1,19 +1,18 @@
 open Mapgen
 open Mapmanage
 open Village
-(* open Game *)
 
 let tile_to_json tile =
   let z = get_tile_z tile in
   let building = get_tile_building tile in
   `Assoc [ ("z", `Int z); ("building", `String (building_to_string building)) ]
 
-(* Converts an array to a json object *)
+(* Convertit un tableau en objet json *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
 let array_to_json_list to_json (array : 'a array) =
   `List (Array.to_list (Array.map to_json array))
 
-(* Converts a 2-dimensional array to a json object *)
+(* Transforme un tableau bidimentionel en objet json *)
 let matrix_to_json_list to_json matrix =
   let n = Array.length matrix in
   let rec listify index =
@@ -31,11 +30,16 @@ let serialize_chunk (chunk : chunk) =
       ("biome", `String (biome_to_string biome));
     ]
 
-let serialize_ing inequality =
+let serialize_flat_ing inequality =
   match inequality with
-  | More -> `String "M"
-  | Less -> `String "L"
-  | Equal -> `String "E"
+  | Village.MoreFlat -> `String "MF"
+  | LessFlat -> `String "LF"
+  | EqualFlat -> `String "LF"
+
+let serialize_percent_ing inequality =
+  match inequality with
+  | MorePercent -> `String "MP"
+  | LessPercent -> `String "LP"
 
 let serialize_argument argument =
   match argument with InCity -> `String "In" | OutCity -> `String "Out"
@@ -70,20 +74,29 @@ let serialize_ressource ressource =
   | Wood -> `String "W"
   | Bed -> `String "B"
 
-(* Fonction stupide qui renvoie le type de la condition sous forme de string *)
+(* Fonction bien stupide qui renvoie le type de la condition sous forme de string *)
 let condition_type_to_string = function
   | Ingpercent (_, _, _, _) -> "Ingpercent"
   | Ingflat (_, _, _, _) -> "Ingpercent"
 
 let serialize_condition condition =
   match condition with
-  | Ingpercent (rss1, rss2, ing, int) | Ingflat (rss1, rss2, ing, int) ->
+  | Ingpercent (rss1, rss2, ing, int) ->
       `Assoc
         [
           ("type", `String (condition_type_to_string condition));
           ("ressource1", serialize_ressource rss1);
           ("ressource2", serialize_ressource rss2);
-          ("ing", serialize_ing ing);
+          ("ing", serialize_percent_ing ing);
+          ("int", `Int int);
+        ]
+  | Ingflat (rss1, rss2, ing, int) ->
+      `Assoc
+        [
+          ("type", `String (condition_type_to_string condition));
+          ("ressource1", serialize_ressource rss1);
+          ("ressource2", serialize_ressource rss2);
+          ("ing", serialize_flat_ing ing);
           ("int", `Int int);
         ]
 
@@ -98,6 +111,9 @@ let rec serialize_tree node =
           ("r_child", serialize_tree r_child);
           ("action", serialize_action action);
         ]
+
+let serialize_tree_array tree_array =
+  array_to_json_list serialize_tree tree_array
 
 let serialize_pos position =
   let x, y = position in
@@ -125,14 +141,13 @@ let serialize_logistics logistics =
   `Assoc [ ("stock", serialize_data stock); ("prod", serialize_data prod) ]
 
 let serialize_village (village : village) =
-  let id, tree, logistics, position, pos_list = village in
   `Assoc
     [
-      ("id", `Int id);
-      ("tree", serialize_tree tree);
-      ("logistics", serialize_logistics logistics);
-      ("position", serialize_pos position);
-      ("pos_list", `List (serialize_pos_list pos_list));
+      ("id", `Int village.id);
+      ("tree", serialize_tree village.tree);
+      ("logistics", serialize_logistics village.logistics);
+      ("position", serialize_pos village.root_position);
+      ("pos_list", `List (serialize_pos_list village.position_list));
     ]
 
 let serialize_village_array village_array =
@@ -153,3 +168,21 @@ let serialize_game game =
     | gen :: q -> serialize_gen gen :: game_serializer q
   in
   `List (game_serializer game)
+
+let serialize_int n = `Int n
+
+let serialize_int_array_array int_array_array =
+  matrix_to_json_list serialize_int int_array_array
+
+let serialize_pos_array pos_array = array_to_json_list serialize_pos pos_array
+
+let serialize_save generation =
+  let tree_array, pos_array, eval = generation in
+  `Assoc
+    [
+      ("tree_array", serialize_tree_array tree_array);
+      ("pos_list", serialize_pos_array pos_array);
+      ("evaluation", serialize_int_array_array eval);
+    ]
+
+let serialize_save_array tab = array_to_json_list serialize_save tab
