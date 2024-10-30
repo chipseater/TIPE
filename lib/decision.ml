@@ -64,7 +64,6 @@ let possibilite chunk =
   done;
   arr
 
-(* Testé *)
 (* Place le batiment dans un des chunks  *)
 let buildtile (build : building) (map : map) (table : (int * int) array)
     (village : village) =
@@ -134,7 +133,6 @@ let pos_card (pos_list : position list) =
       in
       parc pos_list
 
-(* Testé *)
 let rec proxi (arr : int array array) (pos_list : position list)
     (world_limit : int) (corner : position) =
   let pas_valid n i j = i < 0 || i >= n || j < 0 || j >= n in
@@ -155,7 +153,6 @@ let rec proxi (arr : int array array) (pos_list : position list)
       done;
       proxi arr q world_limit corner
 
-(* Testé *)
 (* Parcours la matrice pour lister les positions les plus probables *)
 let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int)
     (map : map) =
@@ -215,7 +212,6 @@ let classif (list : (int * int) list) (map : map) (biome : biome) =
   in
   parc list [] []
 
-(* Testé *)
 (* Construit le batiment à l'extérieur du village avec un biome privilegié *)
 let pref_buildout (build : building) (map : map) (pos_list : position list)
     (biome : biome) village : unit =

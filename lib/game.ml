@@ -74,7 +74,7 @@ let selection score tree_tab =
   let mat = Array.make_matrix nb_pos nb_arbres (0, 0) in
   (* Itère sur chaque position *)
   for i = 0 to nb_pos - 1 do
-    let scores_pos = Array.make nb_pos (0, 0) in
+    let scores_pos = Array.make nb_arbres (0, 0) in
     for j = 0 to nb_arbres - 1 do
       scores_pos.(j) <- (j, score.(i).(j))
     done;
@@ -132,7 +132,7 @@ let do_genertion (generation : generation) : tree array * evaluation =
   let new_tree = mutate_trees new_tree in
   (new_tree, score)
 
-let game ?(nb_villages = 10) ?(nb_trees = 10) ?(taille_map = 800) (n : int) =
+let game ?(nb_villages = 10) ?(nb_trees = 11) ?(taille_map = 800) (n : int) =
   let (tab : game) =
     Array.make (n + 1)
       ( Array.make nb_trees Vide,
