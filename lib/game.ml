@@ -5,6 +5,7 @@ open Score
 open Dumpmap
 open Mapmanage
 open Decision
+open Mutation
 
 let new_game map_width nb_villages =
   let map = gen_map map_width in
@@ -106,9 +107,6 @@ let selection score tree_tab =
   arbres_tries
 
 let scoring (village : village) (map : map) : int = calcul_score village map
-let mutate_trees (tree : tree array) = tree
-(* 'creer les 80 autres arbres *)
-(* Eric *)
 
 let generaliser (a : save) (map : map) : generation =
   let h1, h2, h3 = a in
@@ -129,10 +127,11 @@ let do_genertion (generation : generation) : tree array * evaluation =
     done;
   done;
   let new_tree = selection score tree_tab in
-  let new_tree = mutate_trees new_tree in
+  let new_tree = mutate new_tree 1. in
   (new_tree, score)
 
-let game ?(nb_villages = 10) ?(nb_trees = 11) ?(taille_map = 800) (n : int) =
+(* nb_trees doit être multiple de 5 *)
+let game ?(nb_villages = 10) ?(nb_trees = 25) ?(taille_map = 800) (n : int) =
   let (tab : game) =
     Array.make (n + 1)
       ( Array.make nb_trees Vide,
