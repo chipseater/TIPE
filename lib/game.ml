@@ -132,7 +132,7 @@ let do_genertion (generation : generation) : tree array * evaluation =
   let new_tree = mutate_trees new_tree in
   (new_tree, score)
 
-let game ?(nb_villages = 10) ?(nb_trees = 11) ?(taille_map = 800) (n : int) =
+let game ?(nb_villages = 10) ?(nb_trees = 10) ?(taille_map = 800) (n : int) =
   let (tab : game) =
     Array.make (n + 1)
       ( Array.make nb_trees Vide,
