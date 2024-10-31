@@ -18,8 +18,11 @@ let evolution_par_tour (village : village) (map : map) =
   let new_logistics =
     lack_of_people temp_logistics village.logistics village.position_list map
   in
+  village.logistics <- new_logistics;
   print_string "Population: ";
   print_int (calcul_score village map);
+  print_string "Boof: ";
+  print_int ( let a,_ = village.logistics in search a Food);
   print_char '\n';
   print_string "Bâtiments: ";
   List.iter
@@ -28,11 +31,10 @@ let evolution_par_tour (village : village) (map : map) =
       print_char ' ')
     (get_village_buildings village map);
   print_char '\n';
-  village.logistics <- new_logistics;
   eval_node village.tree map village
 
 let init_logistique () =
-  ([ (Bed, 1); (Food, 1); (People, 1); (Stone, 0); (Wood, 0) ], void_data)
+  ([ (Bed, 1); (Food, 1); (People, -1); (Stone, 0); (Wood, 0) ], void_data)
 
 let starter_pack (map : map) (pos : position) =
   let x, y = pos in

@@ -128,20 +128,20 @@ let calcul_of_people (data : data) : data =
   let food = search data Food in
   let bed = search data Bed in
   let people = search data People in
-  if people > bed then
+  if people/10 > bed then
     sum_data data
-      [ (Bed, -bed); (Food, 0); (People, bed - people); (Stone, 0); (Wood, 0) ]
+      [ (Bed, -bed); (Food, 0); (People, (bed - (people/10))*10); (Stone, 0); (Wood, 0) ]
   else
     let remaining_beds = bed - people in
     if food < remaining_beds then
       sum_data data
-        [ (Bed, -bed); (Food, -food); (People, food); (Stone, 0); (Wood, 0) ]
+        [ (Bed, -bed); (Food, -food); (People, food*10); (Stone, 0); (Wood, 0) ]
     else
       sum_data data
         [
           (Bed, -bed);
           (Food, -remaining_beds);
-          (People, remaining_beds);
+          (People, remaining_beds*10);
           (Stone, 0);
           (Wood, 0);
         ]
@@ -164,7 +164,6 @@ let destroy_build (logistics : logistics) (position_list : position list)
     (map : map) : logistics =
   let temp_logistics = update_people logistics in
   let stoc, _ = temp_logistics in
-
   let parcours_chunk (chunk : chunk) (stock : data) =
     let people = ref (search stock People) in
     let temp_stock = ref stock in
