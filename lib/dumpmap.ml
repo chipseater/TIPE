@@ -5,7 +5,7 @@ open Village
 let tile_to_json tile =
   let z = get_tile_z tile in
   let building = get_tile_building tile in
-  `Assoc [ ("z", `Int z); ("building", `String (building_to_string building)) ]
+  `Assoc [ ("z", `Int z); ("bat", `String (building_to_string building)) ]
 
 (* Convertit un tableau en objet json *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
@@ -61,7 +61,7 @@ let serialize_action action =
   `Assoc
     [
       ("argument", serialize_argument arg);
-      ("building", serialize_building building);
+      ("bat", serialize_building building);
       ("prio", serialize_prio prio);
     ]
 

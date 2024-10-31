@@ -207,8 +207,7 @@ let classif (list : (int * int) list) (map : map) (biome : biome) =
         parc q ((a, b) :: l2) l3
     | (a, b) :: q when test_not_full map.(a).(b) -> parc q l2 ((a, b) :: l3)
     | _ :: q -> parc q l2 l3
-    | [] ->
-        (l2, l3)
+    | [] -> (l2, l3)
   in
   parc list [] []
 
@@ -268,7 +267,7 @@ let to_do (action : action) (map : map) (pos_list : position list)
     | _ -> failwith "No other possibility"
 
 (* Evalue un noeud et fait ce qu'il faut *)
-let rec eval_node (node : tree) (map : map) (village : village) =
+let rec eval_node (node : tree) (map : map) (village : village) : unit =
   let ressource, _ = village.logistics in
   let pos_list = village.position_list in
   match node with

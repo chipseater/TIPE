@@ -1,14 +1,15 @@
 # ---
 # jupyter:
 #   jupytext:
+#     custom_cell_magics: kql
 #     formats: py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.4
+#       jupytext_version: 1.11.2
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+#     display_name: Python 3
 #     language: python
 #     name: python3
 # ---
@@ -81,21 +82,10 @@ def tree_height(tree):
 
 
 # %%
-f = open('../test_game.json', 'r')
-json_data = json.loads(f.read())[0]
-map_data = json_data['map']
-villages = json_data['villages']
+f = open('../map1.json', 'r')
+map_data = np.array(json.loads(f.read()))
 chunk_width = get_chunk_width(map_data)
 
 biome_map = get_biomes(map_data)
-z_map = get_map_z(map_data)
-extent = 0, get_map_size(map_data), get_map_size(map_data), 0
+biome_map
 
-for village in villages:
-    pos = village['position']
-    plt.plot(chunk_width * pos['x'], chunk_width * pos['y'], marker='x', color="red") 
-
-plt.imshow(z_map, cmap="grey", extent=extent)
-plt.imshow(biome_map, extent=extent, alpha=0.3)
-# [(village['position']['x'] * chunk_width, village['position']['y'] * chunk_width) for village in villages]
-np.array([tree_height(village['tree']) for village in villages])

@@ -7,12 +7,10 @@ open Mapmanage
 open Decision
 open Mutation
 
-let new_game map_width nb_villages =
+let new_generation map_width nb_villages =
   let map = gen_map map_width in
   let roots = gen_village_roots (map_width / chunk_width) nb_villages in
   (map, roots)
-
-(* let roots, trees = new_game 800 32;; *)
 
 (* Make all action in one turn *)
 let evolution_par_tour (village : village) (map : map) =
@@ -46,7 +44,7 @@ let nombre_de_tour_par_simulation = 10
 
 let evalvillage a b =
   for _ = 0 to nombre_de_tour_par_simulation do
-    evolution_par_tour a b;
+    evolution_par_tour a b
   done;
   a
 
@@ -108,48 +106,53 @@ let selection score tree_tab =
 
 let scoring (village : village) (map : map) : int = calcul_score village map
 
-let generaliser (a : save) (map : map) : generation =
-  let h1, h2, h3 = a in
-  (h1, map, h2, h3)
+(* Associe une carte et une save pour créer une génération *)
+let associer_generation (a : save) (map : map) : generation =
+  let arbres, pos_array, evaluation = a in
+  (arbres, map, pos_array, evaluation)
 
 let do_genertion (generation : generation) : tree array * evaluation =
   let tree_tab, map, pos_array, _ = generation in
   let nb_pos = Array.length pos_array in
   let nb_arbres = Array.length tree_tab in
-  let score = Array.make_matrix nb_pos nb_arbres 0 in
+  (* Un tableau à deux entrées qui donne le score de l'arbre selon sa position *)
+  let score_mat = Array.make_matrix nb_pos nb_arbres 0 in
   for i = 0 to nb_pos - 1 do
     for j = 0 to nb_arbres - 1 do
       reset_map map;
-      let tempvilage = createvillage tree_tab.(j) pos_array.(i) map j in
-      let tempvilage = evalvillage tempvilage map in
-      let scoretour = scoring tempvilage map in
-      score.(i).(j) <- scoretour;
-    done;
+      let new_village = createvillage tree_tab.(j) pos_array.(i) map j in
+      let evaluated_village = evalvillage new_village map in
+      let scoretour = scoring evaluated_village map in
+      score_mat.(i).(j) <- scoretour
+    done
   done;
-  let new_tree = selection score tree_tab in
-  let new_tree = mutate new_tree 1. in
-  (new_tree, score)
+  let best_trees_array = selection score_mat tree_tab in
+  let mutated_best_trees = mutate best_trees_array 1. in
+  (mutated_best_trees, score_mat)
 
 (* nb_trees doit être multiple de 5 *)
-let game ?(nb_villages = 10) ?(nb_trees = 25) ?(taille_map = 800) (n : int) =
-  let (tab : game) =
+let game ?(nb_villages = 5) ?(nb_trees = 25) ?(taille_map = 800) (n : int) =
+  let (game_array : save array) =
     Array.make (n + 1)
-      ( Array.make nb_trees Vide,
+      ( (* Arbres *)
+        Array.make nb_trees Vide,
+        (* Tableau qui contient les positions des villages *)
         Array.make nb_villages (-1, -1),
+        (* Scores *)
         Array.make_matrix nb_villages nb_trees (-1) )
   in
-  (* Init de la première gen d'arbre *)
-  let tree_tab1 = gen_trees nb_trees in
-  (* Map gen *)
-  let map, pos_list = new_game taille_map nb_villages in
-  tab.(0) <- (tree_tab1, pos_list, [||]);
-  for i = 1 to n - 1 do
-    let tree_tab, score = do_genertion (generaliser tab.(i - 1) map) in
-    let h1, h2, _ = tab.(i - 1) in
-    tab.(i - 1) <- (h1, h2, score);
-    (* Map gen *)
-    let map, pos_list = new_game taille_map nb_villages in
-    Yojson.to_file "efopzvipbaqspivbvqsopvh" (serialize_map map);
-    tab.(i) <- (tree_tab, pos_list, [||]);
+  (* La première case du tableau ne contient que des arbres aléatoires *)
+  game_array.(0) <- (gen_trees nb_trees, [||], [||]);
+  for i = 1 to n do
+    let trees, _, _ = game_array.(i - 1) in
+    let map, pos_arr = new_generation taille_map nb_villages in
+    let evolved_tree_tab, tree_scores =
+      do_genertion (trees, map, pos_arr, [||])
+    in
+    (* Stocke les arbres après évolution, là où ils ont évolués
+       et les scores qu'on obtenu ces arbres *)
+    game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores);
+    (* Stockage éventuel de la carte générée (pas indispensable) *)
+    (* Yojson.to_file (Utils.format_map_name i) (serialize_map map) *)
   done;
-  Yojson.to_file "game.json" (serialize_save_array tab)
+  Yojson.to_file "game.json" (serialize_save_array game_array)
