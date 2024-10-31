@@ -15,6 +15,9 @@ let new_generation map_width nb_villages =
 (* Make all action in one turn *)
 let evolution_par_tour (village : village) (map : map) =
   let temp_logistics = update_all_logistics village.logistics in
+  let new_logistics =
+    lack_of_people temp_logistics village.logistics village.position_list map
+  in
   print_string "Population: ";
   print_int (calcul_score village map);
   print_char '\n';
@@ -25,9 +28,6 @@ let evolution_par_tour (village : village) (map : map) =
       print_char ' ')
     (get_village_buildings village map);
   print_char '\n';
-  let new_logistics =
-    lack_of_people temp_logistics village.logistics village.position_list map
-  in
   village.logistics <- new_logistics;
   eval_node village.tree map village
 
