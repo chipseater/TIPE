@@ -177,7 +177,7 @@ let destroy_build (logistics : logistics) (position_list : position list)
         if !people > -people_need then (
           people := !people - people_need;
           temp_stock := sum_data !temp_stock tile_data)
-        else mutate_building_in_chunk chunk None i j
+        else mutate_building_in_chunk map chunk None i j
       done
     done;
     !temp_stock

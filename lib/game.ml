@@ -15,18 +15,29 @@ let new_generation map_width nb_villages =
 (* Make all action in one turn *)
 let evolution_par_tour (village : village) (map : map) =
   let temp_logistics = update_all_logistics village.logistics in
+  print_string "Population: ";
+  print_int (calcul_score village map);
+  print_char '\n';
+  print_string "Bâtiments: ";
+  List.iter
+    (fun x ->
+      print_building x;
+      print_char ' ')
+    (get_village_buildings village map);
+  print_char '\n';
   let new_logistics =
     lack_of_people temp_logistics village.logistics village.position_list map
   in
   village.logistics <- new_logistics;
   eval_node village.tree map village
 
-let init_logistique () = (void_data, void_data)
+let init_logistique () =
+  ([ (Bed, 1); (Food, 1); (People, 1); (Stone, 0); (Wood, 0) ], void_data)
 
 let starter_pack (map : map) (pos : position) =
   let x, y = pos in
-  mutate_building_in_chunk map.(x).(y) (Some Farm) 0 0;
-  mutate_building_in_chunk map.(x).(y) (Some House) 0 1
+  mutate_building_in_chunk map map.(x).(y) (Some Farm) 0 0;
+  mutate_building_in_chunk map map.(x).(y) (Some House) 0 1
 
 let createvillage (tree : tree) (pos : position) (map : map) (id : int) :
     village =
@@ -40,10 +51,13 @@ let createvillage (tree : tree) (pos : position) (map : map) (id : int) :
     position_list = [ pos ];
   }
 
-let nombre_de_tour_par_simulation = 10
+let nombre_de_tours_par_simulation = 10
 
 let evalvillage a b =
-  for _ = 0 to nombre_de_tour_par_simulation do
+  for i = 0 to nombre_de_tours_par_simulation do
+    print_string "Tour n°";
+    print_int i;
+    print_char '\n';
     evolution_par_tour a b
   done;
   a
@@ -111,8 +125,7 @@ let associer_generation (a : save) (map : map) : generation =
   let arbres, pos_array, evaluation = a in
   (arbres, map, pos_array, evaluation)
 
-let do_genertion (generation : generation) : tree array * evaluation =
-  let tree_tab, map, pos_array, _ = generation in
+let do_genertion tree_tab map pos_array : tree array * evaluation =
   let nb_pos = Array.length pos_array in
   let nb_arbres = Array.length tree_tab in
   (* Un tableau à deux entrées qui donne le score de l'arbre selon sa position *)
@@ -131,7 +144,7 @@ let do_genertion (generation : generation) : tree array * evaluation =
   (mutated_best_trees, score_mat)
 
 (* nb_trees doit être multiple de 5 *)
-let game ?(nb_villages = 5) ?(nb_trees = 25) ?(taille_map = 800) (n : int) =
+let game ?(nb_villages = 2) ?(nb_trees = 25) ?(taille_map = 400) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
@@ -146,12 +159,10 @@ let game ?(nb_villages = 5) ?(nb_trees = 25) ?(taille_map = 800) (n : int) =
   for i = 1 to n do
     let trees, _, _ = game_array.(i - 1) in
     let map, pos_arr = new_generation taille_map nb_villages in
-    let evolved_tree_tab, tree_scores =
-      do_genertion (trees, map, pos_arr, [||])
-    in
+    let evolved_tree_tab, tree_scores = do_genertion trees map pos_arr in
     (* Stocke les arbres après évolution, là où ils ont évolués
        et les scores qu'on obtenu ces arbres *)
-    game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores);
+    game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores)
     (* Stockage éventuel de la carte générée (pas indispensable) *)
     (* Yojson.to_file (Utils.format_map_name i) (serialize_map map) *)
   done;

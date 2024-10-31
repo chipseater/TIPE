@@ -76,7 +76,7 @@ let buildtile (build : building) (map : map) (table : (int * int) array)
   let rec choice arr c =
     match arr.(c) with
     | -1, -1 -> choice arr (c + 1)
-    | i, j -> mutate_building_in_chunk map.(x).(y) (Some build) i j
+    | i, j -> mutate_building_in_chunk map map.(x).(y) (Some build) i j
   in
   choice arr 0
 
@@ -107,7 +107,7 @@ let build_tile_in (build : building) (map : map) (table : (int * int) array) =
     let rec choice arr c =
       match arr.(c) with
       | -1, -1 -> choice arr (c + 1)
-      | i, j -> mutate_building_in_chunk map.(x).(y) (Some build) i j
+      | i, j -> mutate_building_in_chunk map map.(x).(y) (Some build) i j
     in
     choice arr 0
 
