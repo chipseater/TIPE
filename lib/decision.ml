@@ -3,45 +3,45 @@ open Mapmanage
 open Mapgen
 
 (* Vérifie si un noeud est vide *)
-let isEmpty = function Vide -> true | _ -> false
+let estVide = function Vide -> true | _ -> false
 
 (* Test si la ressource 1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le pourcentage est inférieur à la diférence *)
-let ingpercent r1 r2 ing pourcent donnee : bool =
-  let nr1 = search donnee r1 in
-  let nr2 = search donnee r2 in
+let ingpercent ressource1 ressource2 ing pourcentage donnee : bool =
+  let nb_ressource1 = search donnee ressource1 in
+  let nb_ressource2 = search donnee ressource2 in
   match ing with
   | MorePercent ->
-      if nr1 = 0 then true
+      if nb_ressource1 = 0 then true
       else
-        let ratio = nr2 * 100 / nr1 in
-        if nr1 > nr2 then ratio > pourcent else false
+        let ratio = nb_ressource2  * 100 / nb_ressource1 in
+        if nb_ressource1 > nb_ressource2  then ratio > pourcentage else false
   | LessPercent ->
-      if nr1 = 0 then false
+      if nb_ressource1 = 0 then false
       else
-        let ratio = nr2 * 100 / nr1 in
-        if nr1 < nr2 then ratio > pourcent else false
+        let ratio = nb_ressource2  * 100 / nb_ressource1 in
+        if nb_ressource1 < nb_ressource2  then ratio > pourcentage else false
 
 (* Test si la ressource n1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le minimum est inférieur à la diférence *)
-let ingflat r1 r2 ing min donnee : bool =
-  let nr1 = search donnee r1 in
-  let nr2 = search donnee r2 in
+let ingflat ressource1 ressource2 ing min donnee : bool =
+  let nb_ressource1 = search donnee ressource1 in
+  let nb_ressource2  = search donnee ressource2 in
   match ing with
   | MoreFlat ->
-      let dif = nr1 - nr2 in
-      if nr1 > nr2 then dif > min else false
+      let dif = nb_ressource1 - nb_ressource2 in
+      if nb_ressource1 > nb_ressource2  then dif > min else false
   | LessFlat ->
-      let dif = nr1 - nr2 in
-      if nr1 < nr2 then -dif > min else false
-  | EqualFlat -> abs (nr2 - nr1) < min
+      let dif = nb_ressource1 - nb_ressource2  in
+      if nb_ressource1 < nb_ressource2  then -dif > min else false
+  | EqualFlat -> abs (nb_ressource2  - nb_ressource1 ) < min
 
 (* Effectue le test selon l'objet *)
 let test (donnee : data) (condition : condition) : bool =
   match condition with
-  | Ingpercent (r1, r2, ing, pourcent) -> ingpercent r1 r2 ing pourcent donnee
-  | Ingflat (r1, r2, ing, min) -> ingflat r1 r2 ing min donnee
+  | Ingpercent (ressource1, ressource2, ing, pourcentage) -> ingpercent ressource1 ressource2 ing pourcentage donnee
+  | Ingflat (ressource1, ressource2, ing, min) -> ingflat ressource1 ressource2 ing min donnee
 
 (* Teste s' il y a une tuile du chunk qui est vide *)
-let test_not_full (chunk : chunk) : bool =
+let tesr_chunk_pas_plein (chunk : chunk) : bool =
   let chunk_tiles = get_chunk_tiles chunk in
   let t = ref false in
   for i = 0 to chunk_width - 1 do
@@ -87,7 +87,7 @@ let nul table map =
     for t = 0 to n - 1 do
       o := t;
       let x, y = table.(t) in
-      if test_not_full map.(x).(y) then raise Exit
+      if tesr_chunk_pas_plein map.(x).(y) then raise Exit
     done;
     raise Not_found
   with
@@ -161,10 +161,10 @@ let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int)
   let list = ref [] in
   for i = 0 to h - 1 do
     for j = 0 to l - 1 do
-      if arr.(i).(j) > !c && test_not_full map.(i + a).(j + b) then (
+      if arr.(i).(j) > !c && tesr_chunk_pas_plein map.(i + a).(j + b) then (
         list := [ (i + a, j + b) ];
         c := arr.(i).(j))
-      else if arr.(i).(j) = !c && test_not_full map.(i + a).(j + b) then
+      else if arr.(i).(j) = !c && tesr_chunk_pas_plein map.(i + a).(j + b) then
         list := (i + a, j + b) :: !list
       else ()
     done
@@ -188,7 +188,7 @@ let r_buildin (build : building) (map : map) (pos_list : position list)
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
-    | (x, y) :: q when test_not_full map.(x).(y) = true -> empile q
+    | (x, y) :: q when tesr_chunk_pas_plein map.(x).(y) = true -> empile q
     | (x, y) :: q -> (x, y) :: empile q
   in
   let temp = empile pos_list in
@@ -203,9 +203,9 @@ let classif (list : (int * int) list) (map : map) (biome : biome) =
   let rec parc l1 l2 l3 =
     match l1 with
     | (a, b) :: q
-      when get_chunk_biome map.(a).(b) = biome && test_not_full map.(a).(b) ->
+      when get_chunk_biome map.(a).(b) = biome && tesr_chunk_pas_plein map.(a).(b) ->
         parc q ((a, b) :: l2) l3
-    | (a, b) :: q when test_not_full map.(a).(b) -> parc q l2 ((a, b) :: l3)
+    | (a, b) :: q when tesr_chunk_pas_plein map.(a).(b) -> parc q l2 ((a, b) :: l3)
     | _ :: q -> parc q l2 l3
     | [] -> (l2, l3)
   in
@@ -234,7 +234,7 @@ let pref_buildin (build : building) (map : map) (pos_list : position list)
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
-    | (x, y) :: q when test_not_full map.(x).(y) = true -> empile q
+    | (x, y) :: q when tesr_chunk_pas_plein map.(x).(y) = true -> empile q
     | (x, y) :: q -> (x, y) :: empile q
   in
   let temp = empile pos_list in
@@ -251,7 +251,7 @@ let pref_buildin (build : building) (map : map) (pos_list : position list)
       build_tile_in build map tab
 
 (* Effectue le type de construonction en fonction des paramètres *)
-let to_do (action : action) (map : map) (pos_list : position list)
+let a_faire (action : action) (map : map) (pos_list : position list)
     (village : village) : unit =
   let arg, build, pref = action in
   if pref = Random then
@@ -273,9 +273,9 @@ let rec eval_node (node : tree) (map : map) (village : village) : unit =
   match node with
   | Vide -> failwith "Empty node"
   | Node (cond, sub_tree_left, sub_tree_right, action) ->
-      if isEmpty sub_tree_left && test ressource cond then
-        to_do action map pos_list village
-      else if isEmpty sub_tree_right && not (test ressource cond) then
-        to_do action map pos_list village
+      if estVide sub_tree_left && test ressource cond then
+        a_faire action map pos_list village
+      else if estVide sub_tree_right && not (test ressource cond) then
+        a_faire action map pos_list village
       else if test ressource cond then eval_node sub_tree_left map village
       else eval_node sub_tree_right map village

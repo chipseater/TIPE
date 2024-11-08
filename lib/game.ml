@@ -20,10 +20,7 @@ let evolution_par_tour (village : village) (map : map) =
     lack_of_people temp_logistics village.logistics village.position_list map
   in
   let new_logistics = update_people new_logistics in
-  
-  
-  
-  
+  (*
   print_string "Population: ";
   print_int (calcul_score village map);
   print_string "Boof: ";
@@ -36,7 +33,7 @@ let evolution_par_tour (village : village) (map : map) =
       print_char ' ')
     (get_village_buildings village map);
   print_char '\n';
-
+*)
   village.logistics <- new_logistics
 
 let init_logistique () =
@@ -59,13 +56,15 @@ let createvillage (tree : tree) (pos : position) (map : map) (id : int) :
     position_list = [ pos ];
   }
 
-let nombre_de_tours_par_simulation = 25
+let nombre_de_tours_par_simulation = 300
 
 let evalvillage a b =
-  for i = 0 to nombre_de_tours_par_simulation do
+  for _ = 0 to nombre_de_tours_par_simulation do
+    (*
     print_string "Tour n°";
     print_int i;
     print_char '\n';
+    *)
     evolution_par_tour a b
   done;
   a
@@ -167,11 +166,12 @@ let game ?(nb_villages = 2) ?(nb_trees = 25) ?(taille_map = 400) (n : int) =
   for i = 1 to n do
     let trees, _, _ = game_array.(i - 1) in
     let map, pos_arr = new_generation taille_map nb_villages in
+    
     let evolved_tree_tab, tree_scores = do_genertion trees map pos_arr in
     (* Stocke les arbres après évolution, là où ils ont évolués
        et les scores qu'on obtenu ces arbres *)
     game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores)
     (* Stockage éventuel de la carte générée (pas indispensable) *)
-    (* Yojson.to_file (Utils.format_map_name i) (serialize_map map) *)
+    (* Yojson.to_file (Utils.ormat_map_name i) ("dossier/" ^ serialize_map map) *)
   done;
   Yojson.to_file "game.json" (serialize_save_array game_array)

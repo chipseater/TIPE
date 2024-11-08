@@ -128,15 +128,15 @@ let calcul_of_people (data : data) : data =
   let food = search data Food in
   let bed = search data Bed in
   let people = search data People in
-  if people > bed*10 then (print_char 'C';
+  if people > bed*10 then ((*print_char 'C';*)
     sum_data data
       [ (Bed, -bed); (Food, 0); (People, (bed - (people/10))*10); (Stone, 0); (Wood, 0) ])
   else
     let remaining_beds = bed - (people/10) in
-    if food < remaining_beds then (print_char 'B';
+    if food < remaining_beds then ((*print_char 'B';*)
       sum_data data
         [ (Bed, -bed); (Food, -food); (People, food*10); (Stone, 0); (Wood, 0) ] )
-    else (print_char 'A';
+    else ((*print_char 'A';*)
       sum_data data
         [
           (Bed, -bed);
