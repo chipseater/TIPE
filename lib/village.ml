@@ -62,7 +62,7 @@ let quarry_data_prodution : data =
   [ (Bed, 0); (Food, 0); (People, -20); (Stone, 100); (Wood, 0) ]
 
 let farm_data_prodution : data =
-  [ (Bed, 0); (Food, 100); (People, -25); (Stone, 0); (Wood, 0) ]
+  [ (Bed, 0); (Food, 10); (People, -25); (Stone, 0); (Wood, 0) ]
 
 let sawmill_data_prodution : data =
   [ (Bed, 0); (Food, 0); (People, -10); (Stone, 0); (Wood, 50) ]
@@ -128,15 +128,15 @@ let calcul_of_people (data : data) : data =
   let food = search data Food in
   let bed = search data Bed in
   let people = search data People in
-  if people/10 > bed then
+  if people > bed*10 then (print_char 'C';
     sum_data data
-      [ (Bed, -bed); (Food, 0); (People, (bed - (people/10))*10); (Stone, 0); (Wood, 0) ]
+      [ (Bed, -bed); (Food, 0); (People, (bed - (people/10))*10); (Stone, 0); (Wood, 0) ])
   else
-    let remaining_beds = bed - people in
-    if food < remaining_beds then
+    let remaining_beds = bed - (people/10) in
+    if food < remaining_beds then (print_char 'B';
       sum_data data
-        [ (Bed, -bed); (Food, -food); (People, food*10); (Stone, 0); (Wood, 0) ]
-    else
+        [ (Bed, -bed); (Food, -food); (People, food*10); (Stone, 0); (Wood, 0) ] )
+    else (print_char 'A';
       sum_data data
         [
           (Bed, -bed);
@@ -144,15 +144,16 @@ let calcul_of_people (data : data) : data =
           (People, remaining_beds*10);
           (Stone, 0);
           (Wood, 0);
-        ]
+        ])
 
 let update_people (logistics : logistics) : logistics =
   match logistics with stock, prod -> ((calcul_of_people stock : data), prod)
 
 (* Calcul la nouvelle table de data *)
-let update_all_logistics (logistics : logistics) =
-  let temp_logistics = update_people logistics in
-  let new_logistics = update_logistics temp_logistics in
+let update_all_logistics (logistics : logistics) position_list map =
+  let (a,_) =  logistics in
+  let b =  sum_chunk_list_production position_list map in 
+  let new_logistics = update_logistics (a,b) in
   (new_logistics : logistics)
 
 (* Calcule la nouvelle table de donnée en modifiant la map *)
@@ -162,8 +163,7 @@ let update_all_logistics (logistics : logistics) =
 *)
 let destroy_build (logistics : logistics) (position_list : position list)
     (map : map) : logistics =
-  let temp_logistics = update_people logistics in
-  let stoc, _ = temp_logistics in
+  let stoc, _ = logistics in
   let parcours_chunk (chunk : chunk) (stock : data) =
     let people = ref (search stock People) in
     let temp_stock = ref stock in
@@ -188,7 +188,7 @@ let destroy_build (logistics : logistics) (position_list : position list)
     | (x, y) :: q -> parcours_list q (parcours_chunk map.(x).(y) (stock : data))
   in
   let new_prod = parcours_list position_list stoc in
-  update_all_logistics (stoc, new_prod)
+  update_all_logistics (stoc, new_prod) position_list map
 
 let lack_of_people (logistics : logistics) (old_logistics : logistics)
     (chunk_list : position list) (map : map) =
