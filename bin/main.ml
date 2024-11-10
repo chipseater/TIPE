@@ -1,4 +1,4 @@
 open Game
 
-let _ = game 50
+let _ = game 1
 
