@@ -20,7 +20,12 @@ let evolution_par_tour (village : village) (map : map) =
     lack_of_people temp_logistics village.logistics village.position_list map
   in
   let new_logistics = update_people new_logistics in
-  (*
+  
+  let rec aff = function 
+  |[] -> print_char '\n'
+  |(a,b)::q -> print_int a; print_char ' '; print_int b; print_char '\t'; aff q
+  in
+  aff village.position_list;
   print_string "Population: ";
   print_int (calcul_score village map);
   print_string "Boof: ";
@@ -33,7 +38,7 @@ let evolution_par_tour (village : village) (map : map) =
       print_char ' ')
     (get_village_buildings village map);
   print_char '\n';
-*)
+
   village.logistics <- new_logistics
 
 let init_logistique () =
@@ -56,7 +61,7 @@ let createvillage (tree : tree) (pos : position) (map : map) (id : int) :
     position_list = [ pos ];
   }
 
-let nombre_de_tours_par_simulation = 300
+let nombre_de_tours_par_simulation = 10
 
 let evalvillage a b =
   for _ = 0 to nombre_de_tours_par_simulation do
@@ -86,6 +91,10 @@ let compare_last x y =
   let _, a = x in
   let _, b = y in
   compare a b
+
+
+
+
 
 let selection score tree_tab =
   (* selectionne les 20 meilleurs *)
@@ -125,12 +134,25 @@ let selection score tree_tab =
   done;
   arbres_tries
 
+
+
+
+
+  
 let scoring (village : village) (map : map) : int = calcul_score village map
 
 (* Associe une carte et une save pour créer une génération *)
 let associer_generation (a : save) (map : map) : generation =
   let arbres, pos_array, evaluation = a in
   (arbres, map, pos_array, evaluation)
+
+
+
+
+
+
+
+
 
 let do_genertion tree_tab map pos_array : tree array * evaluation =
   let nb_pos = Array.length pos_array in
@@ -149,6 +171,19 @@ let do_genertion tree_tab map pos_array : tree array * evaluation =
   let best_trees_array = selection score_mat tree_tab in
   let mutated_best_trees = mutate best_trees_array 1. in
   (mutated_best_trees, score_mat)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 (* nb_trees doit être multiple de 5 *)
 let game ?(nb_villages = 2) ?(nb_trees = 25) ?(taille_map = 400) (n : int) =

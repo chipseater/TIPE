@@ -124,27 +124,35 @@ let rec update_logistics (logistics : logistics) : logistics =
       let a, b = update_logistics (q, s) in
       (new_stock :: a, prod :: b)
 
-let calcul_of_people (data : data) : data =
+let calcul_of_people (data)  =
   let food = search data Food in
   let bed = search data Bed in
   let people = search data People in
-  if people > bed*10 then ((*print_char 'C';*)
+  if people > bed*10 then
+    begin 
+    if bed > food then (
+      sum_data data
+  [ (Bed, -bed); (Food, -food); (People, -people + food*10 ); (Stone, 0); (Wood, 0) ])
+  else (
     sum_data data
-      [ (Bed, -bed); (Food, 0); (People, (bed - (people/10))*10); (Stone, 0); (Wood, 0) ])
-  else
+    [ (Bed, -bed); (Food, -bed); (People, -people + bed*10 ); (Stone, 0); (Wood, 0) ])
+  end
+  else 
+    if people > food *10 then (
+      sum_data data
+    [ (Bed, -bed); (Food, -food); (People, -people + food*10 ); (Stone, 0); (Wood, 0) ])
+  else begin  
+    let remaining_food = food - (people/10) in 
     let remaining_beds = bed - (people/10) in
-    if food < remaining_beds then ((*print_char 'B';*)
+    let last_gen_people = (people/10)*10 in 
+    if remaining_beds *2 > remaining_food then ( 
       sum_data data
-        [ (Bed, -bed); (Food, -food); (People, food*10); (Stone, 0); (Wood, 0) ] )
-    else ((*print_char 'A';*)
-      sum_data data
-        [
-          (Bed, -bed);
-          (Food, -remaining_beds);
-          (People, remaining_beds*10);
-          (Stone, 0);
-          (Wood, 0);
-        ])
+    [ (Bed, -bed); (Food, -food + remaining_food mod 2); (People, -people + last_gen_people + (remaining_food/2)*10 ); (Stone, 0); (Wood, 0) ])
+  else (
+    sum_data data
+    [ (Bed, -bed); (Food, -food + remaining_food - 2 * remaining_beds); (People, -people + last_gen_people + (2* remaining_beds)*10 ); (Stone, 0); (Wood, 0) ])
+  end
+
 
 let update_people (logistics : logistics) : logistics =
   match logistics with stock, prod -> ((calcul_of_people stock : data), prod)

@@ -41,7 +41,7 @@ let test (donnee : data) (condition : condition) : bool =
   | Ingflat (ressource1, ressource2, ing, min) -> ingflat ressource1 ressource2 ing min donnee
 
 (* Teste s' il y a une tuile du chunk qui est vide *)
-let tesr_chunk_pas_plein (chunk : chunk) : bool =
+let test_chunk_pas_plein (chunk : chunk) : bool =
   let chunk_tiles = get_chunk_tiles chunk in
   let t = ref false in
   for i = 0 to chunk_width - 1 do
@@ -87,7 +87,7 @@ let nul table map =
     for t = 0 to n - 1 do
       o := t;
       let x, y = table.(t) in
-      if tesr_chunk_pas_plein map.(x).(y) then raise Exit
+      if test_chunk_pas_plein map.(x).(y) then raise Exit
     done;
     raise Not_found
   with
@@ -161,10 +161,10 @@ let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int)
   let list = ref [] in
   for i = 0 to h - 1 do
     for j = 0 to l - 1 do
-      if arr.(i).(j) > !c && tesr_chunk_pas_plein map.(i + a).(j + b) then (
+      if arr.(i).(j) > !c && test_chunk_pas_plein map.(i + a).(j + b) then (
         list := [ (i + a, j + b) ];
         c := arr.(i).(j))
-      else if arr.(i).(j) = !c && tesr_chunk_pas_plein map.(i + a).(j + b) then
+      else if arr.(i).(j) = !c && test_chunk_pas_plein map.(i + a).(j + b) then
         list := (i + a, j + b) :: !list
       else ()
     done
@@ -188,7 +188,7 @@ let r_buildin (build : building) (map : map) (pos_list : position list)
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
-    | (x, y) :: q when tesr_chunk_pas_plein map.(x).(y) = true -> empile q
+    | (x, y) :: q when test_chunk_pas_plein map.(x).(y) = true -> empile q
     | (x, y) :: q -> (x, y) :: empile q
   in
   let temp = empile pos_list in
@@ -203,9 +203,9 @@ let classif (list : (int * int) list) (map : map) (biome : biome) =
   let rec parc l1 l2 l3 =
     match l1 with
     | (a, b) :: q
-      when get_chunk_biome map.(a).(b) = biome && tesr_chunk_pas_plein map.(a).(b) ->
+      when get_chunk_biome map.(a).(b) = biome && test_chunk_pas_plein map.(a).(b) ->
         parc q ((a, b) :: l2) l3
-    | (a, b) :: q when tesr_chunk_pas_plein map.(a).(b) -> parc q l2 ((a, b) :: l3)
+    | (a, b) :: q when test_chunk_pas_plein map.(a).(b) -> parc q l2 ((a, b) :: l3)
     | _ :: q -> parc q l2 l3
     | [] -> (l2, l3)
   in
@@ -234,7 +234,7 @@ let pref_buildin (build : building) (map : map) (pos_list : position list)
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
-    | (x, y) :: q when tesr_chunk_pas_plein map.(x).(y) = true -> empile q
+    | (x, y) :: q when test_chunk_pas_plein map.(x).(y) = true -> empile q
     | (x, y) :: q -> (x, y) :: empile q
   in
   let temp = empile pos_list in
@@ -272,10 +272,11 @@ let rec eval_node (node : tree) (map : map) (village : village) : unit =
   let pos_list = village.position_list in
   match node with
   | Vide -> failwith "Empty node"
-  | Node (cond, sub_tree_left, sub_tree_right, action) ->
-      if estVide sub_tree_left && test ressource cond then
+  | Node (cond, sub_tree_left, sub_tree_right, action) -> 
+      let test_v = test ressource cond in 
+      if estVide sub_tree_left && test_v then
         a_faire action map pos_list village
-      else if estVide sub_tree_right && not (test ressource cond) then
+      else if estVide sub_tree_right && not test_v then
         a_faire action map pos_list village
-      else if test ressource cond then eval_node sub_tree_left map village
+      else if test_v then eval_node sub_tree_left map village
       else eval_node sub_tree_right map village
