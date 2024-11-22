@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.3
+#       jupytext_version: 1.16.4
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -124,9 +124,92 @@ def print_tree_lines(tree):
         formatted_line = padding + separator.join(line)
         print(" ".join(formatted_line))
 
+
+
+# %%
+def ecrire_arbre(dict, nom,fi):
+    fi.write(nom)
+    fi.write('[')
+    typ = dict['condition']['type']
+    r1 = dict['condition']['ressource1']
+    r2 = dict['condition']['ressource2']
+    ing = dict['condition']['ing']
+    x = dict['condition']['int']
+    act = dict['action']['argument']
+    bat = dict['action']['bat']
+    prio = dict['action']['prio']
+    fi.write(typ + '<br>' + r1+ ' ' + r2+ ' ' + ing+ ' '+str(x)+'<br>'+act+' '+bat+' '+prio) 
+    fi.write(']')
+    fi.write(' ')
+    if dict['l_child'] != 'V' and dict['r_child'] != 'V'  :
+        fi.write('--> ') 
+        fi.write(nom+'0;\n')
+        fi.write(nom+' --> '+nom+'1;\n')
+        ecrire_arbre(dict['l_child'],nom+'0',fi)
+        ecrire_arbre(dict['r_child'],nom+'1',fi)
+    elif dict['l_child'] != 'V' :
+        fi.write('--> ') 
+        fi.write(nom+'0;\n')
+        ecrire_arbre(dict['l_child'],nom+'0',fi)
+    elif dict['r_child'] != 'V' :
+        fi.write('--> ') 
+        fi.write(nom+'1;\n')
+        ecrire_arbre(dict['r_child'],nom+'1',fi)
+    else :
+        fi.write(';\n')
+
+
+# %%
+def increment_excel_style(column_label: str) -> str:
+    """
+    Incrémente une colonne dans le style Excel.
+    Exemple : 'A' -> 'B', 'Z' -> 'AA', 'AZ' -> 'BA'.
+    """
+    # Convertir la colonne en un numéro (base 26)
+    column_number = 0
+    for char in column_label:
+        column_number = column_number * 26 + (ord(char.upper()) - ord('A') + 1)
+    
+    # Incrémenter le numéro
+    column_number += 1
+    
+    # Convertir le numéro en colonne
+    new_label = ""
+    while column_number > 0:
+        column_number -= 1
+        new_label = chr(column_number % 26 + ord('A')) + new_label
+        column_number //= 26
+    
+    return new_label
+
+# Exemple d'utilisation
+current_label = "Z"
+next_label = increment_excel_style(current_label)
+print(f"Après {current_label}, vient {next_label}")
+
+
+# %%
+def construction_fichier(tree):
+    fi = open('../arbres/arbres.md','w')
+    fi.write('# Arbres \n')
+    fi.write('```mermaid \n')
+    fi.write('graph LR; \n')
+    
+    n = len(tree)
+    cl='A'
+    for i in range(n):
+        ecrire_arbre(tree[i],cl,fi)
+        cl = increment_excel_style(cl)    
+    fi.write('```')
+
+
+
 # %%
 f = open('../game.json', 'r')
 data = np.array(json.loads(f.read()))
-tree = np.array(data[0]['tree_array'])[10]
-print_tree_lines(get_lines(tree))
+tree = np.array(data[9]['tree_array'])
+construction_fichier(tree)
 
+# %%
+
+# %%
