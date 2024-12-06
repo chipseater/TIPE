@@ -205,9 +205,70 @@ def construction_fichier(tree):
 
 
 # %%
+def score(data):
+    l=[]
+    for i in range(1,len(data)):
+        l.append(data[i]['evaluation'])
+    return l
+def moyenne(liste):
+    c=0
+    n=0
+    for i in range(len(liste)):
+        for j in range(len(liste[i])):
+            c+=liste[i][j]
+            n+=1
+    return c/n
+def meilleur_score(liste):
+    c=0 
+    for i in range(len(liste)):
+        for j in range(len(liste[i])):
+            if c < liste[i][j]:
+                c= liste[i][j]
+    return c
+def pire_score(liste):
+    c=liste[1][1]
+    for i in range(len(liste)):
+         for j in range(len(liste[i])):
+            if c > liste[i][j]:
+                c= liste[i][j]
+    return c
+
+
+# %%
+def list_moyenne(liste):
+    l=[]
+    for i in range(len(liste)):
+        l.append(moyenne(liste[i]))
+    return l
+def list_meilleur(liste):
+    l=[]
+    for i in range(len(liste)):
+        l.append(meilleur_score(liste[i]))
+    return l
+def list_pire(liste):
+    l=[]
+    for i in range(len(liste)):
+        l.append(pire_score(liste[i]))
+    return l
+
+
+# %%
+def visualisation(data):
+    l = score(data)
+    l1=list_moyenne(l)
+    l2=list_meilleur(l)
+    l3=list_pire(l)
+    l4=range(len(data)-1)
+    plt.plot(l4,l1,'bo')
+    plt.plot(l4,l2,'ro')
+    plt.plot(l4,l3,'go')
+
+
+# %%
 f = open('../game.json', 'r')
 data = np.array(json.loads(f.read()))
-tree = np.array(data[9]['tree_array'])
-construction_fichier(tree)
+#tree = np.array(data[1]['tree_array'])
+#construction_fichier(tree)
+visualisation(data)
 
 # %%
