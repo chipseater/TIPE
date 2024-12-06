@@ -7,19 +7,19 @@ open Mapmanage
 open Decision
 open Mutation
 
-let new_generation map_width nb_villages =
-  let map = gen_map map_width in
-  let roots = gen_village_roots (map_width / chunk_width) nb_villages in
-  (map, roots)
+let nouvel_generation taille_carte nb_villages =
+  let carte = gen_carte taille_carte in
+  let roots = gen_village_roots (taille_carte / taille_troncon) nb_villages in
+  (carte, roots)
 
 (* Make all action in one turn *)
-let evolution_par_tour (village : village) (map : map) =
-  eval_node village.tree map village;
-  let temp_logistics = update_all_logistics village.logistics village.position_list map  in
-  let new_logistics =
-    lack_of_people temp_logistics village.logistics village.position_list map
+let evolution_par_tour (village : village) (carte : carte) =
+  eval_node village.tree carte village;
+  let temp_logistics = update_all_logistics village.logistics village.position_list carte  in
+  let nouvel_logistics =
+    lack_of_main_d_oeuvre temp_logistics village.logistics village.position_list carte
   in
-  let new_logistics = update_people new_logistics in
+  let nouvel_logistics = update_main_d_oeuvre nouvel_logistics in
   
   let rec aff = function 
   |[] -> print_char '\n'
@@ -27,32 +27,32 @@ let evolution_par_tour (village : village) (map : map) =
   in
   aff village.position_list;
   print_string "Population: ";
-  print_int (calcul_score village map);
+  print_int (calcul_score village carte);
   print_string "Boof: ";
-  print_int ( let a,_ = village.logistics in search a Food);
+  print_int ( let a,_ = village.logistics in recherche a Nouriture);
   print_char '\n';
   print_string "Bâtiments: ";
   List.iter
     (fun x ->
-      print_building x;
+      print_batiment x;
       print_char ' ')
-    (get_village_buildings village map);
+    (get_village_batiments village carte);
   print_char '\n';
 
-  village.logistics <- new_logistics
+  village.logistics <- nouvel_logistics
 
 let init_logistique () =
-  ([ (Bed, 5); (Food, 20); (People, 50); (Stone, 0); (Wood, 0) ], void_data)
+  ([ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 0); (Wood, 0) ], void_donne)
 
-let starter_pack (map : map) (pos : position) =
+let starter_pack (carte : carte) (pos : position) =
   let x, y = pos in
-  mutate_building_in_chunk map map.(x).(y) (Some Farm) 0 0;
-  mutate_building_in_chunk map map.(x).(y) (Some House) 0 1
+  modifie_batiment_dans_troncon carte carte.(x).(y) (Some Ferme) 0 0;
+  modifie_batiment_dans_troncon carte carte.(x).(y) (Some Maison) 0 1
 
-let createvillage (tree : tree) (pos : position) (map : map) (id : int) :
+let createvillage (tree : tree) (pos : position) (carte : carte) (id : int) :
     village =
   (*init le village*)
-  starter_pack map pos;
+  starter_pack carte pos;
   {
     id;
     tree;
@@ -61,7 +61,7 @@ let createvillage (tree : tree) (pos : position) (map : map) (id : int) :
     position_list = [ pos ];
   }
 
-let nombre_de_tours_par_simulation = 10
+let nombre_de_tours_par_simulation = 100
 
 let evalvillage a b =
   for _ = 0 to nombre_de_tours_par_simulation do
@@ -139,12 +139,12 @@ let selection score tree_tab =
 
 
   
-let scoring (village : village) (map : map) : int = calcul_score village map
+let scoring (village : village) (carte : carte) : int = calcul_score village carte
 
 (* Associe une carte et une save pour créer une génération *)
-let associer_generation (a : save) (map : map) : generation =
+let associer_generation (a : save) (carte : carte) : generation =
   let arbres, pos_array, evaluation = a in
-  (arbres, map, pos_array, evaluation)
+  (arbres, carte, pos_array, evaluation)
 
 
 
@@ -154,17 +154,17 @@ let associer_generation (a : save) (map : map) : generation =
 
 
 
-let do_genertion tree_tab map pos_array : tree array * evaluation =
+let do_genertion tree_tab carte pos_array : tree array * evaluation =
   let nb_pos = Array.length pos_array in
   let nb_arbres = Array.length tree_tab in
   (* Un tableau à deux entrées qui donne le score de l'arbre selon sa position *)
   let score_mat = Array.make_matrix nb_pos nb_arbres 0 in
   for i = 0 to nb_pos - 1 do
     for j = 0 to nb_arbres - 1 do
-      reset_map map;
-      let new_village = createvillage tree_tab.(j) pos_array.(i) map j in
-      let evaluated_village = evalvillage new_village map in
-      let scoretour = scoring evaluated_village map in
+      reset_carte carte;
+      let nouvel_village = createvillage tree_tab.(j) pos_array.(i) carte j in
+      let evaluated_village = evalvillage nouvel_village carte in
+      let scoretour = scoring evaluated_village carte in
       score_mat.(i).(j) <- scoretour
     done
   done;
@@ -186,7 +186,7 @@ let do_genertion tree_tab map pos_array : tree array * evaluation =
 
 
 (* nb_trees doit être multiple de 5 *)
-let game ?(nb_villages = 2) ?(nb_trees = 25) ?(taille_map = 400) (n : int) =
+let game ?(nb_villages = 2) ?(nb_trees = 25) ?(taille_carte = 400) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
@@ -200,13 +200,13 @@ let game ?(nb_villages = 2) ?(nb_trees = 25) ?(taille_map = 400) (n : int) =
   game_array.(0) <- (gen_trees nb_trees, [||], [||]);
   for i = 1 to n do
     let trees, _, _ = game_array.(i - 1) in
-    let map, pos_arr = new_generation taille_map nb_villages in
+    let carte, pos_arr = nouvel_generation taille_carte nb_villages in
     
-    let evolved_tree_tab, tree_scores = do_genertion trees map pos_arr in
+    let evolved_tree_tab, tree_scores = do_genertion trees carte pos_arr in
     (* Stocke les arbres après évolution, là où ils ont évolués
        et les scores qu'on obtenu ces arbres *)
     game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores)
     (* Stockage éventuel de la carte générée (pas indispensable) *)
-    (* Yojson.to_file (Utils.ormat_map_name i) ("dossier/" ^ serialize_map map) *)
+    (* Yojson.to_file (Utils.ormat_carte_name i) ("dossier/" ^ serialize_carte carte) *)
   done;
   Yojson.to_file "game.json" (serialize_save_array game_array)

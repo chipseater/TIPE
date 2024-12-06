@@ -1,19 +1,19 @@
 open Domainslib.Task
 
 let z_max = 100.
-let chunk_width = 8
+let taille_troncon = 8
 
 type biome = Forest | Desert | Plains
-type building = House | Quarry | Sawmill | Farm
+type batiment = Maison | Carriere | Scierie | Ferme
 
-(* A tile is made out of the eventual building it contains associated with its elevation *)
-type tile = Tile of building option * int
+(* A tuile is made out of the eventual batiment it contains associated with its elevation *)
+type tuile = Tuile of batiment option * int
 
-(* A chunk is a 4*4 tile matrix associated with its biome *)
-type chunk = Chunk of tile array array * biome
+(* A troncon is a 4*4 tuile matrix associated with its biome *)
+type troncon = Troncon of tuile array array * biome
 
-(* A n*n map is a n/4*n/4 chunk matrix *)
-type map = chunk array array
+(* A n*n carte is a n/4*n/4 troncon matrix *)
+type carte = troncon array array
 
 (* Sets the balance between the diffrent biomes,
    here 8 plains for 1 desert and 1 tundra *)
@@ -21,7 +21,7 @@ let int_to_biome b =
   assert (b >= 0 && b < 10);
   if b < 4 then Plains else if b < 8 then Forest else Desert
 
-(* Checks if the point is not outside of a nxn map *)
+(* Checks if the point is not outside of a nxn carte *)
 let is_valid n i j = not (i < 0 || i >= n || j < 0 || j >= n)
 
 (* Generates a (n / grid_width)^2 grid with
@@ -77,17 +77,17 @@ let perlin grad_grid grid_width i j =
   let bottom_interpolation = interpolate bl_dot_prod br_dot_prod lj in
   interpolate top_interpolation bottom_interpolation li
 
-(* Adds a layer of perlin weighted by factor to a nxn matrix map *)
-let perlin_layer (map : float array array) n grid_width factor =
+(* Adds a layer of perlin weighted by factor to a nxn matrix carte *)
+let perlin_layer (carte : float array array) n grid_width factor =
   (* Generates a gradient grid with enough padding to work with *)
   let grad_grid = gen_rand_grad (n + (2 * grid_width)) grid_width in
   let perlin_pool = setup_pool ~name:"perlin_pool" ~num_domains:5 () in
   let make_cell i j =
     let raw_z = perlin grad_grid grid_width i j in
     assert (raw_z >= -0.71 && raw_z <= 0.71);
-    let z = map.(i).(j) +. (((0.5 *. raw_z) +. 0.5) /. factor) in
+    let z = carte.(i).(j) +. (((0.5 *. raw_z) +. 0.5) /. factor) in
     assert (z >= 0. && z <= 1.);
-    map.(i).(j) <- z
+    carte.(i).(j) <- z
   in
   (* Sequentially computes the perlin noise for the i-th row *)
   let make_row i =
@@ -103,53 +103,53 @@ let perlin_layer (map : float array array) n grid_width factor =
    to a int matrix with values ranging from 0 to the factor *)
 let upscale_matrix_to_int factor (matrix : float array array) =
   let n = Array.length matrix in
-  let new_matrix = Array.make_matrix n n 0 in
+  let nouvel_matrix = Array.make_matrix n n 0 in
   for i = 0 to n - 1 do
     for j = 0 to n - 1 do
-      new_matrix.(i).(j) <- int_of_float (factor *. matrix.(i).(j))
+      nouvel_matrix.(i).(j) <- int_of_float (factor *. matrix.(i).(j))
     done
   done;
-  new_matrix
+  nouvel_matrix
 
 (* Superposes octaves of noises to create fractal noise with cell width m *)
-let perlin_map n cell_width octaves =
-  let map = Array.make_matrix n n 0. in
+let perlin_carte n cell_width octaves =
+  let carte = Array.make_matrix n n 0. in
   (* Sets up a pool of threads to compute the layers asyncronously *)
   let layer_pool = setup_pool ~name:"layer_pool" ~num_domains:2 () in
   let make_layer i =
-    perlin_layer map n
+    perlin_layer carte n
       (cell_width / Utils.pow 2 i)
       (Utils.pow 2 i |> float_of_int)
   in
   (fun () -> parallel_for ~start:1 ~finish:octaves ~body:make_layer layer_pool)
   |> run layer_pool;
   teardown_pool layer_pool;
-  map
+  carte
 
 let hv_to_biome h v =
   if h *. v < 0. then Plains else if h < 0. then Desert else Forest
 
 let gen_biomes n biome_width =
-  let map = Array.make_matrix n n Plains in
+  let carte = Array.make_matrix n n Plains in
   let humidity_grad = gen_rand_grad n biome_width in
   let vegetation_grad = gen_rand_grad n biome_width in
   for i = 0 to n - 1 do
     for j = 0 to n - 1 do
       let h = perlin humidity_grad (2 * biome_width) i j in
       let v = perlin vegetation_grad (2 * biome_width) i j in
-      map.(i).(j) <- hv_to_biome h v
+      carte.(i).(j) <- hv_to_biome h v
     done
   done;
-  map
+  carte
 
-(* Generates an empty chunk according to z_values and a biome *)
-let gen_empty_chunk (z_values : int array array) (biome : biome) =
-  let get_empty_tile i j = Tile (None, z_values.(i).(j)) in
-  let chunk = Array.init_matrix chunk_width chunk_width get_empty_tile in
-  Chunk (chunk, biome)
+(* Generates an empty troncon according to z_values and a biome *)
+let gen_empty_troncon (z_values : int array array) (biome : biome) =
+  let get_empty_tuile i j = Tuile (None, z_values.(i).(j)) in
+  let troncon = Array.init_matrix taille_troncon taille_troncon get_empty_tuile in
+  Troncon (troncon, biome)
 
 let gen_z n z_width octaves =
-  perlin_map n z_width octaves |> upscale_matrix_to_int z_max
+  perlin_carte n z_width octaves |> upscale_matrix_to_int z_max
 
 (* Extracts a nxn submatrix from the top-left corner *)
 let submatrix matrix corner n =
@@ -164,14 +164,14 @@ let submatrix matrix corner n =
 
 (* Fonction de génération de la carte
    n est la taille de la carte, nb_biomes est le nombre de poles à utiliser pour générer les biomes, z_width est la taille des cellules du bruit de perlin et octaves est le nombre d'octaves de perlin à superposer *)
-let gen_map ?(biome_width = 20) ?(z_width = 100) ?(octaves = 6) n =
-  let nb_of_chunk = n / chunk_width in
+let gen_carte ?(biome_width = 20) ?(z_width = 100) ?(octaves = 6) n =
+  let nb_of_troncon = n / taille_troncon in
   let biomes = gen_biomes n biome_width in
-  let z_map = gen_z n z_width octaves in
-  let gen_chunk i j =
+  let z_carte = gen_z n z_width octaves in
+  let gen_troncon i j =
     let z_values =
-      submatrix z_map (i * chunk_width, j * chunk_width) chunk_width
+      submatrix z_carte (i * taille_troncon, j * taille_troncon) taille_troncon
     in
-    gen_empty_chunk z_values biomes.(i).(j)
+    gen_empty_troncon z_values biomes.(i).(j)
   in
-  Array.init_matrix nb_of_chunk nb_of_chunk gen_chunk
+  Array.init_matrix nb_of_troncon nb_of_troncon gen_troncon

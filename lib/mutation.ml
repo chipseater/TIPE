@@ -2,45 +2,45 @@ open Village
 open Mapgen
 
 let ressource_of_int = function
-  | 1 -> Food
-  | 2 -> People
-  | 3 -> Stone
+  | 1 -> Nouriture
+  | 2 -> Main_d_oeuvre
+  | 3 -> Pierre
   | 4 -> Wood
   | _ -> Bed
 
-let building_of_int = function
-  | 1 -> Quarry
-  | 2 -> Sawmill
-  | 3 -> Farm
-  | _ -> House
+let batiment_of_int = function
+  | 1 -> Carriere
+  | 2 -> Scierie
+  | 3 -> Ferme
+  | _ -> Maison
 
 let int_of_condition_type = function
-  | Ingpercent (_, _, _, _) -> 0
-  | Ingflat (_, _, _, _) -> 1
+  | InegaliteEnPourcentage (_, _, _, _) -> 0
+  | InegaliteBrut (_, _, _, _) -> 1
 
-let int_of_flat_ing = function 2 -> MoreFlat | 1 -> EqualFlat | _ -> LessFlat
+let int_of_inegalite_brut = function 2 -> PlusBrut | 1 -> EquivalentBrut | _ -> MoinBrut
 let int_of_percent_ing = function 1 -> MorePercent | _ -> LessPercent
 
 (* Change une inégalité en pourcentage par une inégalité brute et inversement *)
 let switch_condition_type condition =
   match condition with
-  | Ingpercent (r1, r2, _, int) ->
-      Ingflat (r1, r2, int_of_flat_ing (Random.int 3), int)
-  | Ingflat (r1, r2, _, int) ->
-      Ingpercent (r1, r2, int_of_percent_ing (Random.int 2), int)
+  | InegaliteEnPourcentage (r1, r2, _, int) ->
+      InegaliteBrut (r1, r2, int_of_inegalite_brut (Random.int 3), int)
+  | InegaliteBrut (r1, r2, _, int) ->
+      InegaliteEnPourcentage (r1, r2, int_of_percent_ing (Random.int 2), int)
 
 let argument_of_int = function 1 -> OutCity | _ -> InCity
 
 let increase_r1_amount condition increment =
   match condition with
-  | Ingpercent (r1, r2, ing, int) ->
-      Ingpercent (r1, r2, ing, abs (int + increment))
-  | Ingflat (r1, r2, ing, int) -> Ingflat (r1, r2, ing, abs (int + increment))
+  | InegaliteEnPourcentage (r1, r2, ing, int) ->
+      InegaliteEnPourcentage (r1, r2, ing, abs (int + increment))
+  | InegaliteBrut (r1, r2, ing, int) -> InegaliteBrut (r1, r2, ing, abs (int + increment))
 
 let increase_r2_amount condition increment =
   match condition with
-  | Ingpercent (r1, r2, ing, int) -> Ingpercent (r1, r2, ing, int + increment)
-  | Ingflat (r1, r2, ing, int) -> Ingflat (r1, r2, ing, int + increment)
+  | InegaliteEnPourcentage (r1, r2, ing, int) -> InegaliteEnPourcentage (r1, r2, ing, int + increment)
+  | InegaliteBrut (r1, r2, ing, int) -> InegaliteBrut (r1, r2, ing, int + increment)
 
 let increase_ress_amount condition rss_number increment =
   if rss_number = 2 then increase_r2_amount condition increment
@@ -53,22 +53,22 @@ let rnd_increase_ress condition =
   increase_ress_amount condition rss_number increment
 
 let change_ing condition =
-  let new_flat_ing = int_of_flat_ing (Random.int 3) in
-  let new_percent_ing = int_of_percent_ing (Random.int 2) in
+  let nouvel_inegalite_brut = int_of_inegalite_brut (Random.int 3) in
+  let nouvel_percent_ing = int_of_percent_ing (Random.int 2) in
   match condition with
-  | Ingpercent (r1, r2, _, int) -> Ingpercent (r1, r2, new_percent_ing, int)
-  | Ingflat (r1, r2, _, int) -> Ingflat (r1, r2, new_flat_ing, int)
+  | InegaliteEnPourcentage (r1, r2, _, int) -> InegaliteEnPourcentage (r1, r2, nouvel_percent_ing, int)
+  | InegaliteBrut (r1, r2, _, int) -> InegaliteBrut (r1, r2, nouvel_inegalite_brut, int)
 
 let change_rss_type condition =
-  let new_ress = ressource_of_int (Random.int 5) in
+  let nouvel_ress = ressource_of_int (Random.int 5) in
   let ress_nb = Random.int 2 in
   match condition with
-  | Ingpercent (r1, r2, ing, int) ->
-      if ress_nb = 1 then Ingpercent (new_ress, r2, ing, int)
-      else Ingpercent (r1, new_ress, ing, int)
-  | Ingflat (r1, r2, ing, int) ->
-      if ress_nb = 1 then Ingflat (new_ress, r2, ing, int)
-      else Ingflat (r1, new_ress, ing, int)
+  | InegaliteEnPourcentage (r1, r2, ing, int) ->
+      if ress_nb = 1 then InegaliteEnPourcentage (nouvel_ress, r2, ing, int)
+      else InegaliteEnPourcentage (r1, nouvel_ress, ing, int)
+  | InegaliteBrut (r1, r2, ing, int) ->
+      if ress_nb = 1 then InegaliteBrut (nouvel_ress, r2, ing, int)
+      else InegaliteBrut (r1, nouvel_ress, ing, int)
 
 let change_preference_type prio =
   match prio with
@@ -81,36 +81,36 @@ let change_preference_biome prio =
   | Random -> Random
 
 let rand_change_prio prio =
-  let new_prio =
+  let nouvel_prio =
     match Random.int 2 with 1 -> change_preference_biome prio | _ -> prio
   in
-  match new_prio with
-  | Pref _ -> change_preference_type new_prio
-  | Random -> change_preference_type new_prio
+  match nouvel_prio with
+  | Pref _ -> change_preference_type nouvel_prio
+  | Random -> change_preference_type nouvel_prio
 
 let change_threshold condition =
   match condition with
-  | Ingpercent (r1, r2, ing, old_threshold) ->
-      Ingpercent (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
-  | Ingflat (r1, r2, ing, old_threshold) ->
-      Ingflat (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
+  | InegaliteEnPourcentage (r1, r2, ing, old_threshold) ->
+      InegaliteEnPourcentage (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
+  | InegaliteBrut (r1, r2, ing, old_threshold) ->
+      InegaliteBrut (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
 
 let change_argument_of_action action =
-  let _, building, prio = action in
-  (argument_of_int (Random.int 2), building, prio)
+  let _, batiment, prio = action in
+  (argument_of_int (Random.int 2), batiment, prio)
 
-let change_building_of_action action =
+let change_batiment_of_action action =
   let arg, _, prio = action in
-  (arg, building_of_int (Random.int 4), prio)
+  (arg, batiment_of_int (Random.int 4), prio)
 
 let change_prio_of_action action =
-  let arg, building, prio = action in
-  (arg, building, rand_change_prio prio)
+  let arg, batiment, prio = action in
+  (arg, batiment, rand_change_prio prio)
 
 let mutate_action action =
   match Random.int 3 with
   | 2 -> change_argument_of_action action
-  | 1 -> change_building_of_action action
+  | 1 -> change_batiment_of_action action
   | _ -> change_prio_of_action action
 
 let mutate_condition condition_type =

@@ -211,5 +211,3 @@ tree = np.array(data[9]['tree_array'])
 construction_fichier(tree)
 
 # %%
-
-# %%

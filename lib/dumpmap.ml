@@ -2,10 +2,10 @@ open Mapgen
 open Mapmanage
 open Village
 
-let tile_to_json tile =
-  let z = get_tile_z tile in
-  let building = get_tile_building tile in
-  `Assoc [ ("z", `Int z); ("bat", `String (option_building_to_string building)) ]
+let tuile_to_json tuile =
+  let z = get_tuile_z tuile in
+  let batiment = get_tuile_batiment tuile in
+  `Assoc [ ("z", `Int z); ("bat", `String (option_batiment_to_string batiment)) ]
 
 (* Convertit un tableau en objet json *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
@@ -21,20 +21,20 @@ let matrix_to_json_list to_json matrix =
   in
   `List (listify 0)
 
-let serialize_chunk (chunk : chunk) =
-  let biome = get_chunk_biome chunk in
-  let tiles = get_chunk_tiles chunk in
+let serialize_troncon (troncon : troncon) =
+  let biome = get_troncon_biome troncon in
+  let tuiles = get_troncon_tuiles troncon in
   `Assoc
     [
-      ("tiles", matrix_to_json_list tile_to_json tiles);
+      ("tuiles", matrix_to_json_list tuile_to_json tuiles);
       ("biome", `String (biome_to_string biome));
     ]
 
-let serialize_flat_ing inequality =
+let serialize_inegalite_brut inequality =
   match inequality with
-  | Village.MoreFlat -> `String "MF"
-  | LessFlat -> `String "LF"
-  | EqualFlat -> `String "LF"
+  | Village.PlusBrut -> `String "MF"
+  | MoinBrut -> `String "LF"
+  | EquivalentBrut -> `String "LF"
 
 let serialize_percent_ing inequality =
   match inequality with
@@ -49,39 +49,39 @@ let serialize_prio prio =
   | Random -> `String "RND"
   | Pref biome -> `String (biome_to_string biome)
 
-let serialize_building building =
-  match building with
-  | House -> `String "H"
-  | Quarry -> `String "Q"
-  | Sawmill -> `String "S"
-  | Farm -> `String "F"
+let serialize_batiment batiment =
+  match batiment with
+  | Maison -> `String "M"
+  | Carriere -> `String "Ca"
+  | Scierie -> `String "S"
+  | Ferme -> `String "F"
 
 let serialize_action action =
-  let arg, building, prio = action in
+  let arg, batiment, prio = action in
   `Assoc
     [
       ("argument", serialize_argument arg);
-      ("bat", serialize_building building);
+      ("bat", serialize_batiment batiment);
       ("prio", serialize_prio prio);
     ]
 
-(* type ressource = Food | People | Stone | Wood | Bed *)
+(* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed *)
 let serialize_ressource ressource =
   match ressource with
-  | Food -> `String "F"
-  | People -> `String "P"
-  | Stone -> `String "S"
+  | Nouriture -> `String "F"
+  | Main_d_oeuvre -> `String "P"
+  | Pierre -> `String "S"
   | Wood -> `String "W"
   | Bed -> `String "B"
 
 (* Fonction bien stupide qui renvoie le type de la condition sous forme de string *)
 let condition_type_to_string = function
-  | Ingpercent (_, _, _, _) -> "Ingpercent"
-  | Ingflat (_, _, _, _) -> "Ingpercent"
+  | InegaliteEnPourcentage (_, _, _, _) -> "InegaliteEnPourcentage"
+  | InegaliteBrut (_, _, _, _) -> "InegaliteBrut"
 
 let serialize_condition condition =
   match condition with
-  | Ingpercent (rss1, rss2, ing, int) ->
+  | InegaliteEnPourcentage (rss1, rss2, ing, int) ->
       `Assoc
         [
           ("type", `String (condition_type_to_string condition));
@@ -90,13 +90,13 @@ let serialize_condition condition =
           ("ing", serialize_percent_ing ing);
           ("int", `Int int);
         ]
-  | Ingflat (rss1, rss2, ing, int) ->
+  | InegaliteBrut (rss1, rss2, ing, int) ->
       `Assoc
         [
           ("type", `String (condition_type_to_string condition));
           ("ressource1", serialize_ressource rss1);
           ("ressource2", serialize_ressource rss2);
-          ("ing", serialize_flat_ing ing);
+          ("ing", serialize_inegalite_brut ing);
           ("int", `Int int);
         ]
 
@@ -124,21 +124,21 @@ let rec serialize_pos_list pos_list =
   | pos :: q -> serialize_pos pos :: serialize_pos_list q
   | [] -> []
 
-let serialize_data data =
-  let rec data_to_list = function
+let serialize_donne donne =
+  let rec donne_to_list = function
     | [] -> []
     | (ressource, qt) :: q ->
         `Assoc
           [
             ("ressource", serialize_ressource ressource); ("quantity", `Int qt);
           ]
-        :: data_to_list q
+        :: donne_to_list q
   in
-  `List (data_to_list data)
+  `List (donne_to_list donne)
 
 let serialize_logistics logistics =
   let stock, prod = logistics in
-  `Assoc [ ("stock", serialize_data stock); ("prod", serialize_data prod) ]
+  `Assoc [ ("stock", serialize_donne stock); ("prod", serialize_donne prod) ]
 
 let serialize_village (village : village) =
   `Assoc
@@ -153,13 +153,13 @@ let serialize_village (village : village) =
 let serialize_village_array village_array =
   array_to_json_list serialize_village village_array
 
-let serialize_map map = matrix_to_json_list serialize_chunk map
+let serialize_carte carte = matrix_to_json_list serialize_troncon carte
 
 let serialize_gen generation =
-  let villages, map = generation in
+  let villages, carte = generation in
   `Assoc
     [
-      ("villages", serialize_village_array villages); ("map", serialize_map map);
+      ("villages", serialize_village_array villages); ("carte", serialize_carte carte);
     ]
 
 let serialize_game game =

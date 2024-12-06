@@ -2,23 +2,23 @@ open Village
 open Mapgen
 open Random
 
-(* A generation binds a map with the villages that live inside this map *)
+(* A generation binds a carte with the villages that live inside this carte *)
 type score = int array
 type evaluation = score array
-type generation = tree array * map * position array * evaluation
+type generation = tree array * carte * position array * evaluation
 type save = tree array * position array * evaluation
 type game = save array
 
 let rnd_ressource () =
   match Random.int 5 with
-  | 0 -> Food
-  | 1 -> People
-  | 2 -> Stone
+  | 0 -> Nouriture
+  | 1 -> Main_d_oeuvre
+  | 2 -> Pierre
   | 3 -> Wood
   | _ -> Bed
 
-let rnd_flat_ing () =
-  match Random.int 3 with 2 -> MoreFlat | 1 -> LessFlat | _ -> EqualFlat
+let rnd_inegalite_brut () =
+  match Random.int 3 with 2 -> PlusBrut | 1 -> MoinBrut | _ -> EquivalentBrut
 
 let rnd_percent_ing () =
   match Random.int 2 with 1 -> MorePercent | _ -> LessPercent
@@ -27,13 +27,13 @@ let gen_cond () =
   let ress1, ress2, ing_flat, ing_percent, threshold =
     ( rnd_ressource (),
       rnd_ressource (),
-      rnd_flat_ing (),
+      rnd_inegalite_brut (),
       rnd_percent_ing (),
       Random.int 10 )
   in
   match Random.int 2 with
-  | 1 -> Ingpercent (ress1, ress2, ing_percent, threshold)
-  | _ -> Ingflat (ress1, ress2, ing_flat, threshold)
+  | 1 -> InegaliteEnPourcentage (ress1, ress2, ing_percent, threshold)
+  | _ -> InegaliteBrut (ress1, ress2, ing_flat, threshold)
 
 let gen_placement () = match Random.int 2 with 1 -> InCity | _ -> OutCity
 
@@ -42,10 +42,10 @@ let gen_prio () =
   | 1 -> Pref (Random.int 3 |> int_to_biome)
   | _ -> Random
 
-let gen_building () =
-  match Random.int 4 with 1 -> Quarry | 2 -> Sawmill | 3 -> Farm | _ -> House
+let gen_batiment () =
+  match Random.int 4 with 1 -> Carriere | 2 -> Scierie | 3 -> Ferme | _ -> Maison
 
-let gen_action () = (gen_placement (), gen_building (), gen_prio ())
+let gen_action () = (gen_placement (), gen_batiment (), gen_prio ())
 
 let gen_tree () =
   let rec tree_generator height =
@@ -66,7 +66,7 @@ let random_pos min max =
   let x_max, y_max = max in
   (int_in_range ~min:x_min ~max:x_max, int_in_range ~min:y_min ~max:y_max)
 
-(* Génère k positions racines de villages parmi une grille en nxn chunks
+(* Génère k positions racines de villages parmi une grille en nxn troncons
    divisée en secteurs de taille n / k *)
 let gen_village_roots n k =
   let () = self_init () in
@@ -74,7 +74,7 @@ let gen_village_roots n k =
   let quadrant_width = n / quadrants_per_side in
   let roots = Array.make k (0, 0) in
   (* Ajoute à roots une coordonée de racine aléatoire
-     pour chaque secteur de map *)
+     pour chaque secteur de carte *)
   for i = 0 to k - 1 do
     (* x, y sont les coordonées du coin haut-gauche
        du quadrant en cours *)
