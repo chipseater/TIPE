@@ -5,7 +5,8 @@ open Village
 let tuile_to_json tuile =
   let z = get_tuile_z tuile in
   let batiment = get_tuile_batiment tuile in
-  `Assoc [ ("z", `Int z); ("bat", `String (option_batiment_to_string batiment)) ]
+  `Assoc
+    [ ("z", `Int z); ("bat", `String (option_batiment_to_string batiment)) ]
 
 (* Convertit un tableau en objet json *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
@@ -77,7 +78,7 @@ let serialize_ressource ressource =
 (* Fonction bien stupide qui renvoie le type de la condition sous forme de string *)
 let condition_type_to_string = function
   | InegaliteEnPourcentage (_, _, _, _) -> "InegaliteEnPourcentage"
-  | InegaliteBrut (_, _, _, _) -> "InegaliteBrut"
+  | InegaliteBrute (_, _, _, _) -> "InegaliteBrute"
 
 let serialize_condition condition =
   match condition with
@@ -90,7 +91,7 @@ let serialize_condition condition =
           ("ing", serialize_percent_ing ing);
           ("int", `Int int);
         ]
-  | InegaliteBrut (rss1, rss2, ing, int) ->
+  | InegaliteBrute (rss1, rss2, ing, int) ->
       `Assoc
         [
           ("type", `String (condition_type_to_string condition));
@@ -136,8 +137,8 @@ let serialize_donne donne =
   in
   `List (donne_to_list donne)
 
-let serialize_logistics logistics =
-  let stock, prod = logistics in
+let serialize_logistique logistique =
+  let stock, prod = logistique in
   `Assoc [ ("stock", serialize_donne stock); ("prod", serialize_donne prod) ]
 
 let serialize_village (village : village) =
@@ -145,7 +146,7 @@ let serialize_village (village : village) =
     [
       ("id", `Int village.id);
       ("tree", serialize_tree village.tree);
-      ("logistics", serialize_logistics village.logistics);
+      ("logistique", serialize_logistique village.logistique);
       ("position", serialize_pos village.root_position);
       ("pos_list", `List (serialize_pos_list village.position_list));
     ]
@@ -159,7 +160,8 @@ let serialize_gen generation =
   let villages, carte = generation in
   `Assoc
     [
-      ("villages", serialize_village_array villages); ("carte", serialize_carte carte);
+      ("villages", serialize_village_array villages);
+      ("carte", serialize_carte carte);
     ]
 
 let serialize_game game =

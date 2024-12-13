@@ -2,6 +2,8 @@ open Village
 open Mapmanage
 open Mapgen
 
+exception Couille
+
 (* Vérifie si un noeud est vide *)
 let estVide = function Vide -> true | _ -> false
 
@@ -13,32 +15,34 @@ let inegaliteenpourcentage ressource1 ressource2 ing pourcentage donnee : bool =
   | MorePercent ->
       if nb_ressource1 = 0 then true
       else
-        let ratio = nb_ressource2  * 100 / nb_ressource1 in
-        if nb_ressource1 > nb_ressource2  then ratio > pourcentage else false
+        let ratio = nb_ressource2 * 100 / nb_ressource1 in
+        if nb_ressource1 > nb_ressource2 then ratio > pourcentage else false
   | LessPercent ->
       if nb_ressource1 = 0 then false
       else
-        let ratio = nb_ressource2  * 100 / nb_ressource1 in
-        if nb_ressource1 < nb_ressource2  then ratio > pourcentage else false
+        let ratio = nb_ressource2 * 100 / nb_ressource1 in
+        if nb_ressource1 < nb_ressource2 then ratio > pourcentage else false
 
 (* Test si la ressource n1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le minimum est inférieur à la diférence *)
 let inegalitebrut ressource1 ressource2 ing min donnee : bool =
   let nb_ressource1 = recherche donnee ressource1 in
-  let nb_ressource2  = recherche donnee ressource2 in
+  let nb_ressource2 = recherche donnee ressource2 in
   match ing with
   | PlusBrut ->
       let dif = nb_ressource1 - nb_ressource2 in
-      if nb_ressource1 > nb_ressource2  then dif > min else false
+      if nb_ressource1 > nb_ressource2 then dif > min else false
   | MoinBrut ->
-      let dif = nb_ressource1 - nb_ressource2  in
-      if nb_ressource1 < nb_ressource2  then -dif > min else false
-  | EquivalentBrut -> abs (nb_ressource2  - nb_ressource1 ) < min
+      let dif = nb_ressource1 - nb_ressource2 in
+      if nb_ressource1 < nb_ressource2 then -dif > min else false
+  | EquivalentBrut -> abs (nb_ressource2 - nb_ressource1) < min
 
 (* Effectue le test selon l'objet *)
 let test (donnee : donne) (condition : condition) : bool =
   match condition with
-  | InegaliteEnPourcentage (ressource1, ressource2, ing, pourcentage) -> inegaliteenpourcentage ressource1 ressource2 ing pourcentage donnee
-  | InegaliteBrut (ressource1, ressource2, ing, min) -> inegalitebrut ressource1 ressource2 ing min donnee
+  | InegaliteEnPourcentage (ressource1, ressource2, ing, pourcentage) ->
+      inegaliteenpourcentage ressource1 ressource2 ing pourcentage donnee
+  | InegaliteBrute (ressource1, ressource2, ing, min) ->
+      inegalitebrut ressource1 ressource2 ing min donnee
 
 (* Teste s' il y a une tuile du troncon qui est vide *)
 let test_troncon_pas_plein (troncon : troncon) : bool =
@@ -65,8 +69,8 @@ let possibilite troncon =
   arr
 
 (* Place le batiment dans un des troncons  *)
-let batimenttuile (batiment : batiment) (carte : carte) (table : (int * int) array)
-    (village : village) =
+let batimenttuile (batiment : batiment) (carte : carte)
+    (table : (int * int) array) (village : village) =
   Array.shuffle ~rand:Random.int table;
   let x, y = table.(0) in
   let temp = carte.(x).(y) in
@@ -76,7 +80,8 @@ let batimenttuile (batiment : batiment) (carte : carte) (table : (int * int) arr
   let rec choice arr c =
     match arr.(c) with
     | -1, -1 -> choice arr (c + 1)
-    | i, j -> modifie_batiment_dans_troncon carte carte.(x).(y) (Some batiment) i j
+    | i, j ->
+        modifie_batiment_dans_troncon carte carte.(x).(y) (Some batiment) i j
   in
   choice arr 0
 
@@ -95,7 +100,8 @@ let nul table carte =
   | Not_found -> (-1, -1)
 
 (* Place le batiment dans un des troncons  *)
-let batiment_tuile_in (batiment : batiment) (carte : carte) (table : (int * int) array) =
+let batiment_tuile_in (batiment : batiment) (carte : carte)
+    (table : (int * int) array) =
   Array.shuffle ~rand:Random.int table;
   let x, y = nul table carte in
   (*A voir*)
@@ -107,7 +113,8 @@ let batiment_tuile_in (batiment : batiment) (carte : carte) (table : (int * int)
     let rec choice arr c =
       match arr.(c) with
       | -1, -1 -> choice arr (c + 1)
-      | i, j -> modifie_batiment_dans_troncon carte carte.(x).(y) (Some batiment) i j
+      | i, j ->
+          modifie_batiment_dans_troncon carte carte.(x).(y) (Some batiment) i j
     in
     choice arr 0
 
@@ -164,16 +171,16 @@ let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int)
       if arr.(i).(j) > !c && test_troncon_pas_plein carte.(i + a).(j + b) then (
         list := [ (i + a, j + b) ];
         c := arr.(i).(j))
-      else if arr.(i).(j) = !c && test_troncon_pas_plein carte.(i + a).(j + b) then
-        list := (i + a, j + b) :: !list
+      else if arr.(i).(j) = !c && test_troncon_pas_plein carte.(i + a).(j + b)
+      then list := (i + a, j + b) :: !list
       else ()
     done
   done;
   !list
 
 (* Construit le batiment à l'extérieur du village sans biome privilegié *)
-let r_batimentout (batiment : batiment) (carte : carte) (pos_list : position list)
-    (village : village) =
+let r_batimentout (batiment : batiment) (carte : carte)
+    (pos_list : position list) (village : village) =
   let coner, larg, haut = pos_card pos_list in
   let mat = Array.make_matrix haut larg 0 in
   let world_limit = Array.length carte in
@@ -183,8 +190,8 @@ let r_batimentout (batiment : batiment) (carte : carte) (pos_list : position lis
   batimenttuile batiment carte arr village
 
 (* Construit le batiment à l'intérieur du village sans biome privilegié *)
-let r_batimentin (batiment : batiment) (carte : carte) (pos_list : position list)
-    (village : village) : unit =
+let r_batimentin (batiment : batiment) (carte : carte)
+    (pos_list : position list) (village : village) : unit =
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
@@ -203,17 +210,19 @@ let classif (list : (int * int) list) (carte : carte) (biome : biome) =
   let rec parc l1 l2 l3 =
     match l1 with
     | (a, b) :: q
-      when get_troncon_biome carte.(a).(b) = biome && test_troncon_pas_plein carte.(a).(b) ->
+      when get_troncon_biome carte.(a).(b) = biome
+           && test_troncon_pas_plein carte.(a).(b) ->
         parc q ((a, b) :: l2) l3
-    | (a, b) :: q when test_troncon_pas_plein carte.(a).(b) -> parc q l2 ((a, b) :: l3)
+    | (a, b) :: q when test_troncon_pas_plein carte.(a).(b) ->
+        parc q l2 ((a, b) :: l3)
     | _ :: q -> parc q l2 l3
     | [] -> (l2, l3)
   in
   parc list [] []
 
 (* Construit le batiment à l'extérieur du village avec un biome privilegié *)
-let pref_batimentout (batiment : batiment) (carte : carte) (pos_list : position list)
-    (biome : biome) village : unit =
+let pref_batimentout (batiment : batiment) (carte : carte)
+    (pos_list : position list) (biome : biome) village : unit =
   let corner, larg, haut = pos_card pos_list in
   let world_limit = Array.length carte in
   let mat = Array.make_matrix haut larg 0 in
@@ -229,8 +238,8 @@ let pref_batimentout (batiment : batiment) (carte : carte) (pos_list : position 
       batimenttuile batiment carte arr village
 
 (* Construit le batiment à l'intérieur du village avec un biome privilegié *)
-let pref_batimentin (batiment : batiment) (carte : carte) (pos_list : position list)
-    (biome : biome) (village : village) =
+let pref_batimentin (batiment : batiment) (carte : carte)
+    (pos_list : position list) (biome : biome) (village : village) =
   let rec empile (pos_list : position list) : (int * int) list =
     match pos_list with
     | [] -> []
@@ -267,16 +276,20 @@ let a_faire (action : action) (carte : carte) (pos_list : position list)
     | _ -> failwith "No other possibility"
 
 (* Evalue un noeud et fait ce qu'il faut *)
-let rec eval_node (node : tree) (carte : carte) (village : village) : unit =
-  let ressource, _ = village.logistics in
+let rec eval_node (node : tree) (carte : carte) (village : village) (tester: bool ref) : unit =
+  let ressource, _ = village.logistique in
   let pos_list = village.position_list in
-  match node with
-  | Vide -> failwith "Empty node"
-  | Node (cond, sub_tree_left, sub_tree_right, action) -> 
-      let test_v = test ressource cond in 
-      if estVide sub_tree_left && test_v then
-        a_faire action carte pos_list village
-      else if estVide sub_tree_right && not test_v then
-        a_faire action carte pos_list village
-      else if test_v then eval_node sub_tree_left carte village
-      else eval_node sub_tree_right carte village
+  assert (not !tester);
+  if not !tester then
+    match node with
+    | Vide -> failwith "Empty node"
+    | Node (cond, sub_tree_left, sub_tree_right, action) ->
+        let test_v = test ressource cond in
+        if estVide sub_tree_left && test_v then 
+          (a_faire action carte pos_list village; tester := true)
+        else if estVide sub_tree_right && not test_v then
+          (a_faire action carte pos_list village; tester := true)
+        else if test_v then eval_node sub_tree_left carte village tester
+        else eval_node sub_tree_right carte village tester
+  else
+    raise Couille

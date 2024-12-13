@@ -16,17 +16,21 @@ let batiment_of_int = function
 
 let int_of_condition_type = function
   | InegaliteEnPourcentage (_, _, _, _) -> 0
-  | InegaliteBrut (_, _, _, _) -> 1
+  | InegaliteBrute (_, _, _, _) -> 1
 
-let int_of_inegalite_brut = function 2 -> PlusBrut | 1 -> EquivalentBrut | _ -> MoinBrut
+let int_of_inegalite_brut = function
+  | 2 -> PlusBrut
+  | 1 -> EquivalentBrut
+  | _ -> MoinBrut
+
 let int_of_percent_ing = function 1 -> MorePercent | _ -> LessPercent
 
 (* Change une inégalité en pourcentage par une inégalité brute et inversement *)
 let switch_condition_type condition =
   match condition with
   | InegaliteEnPourcentage (r1, r2, _, int) ->
-      InegaliteBrut (r1, r2, int_of_inegalite_brut (Random.int 3), int)
-  | InegaliteBrut (r1, r2, _, int) ->
+      InegaliteBrute (r1, r2, int_of_inegalite_brut (Random.int 3), int)
+  | InegaliteBrute (r1, r2, _, int) ->
       InegaliteEnPourcentage (r1, r2, int_of_percent_ing (Random.int 2), int)
 
 let argument_of_int = function 1 -> OutCity | _ -> InCity
@@ -35,12 +39,15 @@ let increase_r1_amount condition increment =
   match condition with
   | InegaliteEnPourcentage (r1, r2, ing, int) ->
       InegaliteEnPourcentage (r1, r2, ing, abs (int + increment))
-  | InegaliteBrut (r1, r2, ing, int) -> InegaliteBrut (r1, r2, ing, abs (int + increment))
+  | InegaliteBrute (r1, r2, ing, int) ->
+      InegaliteBrute (r1, r2, ing, abs (int + increment))
 
 let increase_r2_amount condition increment =
   match condition with
-  | InegaliteEnPourcentage (r1, r2, ing, int) -> InegaliteEnPourcentage (r1, r2, ing, int + increment)
-  | InegaliteBrut (r1, r2, ing, int) -> InegaliteBrut (r1, r2, ing, int + increment)
+  | InegaliteEnPourcentage (r1, r2, ing, int) ->
+      InegaliteEnPourcentage (r1, r2, ing, int + increment)
+  | InegaliteBrute (r1, r2, ing, int) ->
+      InegaliteBrute (r1, r2, ing, int + increment)
 
 let increase_ress_amount condition rss_number increment =
   if rss_number = 2 then increase_r2_amount condition increment
@@ -56,8 +63,10 @@ let change_ing condition =
   let nouvel_inegalite_brut = int_of_inegalite_brut (Random.int 3) in
   let nouvel_percent_ing = int_of_percent_ing (Random.int 2) in
   match condition with
-  | InegaliteEnPourcentage (r1, r2, _, int) -> InegaliteEnPourcentage (r1, r2, nouvel_percent_ing, int)
-  | InegaliteBrut (r1, r2, _, int) -> InegaliteBrut (r1, r2, nouvel_inegalite_brut, int)
+  | InegaliteEnPourcentage (r1, r2, _, int) ->
+      InegaliteEnPourcentage (r1, r2, nouvel_percent_ing, int)
+  | InegaliteBrute (r1, r2, _, int) ->
+      InegaliteBrute (r1, r2, nouvel_inegalite_brut, int)
 
 let change_rss_type condition =
   let nouvel_ress = ressource_of_int (Random.int 5) in
@@ -66,9 +75,9 @@ let change_rss_type condition =
   | InegaliteEnPourcentage (r1, r2, ing, int) ->
       if ress_nb = 1 then InegaliteEnPourcentage (nouvel_ress, r2, ing, int)
       else InegaliteEnPourcentage (r1, nouvel_ress, ing, int)
-  | InegaliteBrut (r1, r2, ing, int) ->
-      if ress_nb = 1 then InegaliteBrut (nouvel_ress, r2, ing, int)
-      else InegaliteBrut (r1, nouvel_ress, ing, int)
+  | InegaliteBrute (r1, r2, ing, int) ->
+      if ress_nb = 1 then InegaliteBrute (nouvel_ress, r2, ing, int)
+      else InegaliteBrute (r1, nouvel_ress, ing, int)
 
 let change_preference_type prio =
   match prio with
@@ -92,8 +101,8 @@ let change_threshold condition =
   match condition with
   | InegaliteEnPourcentage (r1, r2, ing, old_threshold) ->
       InegaliteEnPourcentage (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
-  | InegaliteBrut (r1, r2, ing, old_threshold) ->
-      InegaliteBrut (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
+  | InegaliteBrute (r1, r2, ing, old_threshold) ->
+      InegaliteBrute (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
 
 let change_argument_of_action action =
   let _, batiment, prio = action in
@@ -150,7 +159,6 @@ let mutate tree_array p0 =
   done;
   print_char '\t';
   for i = n to (5 * n) - 1 do
-    print_int i;
-    mutated_trees.(i) <- mutate_tree (tree_array.(i mod n)) p0
+    mutated_trees.(i) <- mutate_tree tree_array.(i mod n) p0
   done;
   mutated_trees

@@ -7,13 +7,13 @@ type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed
 type donne = (ressource * int) list
 
 (* Contient à la fois les stocks du village et les ressources produites*)
-type logistics = donne * donne
+type logistique = donne * donne
 type position = int * int
 
 (* Arbre *)
 (* Une égalité sur des rapports n'ayant pas de sens,
    des types d'inégalité différents sont utilisés
-   pour InegaliteEnPourcentage et pour InegaliteBrut *)
+   pour InegaliteEnPourcentage et pour InegaliteBrute *)
 type inegalite_brut = PlusBrut | MoinBrut | EquivalentBrut
 type percent_ing = MorePercent | LessPercent
 
@@ -23,12 +23,12 @@ type prio = Random | Pref of biome
 type action = argument * batiment * prio
 
 (* InegaliteEnPourcentage représente une inégalité en pourcentage de stocks tandis que
-   InegaliteBrut représente une inégalité en quantité de ressources
+   InegaliteBrute représente une inégalité en quantité de ressources
    La première ressource sera comparée avec la deuxième d'après
    les constructeurs de ing
 *)
 type condition =
-  | InegaliteBrut of ressource * ressource * inegalite_brut * int
+  | InegaliteBrute of ressource * ressource * inegalite_brut * int
   | InegaliteEnPourcentage of ressource * ressource * percent_ing * int
 
 (* Un arbre de décision est soit vide, soit constitué d'une condition
@@ -41,11 +41,11 @@ type tree = Vide | Node of condition * tree * tree * action
 (* Un village est caractérisé par son identifiant, son arbre de décision,
    son état de logistique et la liste des troncons qu'il possède.
 *)
-(* type village = int * tree * logistics * position * position list *)
+(* type village = int * tree * logistique * position * position list *)
 type village = {
   id : int;
   tree : tree;
-  mutable logistics : logistics;
+  mutable logistique : logistique;
   root_position : position;
   mutable position_list : position list;
 }
@@ -99,7 +99,8 @@ let sum_troncon_production troncon =
   !troncon_production
 
 (* Sums the production of the troncon contained in the list *)
-let rec somme_troncon_list_production (troncon_list : position list) (carte : carte) =
+let rec somme_troncon_list_production (troncon_list : position list)
+    (carte : carte) =
   match troncon_list with
   | (i, j) :: q ->
       let production = sum_troncon_production carte.(i).(j) in
@@ -114,64 +115,94 @@ let rec recherche (donne : donne) ressource =
   | _ :: q -> recherche q ressource
 
 (* Inititalisation d'un objet logistique *)
-let rec update_logistics (logistics : logistics) : logistics =
-  match logistics with
+let rec update_logistique (logistique : logistique) : logistique =
+  match logistique with
   | [], _ :: _ | _ :: _, [] -> failwith "2.Lack ressource"
   | (e, _) :: _, (r, _) :: _ when e <> r -> failwith "3.Not the same ressource"
   | [], [] -> ([], [])
   | (e, d) :: q, (_, f) :: s ->
       let nouvel_stock, prod = ((e, d + f), (e, 0)) in
-      let a, b = update_logistics (q, s) in
+      let a, b = update_logistique (q, s) in
       (nouvel_stock :: a, prod :: b)
 
-let calcul_of_main_d_oeuvre (donne)  =
+let calcul_of_main_d_oeuvre donne =
   let nouriture = recherche donne Nouriture in
   let bed = recherche donne Bed in
   let main_d_oeuvre = recherche donne Main_d_oeuvre in
-  if main_d_oeuvre > bed*10 then
-    begin 
-    if bed > nouriture then (
+  if main_d_oeuvre > bed * 10 then
+    if bed > nouriture then
       sum_donne donne
-  [ (Bed, -bed); (Nouriture, -nouriture); (Main_d_oeuvre, -main_d_oeuvre + nouriture*10 ); (Pierre, 0); (Wood, 0) ])
-  else (
+        [
+          (Bed, -bed);
+          (Nouriture, -nouriture);
+          (Main_d_oeuvre, -main_d_oeuvre + (nouriture * 10));
+          (Pierre, 0);
+          (Wood, 0);
+        ]
+    else
+      sum_donne donne
+        [
+          (Bed, -bed);
+          (Nouriture, -bed);
+          (Main_d_oeuvre, -main_d_oeuvre + (bed * 10));
+          (Pierre, 0);
+          (Wood, 0);
+        ]
+  else if main_d_oeuvre > nouriture * 10 then
     sum_donne donne
-    [ (Bed, -bed); (Nouriture, -bed); (Main_d_oeuvre, -main_d_oeuvre + bed*10 ); (Pierre, 0); (Wood, 0) ])
-  end
-  else 
-    if main_d_oeuvre > nouriture *10 then (
+      [
+        (Bed, -bed);
+        (Nouriture, -nouriture);
+        (Main_d_oeuvre, -main_d_oeuvre + (nouriture * 10));
+        (Pierre, 0);
+        (Wood, 0);
+      ]
+  else
+    let remaining_nouriture = nouriture - (main_d_oeuvre / 10) in
+    let remaining_beds = bed - (main_d_oeuvre / 10) in
+    let last_gen_main_d_oeuvre = main_d_oeuvre / 10 * 10 in
+    if remaining_beds * 2 > remaining_nouriture then
       sum_donne donne
-    [ (Bed, -bed); (Nouriture, -nouriture); (Main_d_oeuvre, -main_d_oeuvre + nouriture*10 ); (Pierre, 0); (Wood, 0) ])
-  else begin  
-    let remaining_nouriture = nouriture - (main_d_oeuvre/10) in 
-    let remaining_beds = bed - (main_d_oeuvre/10) in
-    let last_gen_main_d_oeuvre = (main_d_oeuvre/10)*10 in 
-    if remaining_beds *2 > remaining_nouriture then ( 
+        [
+          (Bed, -bed);
+          (Nouriture, -nouriture + (remaining_nouriture mod 2));
+          ( Main_d_oeuvre,
+            -main_d_oeuvre + last_gen_main_d_oeuvre
+            + (remaining_nouriture / 2 * 10) );
+          (Pierre, 0);
+          (Wood, 0);
+        ]
+    else
       sum_donne donne
-    [ (Bed, -bed); (Nouriture, -nouriture + remaining_nouriture mod 2); (Main_d_oeuvre, -main_d_oeuvre + last_gen_main_d_oeuvre + (remaining_nouriture/2)*10 ); (Pierre, 0); (Wood, 0) ])
-  else (
-    sum_donne donne
-    [ (Bed, -bed); (Nouriture, -nouriture + remaining_nouriture - 2 * remaining_beds); (Main_d_oeuvre, -main_d_oeuvre + last_gen_main_d_oeuvre + (2* remaining_beds)*10 ); (Pierre, 0); (Wood, 0) ])
-  end
+        [
+          (Bed, -bed);
+          (Nouriture, -nouriture + remaining_nouriture - (2 * remaining_beds));
+          ( Main_d_oeuvre,
+            -main_d_oeuvre + last_gen_main_d_oeuvre + (2 * remaining_beds * 10)
+          );
+          (Pierre, 0);
+          (Wood, 0);
+        ]
 
-
-let update_main_d_oeuvre (logistics : logistics) : logistics =
-  match logistics with stock, prod -> ((calcul_of_main_d_oeuvre stock : donne), prod)
+let update_main_d_oeuvre (logistique : logistique) : logistique =
+  match logistique with
+  | stock, prod -> ((calcul_of_main_d_oeuvre stock : donne), prod)
 
 (* Calcul la nouvelle table de donne *)
-let update_all_logistics (logistics : logistics) position_list carte =
-  let (a,_) =  logistics in
-  let b =  somme_troncon_list_production position_list carte in 
-  let nouvel_logistics = update_logistics (a,b) in
-  (nouvel_logistics : logistics)
+let update_all_logistique (logistique : logistique) position_list carte =
+  let a, _ = logistique in
+  let b = somme_troncon_list_production position_list carte in
+  let nouvel_logistique = update_logistique (a, b) in
+  (nouvel_logistique : logistique)
 
 (* Calcule la nouvelle table de donnée en modifiant la carte *)
-(* Calcule la logistics à chaque tuile et a chaque fois que la
+(* Calcule la logistique à chaque tuile et a chaque fois que la
    resource main d'oeuvre devient négative je change la case en none
    et je recalcule la nouvelle table
 *)
-let destroy_batiment (logistics : logistics) (position_list : position list)
-    (carte : carte) : logistics =
-  let stoc, _ = logistics in
+let destroy_batiment (logistique : logistique) (position_list : position list)
+    (carte : carte) : logistique =
+  let stoc, _ = logistique in
   let parcours_troncon (troncon : troncon) (stock : donne) =
     let main_d_oeuvre = ref (recherche stock Main_d_oeuvre) in
     let temp_stock = ref stock in
@@ -193,13 +224,16 @@ let destroy_batiment (logistics : logistics) (position_list : position list)
     match l with
     | [] -> failwith "Invalid Arg d.1"
     | (x, y) :: [] -> parcours_troncon carte.(x).(y) (stock : donne)
-    | (x, y) :: q -> parcours_list q (parcours_troncon carte.(x).(y) (stock : donne))
+    | (x, y) :: q ->
+        parcours_list q (parcours_troncon carte.(x).(y) (stock : donne))
   in
   let nouvel_prod = parcours_list position_list stoc in
-  update_all_logistics (stoc, nouvel_prod) position_list carte
+  update_all_logistique (stoc, nouvel_prod) position_list carte
 
-let lack_of_main_d_oeuvre (logistics : logistics) (old_logistics : logistics)
-    (troncon_list : position list) (carte : carte) =
-  let donne, _ = logistics in
-  if recherche donne Main_d_oeuvre < 0 then destroy_batiment old_logistics troncon_list carte
-  else logistics
+let lack_of_main_d_oeuvre (logistique : logistique)
+    (old_logistique : logistique) (troncon_list : position list) (carte : carte)
+    =
+  let donne, _ = logistique in
+  if recherche donne Main_d_oeuvre < 0 then
+    destroy_batiment old_logistique troncon_list carte
+  else logistique

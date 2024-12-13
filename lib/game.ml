@@ -7,42 +7,62 @@ open Mapmanage
 open Decision
 open Mutation
 
+exception Couille
+
 let nouvel_generation taille_carte nb_villages =
   let carte = gen_carte taille_carte in
   let roots = gen_village_roots (taille_carte / taille_troncon) nb_villages in
   (carte, roots)
 
 (* Make all action in one turn *)
-let evolution_par_tour (village : village) (carte : carte) =
-  eval_node village.tree carte village;
-  let temp_logistics = update_all_logistics village.logistics village.position_list carte  in
-  let nouvel_logistics =
-    lack_of_main_d_oeuvre temp_logistics village.logistics village.position_list carte
+let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
+  let nb_batiment_debut = List.length (get_village_batiments village carte) in
+  eval_node village.tree carte village test;
+  let temp_logistique =
+    update_all_logistique village.logistique village.position_list carte
   in
-  let nouvel_logistics = update_main_d_oeuvre nouvel_logistics in
-(*
-  let rec aff = function 
-  |[] -> print_char '\n'
-  |(a,b)::q -> print_int a; print_char ' '; print_int b; print_char '\t'; aff q
+  let nv_logistique =
+    lack_of_main_d_oeuvre temp_logistique village.logistique
+      village.position_list carte
   in
-  aff village.position_list;
-  print_string "Population: ";
-  print_int (calcul_score village carte);
-  print_string "Boof: ";
-  print_int ( let a,_ = village.logistics in recherche a Nouriture);
-  print_char '\n';
-  print_string "Bâtiments: ";
-  List.iter
-    (fun x ->
-      print_batiment x;
-      print_char ' ')
-    (get_village_batiments village carte);
-  print_char '\n';
-*)
-  village.logistics <- nouvel_logistics
+  let nv_logistique = update_main_d_oeuvre nv_logistique in
+
+  (* let rec aff = function
+       | [] -> print_char '\n'
+       | (a, b) :: q ->
+           print_int a;
+           print_char ' ';
+           print_int b;
+           print_char '\t';
+           aff q
+     in
+     aff village.position_list;
+     print_string "Population: ";
+     print_int (calcul_score village carte);
+     print_string "Boof: ";
+     print_int
+       (let a, _ = village.logistique in
+        recherche a Nouriture);
+     print_char '\n';
+     print_string "Bâtiments: ";
+     List.iter
+       (fun x ->
+         print_batiment x;
+         print_char ' ')
+       (get_village_batiments village carte);
+     print_char '\n'; *)
+  let nb_batiment_fin = List.length (get_village_batiments village carte) in
+  Printf.printf "Id %d: %d %d\n" village.id nb_batiment_debut nb_batiment_fin;
+  if nb_batiment_fin > nb_batiment_debut + 1 then raise Couille;
+  village.logistique <- nv_logistique
 
 let init_logistique () =
-  ([ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 0); (Wood, 0) ], void_donne)
+  ( [ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 0); (Wood, 0) ],
+    void_donne )
+
+let logistique_pete () =
+  ( [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -10000); (Pierre, 0); (Wood, 0) ],
+    void_donne )
 
 let starter_pack (carte : carte) (pos : position) =
   let x, y = pos in
@@ -51,28 +71,35 @@ let starter_pack (carte : carte) (pos : position) =
 
 let createvillage (tree : tree) (pos : position) (carte : carte) (id : int) :
     village =
-  (*init le village*)
+  (* init le village *)
   starter_pack carte pos;
   {
     id;
     tree;
-    logistics = init_logistique ();
+    logistique = init_logistique ();
     root_position = pos;
     position_list = [ pos ];
   }
 
-let nombre_de_tours_par_simulation = 5
+let nombre_de_tours_par_simulation = 20
 
-let evalvillage a b =
-  for _ = 0 to nombre_de_tours_par_simulation do
-    (*
-    print_string "Tour n°";
-    print_int i;
-    print_char ' ';
-    *)
-    evolution_par_tour a b
-  done;
-  a
+let rec evalvillage village carte : village =
+  let test = ref false in
+  try
+    for _ = 0 to nombre_de_tours_par_simulation do
+      test := false;
+      evolution_par_tour village carte test
+    done; village
+  with
+  | Couille ->
+      {
+        id = village.id;
+        tree = village.tree;
+        logistique = logistique_pete ();
+        root_position = village.root_position;
+        position_list = village.position_list;
+      }
+  | _ -> village
 
 let rank n m mat =
   let rg = Array.make m [] in
@@ -91,10 +118,6 @@ let compare_last x y =
   let _, a = x in
   let _, b = y in
   compare a b
-
-
-
-
 
 let selection score tree_tab =
   (* selectionne les 20 meilleurs *)
@@ -134,25 +157,13 @@ let selection score tree_tab =
   done;
   arbres_tries
 
-
-
-
-
-  
-let scoring (village : village) (carte : carte) : int = calcul_score village carte
+let scoring (village : village) (carte : carte) : int =
+  calcul_score village carte
 
 (* Associe une carte et une save pour créer une génération *)
 let associer_generation (a : save) (carte : carte) : generation =
   let arbres, pos_array, evaluation = a in
   (arbres, carte, pos_array, evaluation)
-
-
-
-
-
-
-
-
 
 let do_genertion tree_tab carte pos_array : tree array * evaluation =
   let nb_pos = Array.length pos_array in
@@ -174,19 +185,6 @@ let do_genertion tree_tab carte pos_array : tree array * evaluation =
   let mutated_best_trees = mutate best_trees_array 1. in
   print_char 'A';
   (mutated_best_trees, score_mat)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 (* nb_trees doit être multiple de 5 *)
 let game ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =

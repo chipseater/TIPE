@@ -145,7 +145,9 @@ let gen_biomes n biome_width =
 (* Generates an empty troncon according to z_values and a biome *)
 let gen_empty_troncon (z_values : int array array) (biome : biome) =
   let get_empty_tuile i j = Tuile (None, z_values.(i).(j)) in
-  let troncon = Array.init_matrix taille_troncon taille_troncon get_empty_tuile in
+  let troncon =
+    Array.init_matrix taille_troncon taille_troncon get_empty_tuile
+  in
   Troncon (troncon, biome)
 
 let gen_z n z_width octaves =

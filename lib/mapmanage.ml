@@ -24,7 +24,9 @@ let print_troncon_biome troncon =
 
 let get_tuile_z = function Tuile (_, z) -> z
 let get_tuile_batiment = function Tuile (batiment, _) -> batiment
-let get_troncon_tuiles troncon = match troncon with Troncon (tuiles, _) -> tuiles
+
+let get_troncon_tuiles troncon =
+  match troncon with Troncon (tuiles, _) -> tuiles
 
 let get_troncon_batiments troncon =
   let troncon_tuiles = get_troncon_tuiles troncon in

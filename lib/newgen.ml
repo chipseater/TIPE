@@ -33,7 +33,7 @@ let gen_cond () =
   in
   match Random.int 2 with
   | 1 -> InegaliteEnPourcentage (ress1, ress2, ing_percent, threshold)
-  | _ -> InegaliteBrut (ress1, ress2, ing_flat, threshold)
+  | _ -> InegaliteBrute (ress1, ress2, ing_flat, threshold)
 
 let gen_placement () = match Random.int 2 with 1 -> InCity | _ -> OutCity
 
@@ -43,7 +43,11 @@ let gen_prio () =
   | _ -> Random
 
 let gen_batiment () =
-  match Random.int 4 with 1 -> Carriere | 2 -> Scierie | 3 -> Ferme | _ -> Maison
+  match Random.int 4 with
+  | 1 -> Carriere
+  | 2 -> Scierie
+  | 3 -> Ferme
+  | _ -> Maison
 
 let gen_action () = (gen_placement (), gen_batiment (), gen_prio ())
 
