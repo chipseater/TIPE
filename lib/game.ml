@@ -20,7 +20,7 @@ let evolution_par_tour (village : village) (carte : carte) =
     lack_of_main_d_oeuvre temp_logistics village.logistics village.position_list carte
   in
   let nouvel_logistics = update_main_d_oeuvre nouvel_logistics in
-  
+(*
   let rec aff = function 
   |[] -> print_char '\n'
   |(a,b)::q -> print_int a; print_char ' '; print_int b; print_char '\t'; aff q
@@ -38,7 +38,7 @@ let evolution_par_tour (village : village) (carte : carte) =
       print_char ' ')
     (get_village_batiments village carte);
   print_char '\n';
-
+*)
   village.logistics <- nouvel_logistics
 
 let init_logistique () =
@@ -61,14 +61,14 @@ let createvillage (tree : tree) (pos : position) (carte : carte) (id : int) :
     position_list = [ pos ];
   }
 
-let nombre_de_tours_par_simulation = 100
+let nombre_de_tours_par_simulation = 5
 
 let evalvillage a b =
   for _ = 0 to nombre_de_tours_par_simulation do
     (*
     print_string "Tour n°";
     print_int i;
-    print_char '\n';
+    print_char ' ';
     *)
     evolution_par_tour a b
   done;
@@ -165,11 +165,14 @@ let do_genertion tree_tab carte pos_array : tree array * evaluation =
       let nouvel_village = createvillage tree_tab.(j) pos_array.(i) carte j in
       let evaluated_village = evalvillage nouvel_village carte in
       let scoretour = scoring evaluated_village carte in
-      score_mat.(i).(j) <- scoretour
-    done
+      score_mat.(i).(j) <- scoretour;
+    done;
+    print_char 'A';print_int i;
   done;
   let best_trees_array = selection score_mat tree_tab in
+  print_char 'A';
   let mutated_best_trees = mutate best_trees_array 1. in
+  print_char 'A';
   (mutated_best_trees, score_mat)
 
 
@@ -186,7 +189,7 @@ let do_genertion tree_tab carte pos_array : tree array * evaluation =
 
 
 (* nb_trees doit être multiple de 5 *)
-let game ?(nb_villages = 2) ?(nb_trees = 25) ?(taille_carte = 400) (n : int) =
+let game ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
@@ -199,10 +202,29 @@ let game ?(nb_villages = 2) ?(nb_trees = 25) ?(taille_carte = 400) (n : int) =
   (* La première case du tableau ne contient que des arbres aléatoires *)
   game_array.(0) <- (gen_trees nb_trees, [||], [||]);
   for i = 1 to n do
+    print_string "Gen n°";
+    print_int i;
+    print_char ' ';
+    print_char '1';
+    print_char '\n';
     let trees, _, _ = game_array.(i - 1) in
+    print_string "Gen n°";
+    print_int i;
+    print_char ' ';
+    print_char '2';
+    print_char '\n';
     let carte, pos_arr = nouvel_generation taille_carte nb_villages in
-    
+    print_string "Gen n°";
+    print_int i;
+    print_char ' ';
+    print_char '3';
+    print_char '\n';
     let evolved_tree_tab, tree_scores = do_genertion trees carte pos_arr in
+    print_string "Gen n°";
+    print_int i;
+    print_char ' ';
+    print_char '4';
+    print_char '\n';
     (* Stocke les arbres après évolution, là où ils ont évolués
        et les scores qu'on obtenu ces arbres *)
     game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores)

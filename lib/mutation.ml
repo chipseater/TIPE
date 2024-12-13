@@ -142,10 +142,15 @@ let mutate_tree root_tree p0 =
 let mutate tree_array p0 =
   let n = Array.length tree_array in
   let mutated_trees = Array.make (5 * n) Vide in
-  for i = 0 to n - 1 do
+  print_int n;
+  print_int (Array.length mutated_trees);
+  for i = 0 to (n - 1) do
+    print_int i;
     mutated_trees.(i) <- tree_array.(i)
   done;
+  print_char '\t';
   for i = n to (5 * n) - 1 do
-    mutated_trees.(i) <- mutate_tree tree_array.(i mod 5) p0
+    print_int i;
+    mutated_trees.(i) <- mutate_tree (tree_array.(i mod n)) p0
   done;
   mutated_trees

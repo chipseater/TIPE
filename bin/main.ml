@@ -1,3 +1,3 @@
 open Game
 
-let _ = game 3 
+let _ = game 10
