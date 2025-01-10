@@ -6,10 +6,11 @@ open Dumpmap
 open Mapmanage
 open Decision
 open Mutation
+open Domainslib.Task
 
 exception Couille
 
-let nouvel_generation taille_carte nb_villages =
+let nv_generation taille_carte nb_villages =
   let carte = gen_carte taille_carte in
   let roots = gen_village_roots (taille_carte / taille_troncon) nb_villages in
   (carte, roots)
@@ -61,7 +62,7 @@ let init_logistique () =
     void_donne )
 
 let logistique_pete () =
-  ( [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -10000); (Pierre, 0); (Wood, 0) ],
+  ( [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -1); (Pierre, 0); (Wood, 0) ],
     void_donne )
 
 let starter_pack (carte : carte) (pos : position) =
@@ -165,25 +166,27 @@ let associer_generation (a : save) (carte : carte) : generation =
   let arbres, pos_array, evaluation = a in
   (arbres, carte, pos_array, evaluation)
 
-let do_genertion tree_tab carte pos_array : tree array * evaluation =
+let do_genertion tree_tab carte_de_base pos_array : tree array * evaluation =
   let nb_pos = Array.length pos_array in
   let nb_arbres = Array.length tree_tab in
   (* Un tableau à deux entrées qui donne le score de l'arbre selon sa position *)
   let score_mat = Array.make_matrix nb_pos nb_arbres 0 in
-  for i = 0 to nb_pos - 1 do
-    for j = 0 to nb_arbres - 1 do
-      reset_carte carte;
-      let nouvel_village = createvillage tree_tab.(j) pos_array.(i) carte j in
-      let evaluated_village = evalvillage nouvel_village carte in
-      let scoretour = scoring evaluated_village carte in
-      score_mat.(i).(j) <- scoretour;
-    done;
-    print_char 'A';print_int i;
-  done;
+  let generation_pool = setup_pool ~name:"generation_pool" ~num_domains:5 () in
+  let run_tree_at_pos i j =
+    let carte = copier_carte carte_de_base in
+    let nv_village = createvillage tree_tab.(j) pos_array.(i) carte j in
+    let evaluated_village = evalvillage nv_village carte in
+    let scoretour = scoring evaluated_village carte in
+    score_mat.(i).(j) <- scoretour
+  in let run_position i =
+    (fun () ->
+      parallel_for ~start:0 ~finish:(nb_arbres - 1) ~body:(run_tree_at_pos i) generation_pool)
+    |> run generation_pool
+  in (fun () ->
+    parallel_for ~start:0 ~finish:(nb_pos - 1) ~body:(run_position) generation_pool)
+  |> run generation_pool;
   let best_trees_array = selection score_mat tree_tab in
-  print_char 'A';
   let mutated_best_trees = mutate best_trees_array 1. in
-  print_char 'A';
   (mutated_best_trees, score_mat)
 
 (* nb_trees doit être multiple de 5 *)
@@ -200,29 +203,9 @@ let game ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   (* La première case du tableau ne contient que des arbres aléatoires *)
   game_array.(0) <- (gen_trees nb_trees, [||], [||]);
   for i = 1 to n do
-    print_string "Gen n°";
-    print_int i;
-    print_char ' ';
-    print_char '1';
-    print_char '\n';
     let trees, _, _ = game_array.(i - 1) in
-    print_string "Gen n°";
-    print_int i;
-    print_char ' ';
-    print_char '2';
-    print_char '\n';
-    let carte, pos_arr = nouvel_generation taille_carte nb_villages in
-    print_string "Gen n°";
-    print_int i;
-    print_char ' ';
-    print_char '3';
-    print_char '\n';
+    let carte, pos_arr = nv_generation taille_carte nb_villages in
     let evolved_tree_tab, tree_scores = do_genertion trees carte pos_arr in
-    print_string "Gen n°";
-    print_int i;
-    print_char ' ';
-    print_char '4';
-    print_char '\n';
     (* Stocke les arbres après évolution, là où ils ont évolués
        et les scores qu'on obtenu ces arbres *)
     game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores)

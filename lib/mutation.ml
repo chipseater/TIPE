@@ -135,7 +135,6 @@ let mutate_condition condition_type =
 let mutate_tree root_tree p0 =
   let rec tree_mutator tree p =
     match tree with
-    | Vide -> Vide
     | Node (cond, l_tree, r_tree, action) ->
         if Utils.rand_bool p then
           let mutation_function = mutate_condition (Random.int 4) in
@@ -145,6 +144,7 @@ let mutate_tree root_tree p0 =
               tree_mutator r_tree (p *. 0.8),
               mutate_action action )
         else tree
+    | Vide -> Vide
   in
   tree_mutator root_tree p0
 

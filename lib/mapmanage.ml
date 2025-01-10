@@ -74,3 +74,13 @@ let reset_carte carte =
       carte.(i).(j) <- reset_troncon carte.(i).(j)
     done
   done
+
+let copier_troncon troncon =
+  Troncon
+    (Array.(map copy) (get_troncon_tuiles troncon), get_troncon_biome troncon)
+
+let copier_ligne_carte carte i =
+  Array.map copier_troncon carte.(i)
+
+let copier_carte carte =
+  Array.mapi (fun i _ -> copier_ligne_carte carte i) carte
