@@ -1,0 +1,1563 @@
+[
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "B",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "P" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "MF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "P",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "S",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "RND" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 13
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "F",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "S", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 6
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "RND" }
+          },
+          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "RND" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "B",
+          "ressource2": "P",
+          "ing": "LP",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "S",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "W",
+            "ressource2": "S",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "MP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "P",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "RND" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LP",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "Ca", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "F", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "W",
+          "ressource2": "F",
+          "ing": "LF",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "MP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "P",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "S",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "RND" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 13
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "F",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "S", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 6
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "RND" }
+          },
+          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "B",
+          "ressource2": "P",
+          "ing": "LP",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "MP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 0
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "S", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "P" }
+        },
+        "action": { "argument": "Out", "bat": "F", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "F", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 2
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "S",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "MP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "Ca", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 2
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "P",
+              "ressource2": "S",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "RND" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "Ca", "prio": "RND" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "S",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 2
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "RND" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 13
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "F",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "S", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 6
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "RND" }
+          },
+          "action": { "argument": "In", "bat": "F", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "B",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 0
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "P" }
+        },
+        "action": { "argument": "In", "bat": "S", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LF",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "LP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LP",
+            "int": 9
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "M", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "S", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "F", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MF",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "RND" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "MF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "MP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "M", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "P",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "S",
+          "ressource2": "P",
+          "ing": "MP",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 5
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 13
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "F" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "F",
+            "ing": "LF",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "S", "prio": "RND" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "P",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 6
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "B",
+          "ressource2": "P",
+          "ing": "MF",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "MF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "RND" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LP",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LP",
+            "int": 0
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "F" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 8
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LP",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteBrut",
+          "ressource1": "W",
+          "ressource2": "P",
+          "ing": "LF",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "RND" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MP",
+              "int": 9
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "S",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "B",
+              "ing": "LF",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "P",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 4
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "Ca", "prio": "RND" }
+      },
+      {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "S",
+          "ressource2": "P",
+          "ing": "MP",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "F",
+            "ressource2": "P",
+            "ing": "LF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "S",
+              "ressource2": "B",
+              "ing": "MP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "M", "prio": "P" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "B",
+              "ressource2": "P",
+              "ing": "MF",
+              "int": 13
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "P" }
+          },
+          "action": { "argument": "In", "bat": "M", "prio": "P" }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrut",
+            "ressource1": "B",
+            "ressource2": "F",
+            "ing": "MF",
+            "int": 1
+          },
+          "l_child": {
+            "condition": {
+              "type": "InegaliteEnPourcentage",
+              "ressource1": "W",
+              "ressource2": "B",
+              "ing": "LP",
+              "int": 1
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "Out", "bat": "S", "prio": "RND" }
+          },
+          "r_child": {
+            "condition": {
+              "type": "InegaliteBrut",
+              "ressource1": "F",
+              "ressource2": "P",
+              "ing": "LF",
+              "int": 6
+            },
+            "l_child": "V",
+            "r_child": "V",
+            "action": { "argument": "In", "bat": "F", "prio": "RND" }
+          },
+          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
+        },
+        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+      }
+    ]
+    

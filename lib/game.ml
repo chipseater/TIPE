@@ -190,7 +190,7 @@ let do_genertion tree_tab carte_de_base pos_array : tree array * evaluation =
   (mutated_best_trees, score_mat)
 
 (* nb_trees doit être multiple de 5 *)
-let game ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
+let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
@@ -213,3 +213,11 @@ let game ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
     (* Yojson.to_file (Utils.ormat_carte_name i) ("dossier/" ^ serialize_carte carte) *)
   done;
   Yojson.to_file "game.json" (serialize_save_array game_array)
+
+let game2 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
+()
+let game i (n : int) = 
+  match i with 
+  |1 -> game1 n
+  |_ -> ()
+
