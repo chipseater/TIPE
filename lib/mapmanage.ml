@@ -2,13 +2,13 @@ open Mapgen
 
 (* Fonctions utilitaires pour gérer les objets de la carte *)
 let isNone = function Troncon (_, _) -> false
-let biome_to_string = function Forest -> "F" | Desert -> "D" | Plains -> "P"
+let biome_to_string = function Forest -> "Forest" | Desert -> "Desert" | Plains -> "Plains"
 
 let batiment_to_string = function
-  | Maison -> "M"
-  | Carriere -> "Ca"
-  | Scierie -> "S"
-  | Ferme -> "F"
+  | Maison -> "Maison"
+  | Carriere -> "Carriere"
+  | Scierie -> "Scierie"
+  | Ferme -> "Ferme"
 
 let option_batiment_to_string = function
   | Some batiment -> batiment_to_string batiment

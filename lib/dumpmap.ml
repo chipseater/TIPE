@@ -33,29 +33,29 @@ let serialize_troncon (troncon : troncon) =
 
 let serialize_inegalite_brut inequality =
   match inequality with
-  | Village.PlusBrut -> `String "MF"
-  | MoinBrut -> `String "LF"
-  | EquivalentBrut -> `String "LF"
+  | PlusBrut -> `String "PlusBrut"
+  | MoinBrut -> `String "MoinBrut"
+  | EquivalentBrut -> `String "EquivalentBrut"
 
 let serialize_percent_ing inequality =
   match inequality with
-  | MorePercent -> `String "MP"
-  | LessPercent -> `String "LP"
+  | MorePercent -> `String "MorePercent"
+  | LessPercent -> `String "LessPercent"
 
 let serialize_argument argument =
-  match argument with InCity -> `String "In" | OutCity -> `String "Out"
+  match argument with InCity -> `String "InCity" | OutCity -> `String "OutCity"
 
 let serialize_prio prio =
   match prio with
-  | Random -> `String "RND"
+  | Random -> `String "Random"
   | Pref biome -> `String (biome_to_string biome)
 
 let serialize_batiment batiment =
   match batiment with
-  | Maison -> `String "M"
-  | Carriere -> `String "Ca"
-  | Scierie -> `String "S"
-  | Ferme -> `String "F"
+  | Maison -> `String "Maison"
+  | Carriere -> `String "Carriere"
+  | Scierie -> `String "Scierie"
+  | Ferme -> `String "Ferme"
 
 let serialize_action action =
   let arg, batiment, prio = action in
@@ -69,11 +69,11 @@ let serialize_action action =
 (* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed *)
 let serialize_ressource ressource =
   match ressource with
-  | Nouriture -> `String "F"
-  | Main_d_oeuvre -> `String "P"
-  | Pierre -> `String "S"
-  | Wood -> `String "W"
-  | Bed -> `String "B"
+  | Nouriture -> `String "Nouriture"
+  | Main_d_oeuvre -> `String "Main_d_oeuvre"
+  | Pierre -> `String "Pierre"
+  | Wood -> `String "Wood"
+  | Bed -> `String "Bed"
 
 (* Fonction bien stupide qui renvoie le type de la condition sous forme de string *)
 let condition_type_to_string = function

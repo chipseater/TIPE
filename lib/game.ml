@@ -7,6 +7,7 @@ open Mapmanage
 open Decision
 open Mutation
 open Domainslib.Task
+open Foret
 
 exception Couille
 
@@ -84,7 +85,7 @@ let createvillage (tree : tree) (pos : position) (carte : carte) (id : int) :
 
 let nombre_de_tours_par_simulation = 20
 
-let rec evalvillage village carte : village =
+let  evalvillage village carte : village =
   let test = ref false in
   try
     for _ = 0 to nombre_de_tours_par_simulation do
@@ -190,7 +191,7 @@ let do_genertion tree_tab carte_de_base pos_array : tree array * evaluation =
   (mutated_best_trees, score_mat)
 
 (* nb_trees doit être multiple de 5 *)
-let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
+let game1 ?(nb_villages = 2) ?(nb_trees = 10) ?(taille_carte = 200) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
@@ -215,9 +216,11 @@ let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   Yojson.to_file "game.json" (serialize_save_array game_array)
 
 let game2 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
-()
+  Yojson.to_file "test.json" (serialize_tree_array (const ()))
+
 let game i (n : int) = 
   match i with 
   |1 -> game1 n
+  |2 -> game2 n 
   |_ -> ()
 

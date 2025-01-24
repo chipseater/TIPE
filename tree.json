@@ -1,1563 +1,2170 @@
 [
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "B",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "P" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Bed",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "LessPercent",
+      "int": 5
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteBrute",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "PlusBrut",
+        "int": 11
       },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 4
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "RND" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "MF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "P",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "S",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "RND" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 13
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "RND" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "F",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "S", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 6
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "RND" }
-          },
-          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "RND" }
-      },
-      {
+      "l_child": {
         "condition": {
           "type": "InegaliteEnPourcentage",
-          "ressource1": "B",
-          "ressource2": "P",
-          "ing": "LP",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "S",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "W",
-            "ressource2": "S",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "MP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "P",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "RND" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteEnPourcentage",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LP",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "Ca", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "F", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "W",
-          "ressource2": "F",
-          "ing": "LF",
-          "int": 4
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "MP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "RND" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "P",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "S",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "RND" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 13
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "RND" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "F",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "S", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 6
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "RND" }
-          },
-          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteEnPourcentage",
-          "ressource1": "B",
-          "ressource2": "P",
-          "ing": "LP",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "MP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 0
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "S", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "RND" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "P" }
-        },
-        "action": { "argument": "Out", "bat": "F", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "F", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 2
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "S",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "MP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "Ca", "prio": "RND" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 2
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "P",
-              "ressource2": "S",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "RND" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "Ca", "prio": "RND" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "S",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 2
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "RND" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 13
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "F",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "S", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 6
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "RND" }
-          },
-          "action": { "argument": "In", "bat": "F", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "B",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 0
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "P" }
-        },
-        "action": { "argument": "In", "bat": "S", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LF",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "LP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LP",
-            "int": 9
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "M", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "S", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "F", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LF",
-          "int": 4
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MF",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "RND" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "MF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "MP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "M", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "P",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteEnPourcentage",
-          "ressource1": "S",
-          "ressource2": "P",
-          "ing": "MP",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 5
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 13
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "F" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "F",
-            "ing": "LF",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "S", "prio": "RND" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "P",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 6
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "B",
-          "ressource2": "P",
-          "ing": "MF",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LF",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "MF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "RND" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteEnPourcentage",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LP",
-          "int": 1
-        },
-        "l_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LP",
-            "int": 0
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "F" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 8
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "RND" }
-        },
-        "r_child": {
-          "condition": {
-            "type": "InegaliteEnPourcentage",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LP",
-            "int": 1
-          },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "Out", "bat": "M", "prio": "RND" }
-        },
-        "action": { "argument": "Out", "bat": "S", "prio": "P" }
-      },
-      {
-        "condition": {
-          "type": "InegaliteBrut",
-          "ressource1": "W",
-          "ressource2": "P",
-          "ing": "LF",
+          "ressource1": "Wood",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
           "int": 6
         },
         "l_child": {
           "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LF",
-            "int": 1
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
           },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "RND" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MP",
-              "int": 9
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
         },
         "r_child": {
           "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "S",
-            "ing": "LF",
-            "int": 1
+            "type": "InegaliteBrute",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MoinBrut",
+            "int": 8
           },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "B",
-              "ing": "LF",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "Ca", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "P",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 4
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "RND" }
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
         },
-        "action": { "argument": "Out", "bat": "Ca", "prio": "RND" }
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
       },
-      {
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": {
+        "argument": "OutCity",
+        "bat": "Carriere",
+        "prio": "Random"
+      }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Pierre",
+        "ressource2": "Pierre",
+        "ing": "LessPercent",
+        "int": 5
+      },
+      "l_child": {
         "condition": {
           "type": "InegaliteEnPourcentage",
-          "ressource1": "S",
-          "ressource2": "P",
-          "ing": "MP",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "MorePercent",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 3
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 4
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Carriere",
+          "prio": "Random"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Scierie", "prio": "Random" }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Forest" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Bed",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "LessPercent",
+      "int": 5
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "LessPercent",
+        "int": 11
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Bed",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": {
+        "argument": "OutCity",
+        "bat": "Carriere",
+        "prio": "Plains"
+      }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Wood",
+        "ressource2": "Pierre",
+        "ing": "LessPercent",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "MorePercent",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 3
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 4
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Carriere",
+          "prio": "Random"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Maison", "prio": "Random" }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Random" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Bed",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "LessPercent",
+      "int": 6
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteBrute",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "PlusBrut",
+        "int": 11
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Wood",
+          "ressource2": "Wood",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 16
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MoinBrut",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Pierre",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Bed",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Carriere",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": { "argument": "OutCity", "bat": "Ferme", "prio": "Random" }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Pierre",
+        "ressource2": "Pierre",
+        "ing": "LessPercent",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "LessPercent",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 7
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": { "argument": "InCity", "bat": "Ferme", "prio": "Plains" }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "LessPercent",
+          "int": 3
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 4
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Carriere",
+          "prio": "Random"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Scierie", "prio": "Random" }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Forest" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Bed",
+      "ressource2": "Nouriture",
+      "ing": "LessPercent",
+      "int": 5
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteBrute",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "MoinBrut",
+        "int": 11
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Bed",
+          "ressource2": "Nouriture",
+          "ing": "PlusBrut",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": { "argument": "OutCity", "bat": "Ferme", "prio": "Plains" }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Wood",
+        "ressource2": "Pierre",
+        "ing": "MorePercent",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Scierie",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
           "int": 1
         },
         "l_child": {
           "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "F",
-            "ressource2": "P",
-            "ing": "LF",
-            "int": 1
+            "type": "InegaliteBrute",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "EquivalentBrut",
+            "int": 8
           },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "S",
-              "ressource2": "B",
-              "ing": "MP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "M", "prio": "P" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "B",
-              "ressource2": "P",
-              "ing": "MF",
-              "int": 13
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "P" }
-          },
-          "action": { "argument": "In", "bat": "M", "prio": "P" }
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
         },
         "r_child": {
           "condition": {
-            "type": "InegaliteBrut",
-            "ressource1": "B",
-            "ressource2": "F",
-            "ing": "MF",
-            "int": 1
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 2
           },
-          "l_child": {
-            "condition": {
-              "type": "InegaliteEnPourcentage",
-              "ressource1": "W",
-              "ressource2": "B",
-              "ing": "LP",
-              "int": 1
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "Out", "bat": "S", "prio": "RND" }
-          },
-          "r_child": {
-            "condition": {
-              "type": "InegaliteBrut",
-              "ressource1": "F",
-              "ressource2": "P",
-              "ing": "LF",
-              "int": 6
-            },
-            "l_child": "V",
-            "r_child": "V",
-            "action": { "argument": "In", "bat": "F", "prio": "RND" }
-          },
-          "action": { "argument": "Out", "bat": "F", "prio": "RND" }
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
         },
-        "action": { "argument": "Out", "bat": "S", "prio": "P" }
+        "action": {
+          "argument": "OutCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Maison", "prio": "Forest" }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Random" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Bed",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "MorePercent",
+      "int": 5
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "MorePercent",
+        "int": 11
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Wood",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MoinBrut",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": {
+        "argument": "InCity",
+        "bat": "Carriere",
+        "prio": "Random"
       }
-    ]
-    
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "LessPercent",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "MorePercent",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 3
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 4
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Carriere",
+          "prio": "Random"
+        }
+      },
+      "action": {
+        "argument": "OutCity",
+        "bat": "Scierie",
+        "prio": "Random"
+      }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Random" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Bed",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "LessPercent",
+      "int": 12
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteBrute",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "EquivalentBrut",
+        "int": 11
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Bed",
+          "ressource2": "Pierre",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Ferme",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": {
+        "argument": "OutCity",
+        "bat": "Carriere",
+        "prio": "Random"
+      }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Main_d_oeuvre",
+        "ressource2": "Pierre",
+        "ing": "LessPercent",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "MorePercent",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "MorePercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Scierie",
+            "prio": "Plains"
+          }
+        },
+        "action": { "argument": "InCity", "bat": "Ferme", "prio": "Plains" }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Bed",
+          "ing": "MorePercent",
+          "int": 3
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Random"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Ferme", "prio": "Random" }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Plains" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Bed",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "LessPercent",
+      "int": 6
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteBrute",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "PlusBrut",
+        "int": 11
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Wood",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MoinBrut",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": {
+        "argument": "OutCity",
+        "bat": "Carriere",
+        "prio": "Random"
+      }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Pierre",
+        "ressource2": "Pierre",
+        "ing": "LessPercent",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Bed",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Random"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "LessPercent",
+          "int": 3
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 4
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Ferme", "prio": "Random" }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Random" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Bed",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "LessPercent",
+      "int": 4
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteBrute",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "EquivalentBrut",
+        "int": 11
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Bed",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "LessPercent",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Forest"
+        }
+      },
+      "action": {
+        "argument": "OutCity",
+        "bat": "Carriere",
+        "prio": "Plains"
+      }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Wood",
+        "ressource2": "Pierre",
+        "ing": "LessPercent",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "MorePercent",
+          "int": 1
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 2
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "EquivalentBrut",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Wood",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 4
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Maison", "prio": "Forest" }
+    },
+    "action": { "argument": "InCity", "bat": "Maison", "prio": "Random" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteBrute",
+      "ressource1": "Bed",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "MoinBrut",
+      "int": 5
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteBrute",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "PlusBrut",
+        "int": 11
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Wood",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MoinBrut",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": {
+        "argument": "OutCity",
+        "bat": "Carriere",
+        "prio": "Random"
+      }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteBrute",
+        "ressource1": "Pierre",
+        "ressource2": "Pierre",
+        "ing": "PlusBrut",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "MorePercent",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 4
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Random"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Scierie", "prio": "Forest" }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Random" }
+  },
+  {
+    "condition": {
+      "type": "InegaliteEnPourcentage",
+      "ressource1": "Wood",
+      "ressource2": "Main_d_oeuvre",
+      "ing": "LessPercent",
+      "int": 5
+    },
+    "l_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Pierre",
+        "ressource2": "Wood",
+        "ing": "LessPercent",
+        "int": 24
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Bed",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 6
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 9
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteBrute",
+          "ressource1": "Wood",
+          "ressource2": "Main_d_oeuvre",
+          "ing": "MoinBrut",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Wood",
+            "ing": "MorePercent",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Nouriture",
+            "ing": "MoinBrut",
+            "int": 6
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Maison",
+          "prio": "Random"
+        }
+      },
+      "action": {
+        "argument": "OutCity",
+        "bat": "Carriere",
+        "prio": "Random"
+      }
+    },
+    "r_child": {
+      "condition": {
+        "type": "InegaliteEnPourcentage",
+        "ressource1": "Nouriture",
+        "ressource2": "Pierre",
+        "ing": "LessPercent",
+        "int": 5
+      },
+      "l_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Pierre",
+          "ressource2": "Wood",
+          "ing": "LessPercent",
+          "int": 4
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "EquivalentBrut",
+            "int": 5
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Main_d_oeuvre",
+            "ressource2": "Main_d_oeuvre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "OutCity",
+            "bat": "Carriere",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "InCity",
+          "bat": "Carriere",
+          "prio": "Plains"
+        }
+      },
+      "r_child": {
+        "condition": {
+          "type": "InegaliteEnPourcentage",
+          "ressource1": "Main_d_oeuvre",
+          "ressource2": "Nouriture",
+          "ing": "MorePercent",
+          "int": 3
+        },
+        "l_child": {
+          "condition": {
+            "type": "InegaliteEnPourcentage",
+            "ressource1": "Wood",
+            "ressource2": "Pierre",
+            "ing": "LessPercent",
+            "int": 8
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Maison",
+            "prio": "Random"
+          }
+        },
+        "r_child": {
+          "condition": {
+            "type": "InegaliteBrute",
+            "ressource1": "Pierre",
+            "ressource2": "Wood",
+            "ing": "EquivalentBrut",
+            "int": 4
+          },
+          "l_child": "V",
+          "r_child": "V",
+          "action": {
+            "argument": "InCity",
+            "bat": "Ferme",
+            "prio": "Plains"
+          }
+        },
+        "action": {
+          "argument": "OutCity",
+          "bat": "Carriere",
+          "prio": "Random"
+        }
+      },
+      "action": { "argument": "InCity", "bat": "Maison", "prio": "Plains" }
+    },
+    "action": { "argument": "OutCity", "bat": "Maison", "prio": "Random" }
+  }
+]
