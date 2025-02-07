@@ -235,6 +235,36 @@ def pire_score(liste):
 
 
 # %%
+def app(l,e):
+    if len(l)<10:
+        l.append(e)
+        l.sort()
+    else:
+        if l[-1] < e: 
+            l[-1]=e
+            l.sort()
+    return l 
+
+
+# %%
+def moy_best(liste):
+    l=[]
+    for i in range(len(liste)):
+         for j in range(len(liste[i])):
+            l= app(l,liste[i][j])
+    c=0
+    for i in range(len(l)):
+       c += l[i]
+    return c/10
+
+def list_moy_best(liste):
+    l=[]
+    for i in range(len(liste)):
+        l.append(moy_best(liste[i]))
+    return l
+
+
+# %%
 def list_moyenne(liste):
     l=[]
     for i in range(len(liste)):
@@ -253,71 +283,34 @@ def list_pire(liste):
 
 
 # %%
-def moyenne_1(liste):
-    c=0
-    n=0
-    x1=0
-    x2=0
-    x3=0
-    for i in range(len(liste)):
-        for j in range(len(liste[i])):
-            if x1 < liste[i][j]:
-                x3=x2
-                x2=x1
-                x1=liste[i][j]
-            c+=liste[i][j]
-            n+=1
-    return (c-x1-x2-x3)/(n-3)
-
-
-# %%
-def list_moyenne_1(liste):
-    l=[]
-    for i in range(len(liste)):
-        l.append(moyenne_1(liste[i]))
-    return l
-
-
-
-# %%
-def meilleur_score_1(liste):
-    c=0 
-    x=moyenne_1(liste)
-    for i in range(len(liste)):
-        for j in range(len(liste[i])):
-            if c < liste[i][j] and (liste[i][j] < 1*x):
-                c= liste[i][j]
-    return c
-
-
-
-# %%
-def list_meilleur_1(liste):
-    l=[]
-    for i in range(len(liste)):
-        l.append(meilleur_score_1(liste[i]))
-    return l
-
-
-
-# %%
 def visualisation(data):
     l = score(data)
-    l1=list_moyenne_1(l)
-    l2=list_meilleur_1(l)
+    l1=list_moyenne(l)
+    l2=list_meilleur(l)
     l3=list_pire(l)
+    l5=list_moy_best(l)
     l4=range(len(data)-1)
     plt.plot(l4,l1,'bo')
     plt.plot(l4,l2,'ro')
-    #plt.plot(l4,l3,'go')
+    plt.plot(l4,l3,'go')
+    plt.plot(l4,l5,'yo')
+
+
+# %%
+def reconstruction(data):
+    tab=np.array(data[-1]['tree_array'])
+    f= open('../test.json','w')
+    f.write(json.dumps(list(tab)))
+    f.close
 
 
 # %%
 f = open('../game.json', 'r')
 data = np.array(json.loads(f.read()))
-#tree = np.array(data[1]['tree_array'])
+#tree = np.array(data[-1]['tree_array'])
 #construction_fichier(tree)
 visualisation(data)
+#reconstruction(data)
 
 # %%
 

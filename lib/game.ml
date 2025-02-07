@@ -188,10 +188,11 @@ let do_genertion tree_tab carte_de_base pos_array : tree array * evaluation =
   |> run generation_pool;
   let best_trees_array = selection score_mat tree_tab in
   let mutated_best_trees = mutate best_trees_array 1. in
+  teardown_pool generation_pool;
   (mutated_best_trees, score_mat)
 
 (* nb_trees doit être multiple de 5 *)
-let game1 ?(nb_villages = 2) ?(nb_trees = 10) ?(taille_carte = 200) (n : int) =
+let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
@@ -216,7 +217,22 @@ let game1 ?(nb_villages = 2) ?(nb_trees = 10) ?(taille_carte = 200) (n : int) =
   Yojson.to_file "game.json" (serialize_save_array game_array)
 
 let game2 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
-  Yojson.to_file "test.json" (serialize_tree_array (const ()))
+  let (game_array : save array) =
+    Array.make (n + 1)
+      ( Array.make nb_trees Vide,
+        Array.make nb_villages (-1, -1),
+        Array.make_matrix nb_villages nb_trees (-1) )
+  in
+  game_array.(0) <- (const (), [||], [||]);
+  for i = 1 to n do
+    let trees, _, _ = game_array.(i - 1) in
+    let carte, pos_arr = nv_generation taille_carte nb_villages in
+    let evolved_tree_tab, tree_scores = do_genertion trees carte pos_arr in
+    game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores)
+  done;
+  Yojson.to_file "game.json" (serialize_save_array game_array)
+
+
 
 let game i (n : int) = 
   match i with 

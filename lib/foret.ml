@@ -60,7 +60,7 @@ let echange_bat str = match str with
   |"Ferme" -> Ferme
   |_ -> failwith "Non Defini6"
 
-let const_cond t = match to_string(member "type" t) with 
+let const_cond t = print_int 3;match to_string(member "type" t) with 
   |"InegaliteBrute" -> InegaliteBrute((echange_ressource (to_string(member "ressource1" t))),
                                     (echange_ressource (to_string(member "ressource2" t))),
                                     (echange_ing_brut (to_string(member "ing" t))),
@@ -72,18 +72,20 @@ let const_cond t = match to_string(member "type" t) with
                                                       to_int(member "int" t))
   |_ ->failwith "Non Defini7"
 ;;
-let const_act t = ((echange_arg(to_string(member "arg" t))),
+let const_act t =print_int 2; ((echange_arg(to_string(member "argument" t))),
                   (echange_bat (to_string(member "bat" t))),
                   (echange_prio(to_string(member "prio" t))))
 
 
-let rec  construc (t:Safe.t) = Node(const_cond (member "condition" t),
-                      construc (member "l_child" t),
-                      construc (member "r_child" t), 
-                      const_act (member "action" t))
+let rec  construc (t:Safe.t) = print_int 1; match t with
+  | `Assoc(_) -> Node(const_cond (member "condition" t),
+            construc (member "l_child" t),
+            construc (member "r_child" t), 
+            const_act (member "action" t))
+  |_ -> Vide
 
 let const () =
-  let t = Yojson.Safe.from_file "tree.json" in 
+  let t = Yojson.Safe.from_file "test.json" in 
   let tab = Array.make 100 Vide in 
   let rec parc t c = 
     match  t with 
