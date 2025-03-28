@@ -50,4 +50,9 @@
 (library
  (name foret)
  (modules foret)
- (libraries yojson village mapgen ))
+ (libraries yojson village mapgen))
+
+(library
+ (name adn)
+ (modules adn)
+ (libraries utils village mapgen))

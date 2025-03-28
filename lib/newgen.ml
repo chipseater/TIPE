@@ -15,10 +15,10 @@ let rnd_ressource () =
   | 1 -> Main_d_oeuvre
   | 2 -> Pierre
   | 3 -> Wood
-  | _ -> Bed
+  | _ -> Lit
 
 let rnd_inegalite_brut () =
-  match Random.int 3 with 2 -> PlusBrut | 1 -> MoinBrut | _ -> EquivalentBrut
+  match Random.int 3 with 2 -> PlusBrut | 1 -> MoinsBrut | _ -> EquivalentBrut
 
 let rnd_percent_ing () =
   match Random.int 2 with 1 -> MorePercent | _ -> LessPercent

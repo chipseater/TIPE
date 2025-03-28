@@ -11,4 +11,5 @@
   decision
   newgen
   mutation
-  game))
+  game
+  adn))

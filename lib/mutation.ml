@@ -6,7 +6,7 @@ let ressource_of_int = function
   | 2 -> Main_d_oeuvre
   | 3 -> Pierre
   | 4 -> Wood
-  | _ -> Bed
+  | _ -> Lit
 
 let batiment_of_int = function
   | 1 -> Carriere
@@ -21,7 +21,7 @@ let int_of_condition_type = function
 let int_of_inegalite_brut = function
   | 2 -> PlusBrut
   | 1 -> EquivalentBrut
-  | _ -> MoinBrut
+  | _ -> MoinsBrut
 
 let int_of_percent_ing = function 1 -> MorePercent | _ -> LessPercent
 

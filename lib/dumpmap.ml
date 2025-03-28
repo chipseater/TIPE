@@ -34,7 +34,7 @@ let serialize_troncon (troncon : troncon) =
 let serialize_inegalite_brut inequality =
   match inequality with
   | PlusBrut -> `String "PlusBrut"
-  | MoinBrut -> `String "MoinBrut"
+  | MoinsBrut -> `String "MoinsBrut"
   | EquivalentBrut -> `String "EquivalentBrut"
 
 let serialize_percent_ing inequality =
@@ -66,14 +66,14 @@ let serialize_action action =
       ("prio", serialize_prio prio);
     ]
 
-(* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed *)
+(* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Lit *)
 let serialize_ressource ressource =
   match ressource with
   | Nouriture -> `String "Nouriture"
   | Main_d_oeuvre -> `String "Main_d_oeuvre"
   | Pierre -> `String "Pierre"
   | Wood -> `String "Wood"
-  | Bed -> `String "Bed"
+  | Lit -> `String "Lit"
 
 (* Fonction bien stupide qui renvoie le type de la condition sous forme de string *)
 let condition_type_to_string = function

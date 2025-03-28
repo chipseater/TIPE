@@ -1,7 +1,7 @@
 open Mapgen
 open Mapmanage
 
-type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed
+type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Lit
 
 (* Dictionnaire contenant des ressources et leur quantités *)
 type donne = (ressource * int) list
@@ -14,7 +14,7 @@ type position = int * int
 (* Une égalité sur des rapports n'ayant pas de sens,
    des types d'inégalité différents sont utilisés
    pour InegaliteEnPourcentage et pour InegaliteBrute *)
-type inegalite_brut = PlusBrut | MoinBrut | EquivalentBrut
+type inegalite_brut = PlusBrut | MoinsBrut | EquivalentBrut
 type percent_ing = MorePercent | LessPercent
 
 (* Action *)
@@ -52,20 +52,20 @@ type village = {
 
 (* Un objet de type donne vide *)
 let void_donne : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ]
+  [ (Lit, 0); (Nouriture, 0); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ]
 
 (* Les valeurs de production des différents bâtiments *)
 let maison_donne_prodution : donne =
-  [ (Bed, 5); (Nouriture, 0); (Main_d_oeuvre, -1); (Pierre, 0); (Wood, 0) ]
+  [ (Lit, 5); (Nouriture, 0); (Main_d_oeuvre, -1); (Pierre, 0); (Wood, 0) ]
 
 let carriere_donne_prodution : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -20); (Pierre, 100); (Wood, 0) ]
+  [ (Lit, 0); (Nouriture, 0); (Main_d_oeuvre, -20); (Pierre, 100); (Wood, 0) ]
 
 let ferme_donne_prodution : donne =
-  [ (Bed, 0); (Nouriture, 10); (Main_d_oeuvre, -25); (Pierre, 0); (Wood, 0) ]
+  [ (Lit, 0); (Nouriture, 10); (Main_d_oeuvre, -25); (Pierre, 0); (Wood, 0) ]
 
 let scierie_donne_prodution : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -10); (Pierre, 0); (Wood, 50) ]
+  [ (Lit, 0); (Nouriture, 0); (Main_d_oeuvre, -10); (Pierre, 0); (Wood, 50) ]
 
 (* Fonction *)
 (* Additionne deux dictionnaires de ressources *)
@@ -127,13 +127,13 @@ let rec update_logistique (logistique : logistique) : logistique =
 
 let calcul_of_main_d_oeuvre donne =
   let nouriture = recherche donne Nouriture in
-  let bed = recherche donne Bed in
+  let bed = recherche donne Lit in
   let main_d_oeuvre = recherche donne Main_d_oeuvre in
   if main_d_oeuvre > bed * 10 then
     if bed > nouriture then
       sum_donne donne
         [
-          (Bed, -bed);
+          (Lit, -bed);
           (Nouriture, -nouriture);
           (Main_d_oeuvre, -main_d_oeuvre + (nouriture * 10));
           (Pierre, 0);
@@ -142,7 +142,7 @@ let calcul_of_main_d_oeuvre donne =
     else
       sum_donne donne
         [
-          (Bed, -bed);
+          (Lit, -bed);
           (Nouriture, -bed);
           (Main_d_oeuvre, -main_d_oeuvre + (bed * 10));
           (Pierre, 0);
@@ -151,7 +151,7 @@ let calcul_of_main_d_oeuvre donne =
   else if main_d_oeuvre > nouriture * 10 then
     sum_donne donne
       [
-        (Bed, -bed);
+        (Lit, -bed);
         (Nouriture, -nouriture);
         (Main_d_oeuvre, -main_d_oeuvre + (nouriture * 10));
         (Pierre, 0);
@@ -164,7 +164,7 @@ let calcul_of_main_d_oeuvre donne =
     if remaining_beds * 2 > remaining_nouriture then
       sum_donne donne
         [
-          (Bed, -bed);
+          (Lit, -bed);
           (Nouriture, -nouriture + (remaining_nouriture mod 2));
           ( Main_d_oeuvre,
             -main_d_oeuvre + last_gen_main_d_oeuvre
@@ -175,7 +175,7 @@ let calcul_of_main_d_oeuvre donne =
     else
       sum_donne donne
         [
-          (Bed, -bed);
+          (Lit, -bed);
           (Nouriture, -nouriture + remaining_nouriture - (2 * remaining_beds));
           ( Main_d_oeuvre,
             -main_d_oeuvre + last_gen_main_d_oeuvre + (2 * remaining_beds * 10)

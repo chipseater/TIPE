@@ -3,11 +3,11 @@ open Yojson.Safe.Util
 open Village
 open Mapgen
 
-(* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed
+(* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Lit
 type donne = (ressource * int) list
 type logistics = donne * donne
 type position = int * int
-type inegalite_brut = PlusBrut | MoinBrut | EquivalentBrut
+type inegalite_brut = PlusBrut | MoinsBrut | EquivalentBrut
 type percent_ing = MorePercent | LessPercent
 
 type biome = Forest | Desert | Plains
@@ -27,7 +27,7 @@ let echange_ressource str = match str with
   |"Main_d_oeuvre" -> Main_d_oeuvre
   |"Pierre" -> Pierre 
   |"Wood" -> Wood
-  |"Bed" -> Bed
+  |"Lit" -> Lit
   |_ -> failwith "Non Defini1"
 
 let echange_ing_pour str = match str with 
@@ -37,7 +37,7 @@ let echange_ing_pour str = match str with
 
 let echange_ing_brut str = match str with 
   |"PlusBrut" -> PlusBrut
-  |"MoinBrut"-> MoinBrut
+  |"MoinsBrut"-> MoinsBrut
   |"EquivalentBrut" -> EquivalentBrut
   |_ -> failwith "Non Defini3"
 

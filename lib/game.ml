@@ -59,11 +59,11 @@ let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
   village.logistique <- nv_logistique
 
 let init_logistique () =
-  ( [ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 0); (Wood, 0) ],
+  ( [ (Lit, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 0); (Wood, 0) ],
     void_donne )
 
 let logistique_pete () =
-  ( [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -1); (Pierre, 0); (Wood, 0) ],
+  ( [ (Lit, 0); (Nouriture, 0); (Main_d_oeuvre, -1); (Pierre, 0); (Wood, 0) ],
     void_donne )
 
 let starter_pack (carte : carte) (pos : position) =
