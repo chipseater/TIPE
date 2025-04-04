@@ -1,6 +1,7 @@
 open Village
 open Mapgen
 open Mapmanage
+open Type
 
 let get_popuplation village =
   let stock, _ = village.logistique in

@@ -1,3 +1,4 @@
+open Type 
 open Village
 open Mapgen
 open Newgen
@@ -71,19 +72,18 @@ let starter_pack (carte : carte) (pos : position) =
   modifie_batiment_dans_troncon carte carte.(x).(y) (Some Ferme) 0 0;
   modifie_batiment_dans_troncon carte carte.(x).(y) (Some Maison) 0 1
 
-let createvillage (tree : tree) (pos : position) (carte : carte) (id : int) :
+let createvillage (tree : tree) (treepos:treepos) (pos : position) (carte : carte) (id : int) :
     village =
   (* init le village *)
   starter_pack carte pos;
   {
     id;
     tree;
+    treepos;
     logistique = init_logistique ();
     root_position = pos;
     position_list = [ pos ];
   }
-
-let nombre_de_tours_par_simulation = 20
 
 let  evalvillage village carte : village =
   let test = ref false in
@@ -97,6 +97,7 @@ let  evalvillage village carte : village =
       {
         id = village.id;
         tree = village.tree;
+        treepos = village.treepos;
         logistique = logistique_pete ();
         root_position = village.root_position;
         position_list = village.position_list;
@@ -121,7 +122,7 @@ let compare_last x y =
   let _, b = y in
   compare a b
 
-let selection score tree_tab =
+let selection score tree_tab treepos_tab =
   (* selectionne les 20 meilleurs *)
   let nb_pos = Array.length score in
   let nb_arbres = Array.length score.(0) in
@@ -153,21 +154,23 @@ let selection score tree_tab =
   let () = Array.stable_sort compare_last scores_a_trier in
   (* Retrouve les arbres après tri *)
   let arbres_tries = Array.make (nb_arbres / 5) Vide in
+  let arbrespos_tries = Array.make (nb_arbres/5) Nil in 
   for i = 0 to (nb_arbres / 5) - 1 do
     let indice_arbre, _ = scores_a_trier.(i) in
-    arbres_tries.(i) <- tree_tab.(indice_arbre)
+    arbres_tries.(i) <- tree_tab.(indice_arbre);
+    arbrespos_tries.(i) <- treepos_tab.(indice_arbre)
   done;
-  arbres_tries
+  (arbres_tries,arbrespos_tries)
 
 let scoring (village : village) (carte : carte) : int =
   calcul_score village carte
 
 (* Associe une carte et une save pour créer une génération *)
 let associer_generation (a : save) (carte : carte) : generation =
-  let arbres, pos_array, evaluation = a in
-  (arbres, carte, pos_array, evaluation)
+  let arbres, arbrespos, pos_array, evaluation = a in
+  (arbres, arbrespos , carte, pos_array, evaluation)
 
-let do_genertion tree_tab carte_de_base pos_array : tree array * evaluation =
+let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array * evaluation =
   let nb_pos = Array.length pos_array in
   let nb_arbres = Array.length tree_tab in
   (* Un tableau à deux entrées qui donne le score de l'arbre selon sa position *)
@@ -175,7 +178,7 @@ let do_genertion tree_tab carte_de_base pos_array : tree array * evaluation =
   let generation_pool = setup_pool ~name:"generation_pool" ~num_domains:5 () in
   let run_tree_at_pos i j =
     let carte = copier_carte carte_de_base in
-    let nv_village = createvillage tree_tab.(j) pos_array.(i) carte j in
+    let nv_village = createvillage tree_tab.(j) treepos_tab.(j) pos_array.(i) carte j in
     let evaluated_village = evalvillage nv_village carte in
     let scoretour = scoring evaluated_village carte in
     score_mat.(i).(j) <- scoretour
@@ -186,10 +189,11 @@ let do_genertion tree_tab carte_de_base pos_array : tree array * evaluation =
   in (fun () ->
     parallel_for ~start:0 ~finish:(nb_pos - 1) ~body:(run_position) generation_pool)
   |> run generation_pool;
-  let best_trees_array = selection score_mat tree_tab in
+  let (best_trees_array,best_treespos_array) = selection score_mat tree_tab treepos_tab in
   let mutated_best_trees = mutate best_trees_array 1. in
+  let mutated_best_treespos = mutatepos best_treespos_array 1. in 
   teardown_pool generation_pool;
-  (mutated_best_trees, score_mat)
+  (mutated_best_trees,mutated_best_treespos, score_mat)
 
 (* nb_trees doit être multiple de 5 *)
 let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
@@ -197,20 +201,21 @@ let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
     Array.make (n + 1)
       ( (* Arbres *)
         Array.make nb_trees Vide,
+        Array.make nb trees Nil,
         (* Tableau qui contient les positions des villages *)
         Array.make nb_villages (-1, -1),
         (* Scores *)
         Array.make_matrix nb_villages nb_trees (-1) )
   in
   (* La première case du tableau ne contient que des arbres aléatoires *)
-  game_array.(0) <- (gen_trees nb_trees, [||], [||]);
+  game_array.(0) <- (gen_trees nb_trees, gen_treepos nb_trees ,[||], [||]);
   for i = 1 to n do
-    let trees, _, _ = game_array.(i - 1) in
+    let trees,treepos , _, _ = game_array.(i - 1) in
     let carte, pos_arr = nv_generation taille_carte nb_villages in
-    let evolved_tree_tab, tree_scores = do_genertion trees carte pos_arr in
+    let evolved_tree_tab,evolved_treepos_tab, tree_scores = do_genertion trees treepos carte pos_arr in
     (* Stocke les arbres après évolution, là où ils ont évolués
        et les scores qu'on obtenu ces arbres *)
-    game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores)
+    game_array.(i) <- (evolved_tree_tab, evolved_treepos_tab ,pos_arr, tree_scores)
     (* Stockage éventuel de la carte générée (pas indispensable) *)
     (* Yojson.to_file (Utils.ormat_carte_name i) ("dossier/" ^ serialize_carte carte) *)
   done;
@@ -220,6 +225,7 @@ let game2 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( Array.make nb_trees Vide,
+        Array.make nb_trees Nil,
         Array.make nb_villages (-1, -1),
         Array.make_matrix nb_villages nb_trees (-1) )
   in
@@ -227,8 +233,8 @@ let game2 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   for i = 1 to n do
     let trees, _, _ = game_array.(i - 1) in
     let carte, pos_arr = nv_generation taille_carte nb_villages in
-    let evolved_tree_tab, tree_scores = do_genertion trees carte pos_arr in
-    game_array.(i) <- (evolved_tree_tab, pos_arr, tree_scores)
+    let evolved_tree_tab, evolved_treepos_tab ,tree_scores = do_genertion trees treepos carte pos_arr in
+    game_array.(i) <- (evolved_tree_tab, evolved_treepos_tab ,pos_arr, tree_scores)
   done;
   Yojson.to_file "game.json" (serialize_save_array game_array)
 

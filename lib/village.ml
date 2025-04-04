@@ -1,72 +1,5 @@
-open Mapgen
 open Mapmanage
-
-type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed
-
-(* Dictionnaire contenant des ressources et leur quantités *)
-type donne = (ressource * int) list
-
-(* Contient à la fois les stocks du village et les ressources produites*)
-type logistique = donne * donne
-type position = int * int
-
-(* Arbre *)
-(* Une égalité sur des rapports n'ayant pas de sens,
-   des types d'inégalité différents sont utilisés
-   pour InegaliteEnPourcentage et pour InegaliteBrute *)
-type inegalite_brut = PlusBrut | MoinBrut | EquivalentBrut
-type percent_ing = MorePercent | LessPercent
-
-(* Action *)
-type argument = InCity | OutCity
-type prio = Random | Pref of biome
-type action = argument * batiment * prio
-
-(* InegaliteEnPourcentage représente une inégalité en pourcentage de stocks tandis que
-   InegaliteBrute représente une inégalité en quantité de ressources
-   La première ressource sera comparée avec la deuxième d'après
-   les constructeurs de ing
-*)
-type condition =
-  | InegaliteBrute of ressource * ressource * inegalite_brut * int
-  | InegaliteEnPourcentage of ressource * ressource * percent_ing * int
-
-(* Un arbre de décision est soit vide, soit constitué d'une condition
-   qui décidera si le premier ou le deuxième sous-arbre sera évalué:
-   à gauche si la condition est remplie, à droite sinon. Si la condition
-   du noeud est vérifié, alors l'action de ce noeud sera exécutée.
-*)
-type tree = Vide | Node of condition * tree * tree * action
-
-(* Un village est caractérisé par son identifiant, son arbre de décision,
-   son état de logistique et la liste des troncons qu'il possède.
-*)
-(* type village = int * tree * logistique * position * position list *)
-type village = {
-  id : int;
-  tree : tree;
-  mutable logistique : logistique;
-  root_position : position;
-  mutable position_list : position list;
-}
-
-(* Un objet de type donne vide *)
-let void_donne : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ]
-
-(* Les valeurs de production des différents bâtiments *)
-let maison_donne_prodution : donne =
-  [ (Bed, 5); (Nouriture, 0); (Main_d_oeuvre, -1); (Pierre, 0); (Wood, 0) ]
-
-let carriere_donne_prodution : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -20); (Pierre, 100); (Wood, 0) ]
-
-let ferme_donne_prodution : donne =
-  [ (Bed, 0); (Nouriture, 10); (Main_d_oeuvre, -25); (Pierre, 0); (Wood, 0) ]
-
-let scierie_donne_prodution : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -10); (Pierre, 0); (Wood, 50) ]
-
+open Type
 (* Fonction *)
 (* Additionne deux dictionnaires de ressources *)
 let rec sum_donne (l1 : donne) (l2 : donne) : donne =
@@ -77,6 +10,17 @@ let rec sum_donne (l1 : donne) (l2 : donne) : donne =
   | _, [] | [], _ -> raise (Invalid_argument "Not the same size")
   | (r1, v1) :: q1, (_, v2) :: q2 -> (r1, v1 + v2) :: sum_donne q1 q2
 
+
+(* Renvoie la production de la tuile d'après le batiment qu'il contient *)
+let get_production_from bat : donne =
+  match bat with
+  | Maison -> maison_donne_prodution
+  | Carriere -> carriere_donne_prodution
+  | Ferme -> ferme_donne_prodution
+  | Scierie -> scierie_donne_prodution
+  | _ -> void_donne
+
+
 (* Renvoie la production de la tuile d'après le batiment qu'il contient *)
 let get_production_from_tuile (tuile : tuile) : donne =
   match get_tuile_batiment tuile with
@@ -86,19 +30,123 @@ let get_production_from_tuile (tuile : tuile) : donne =
   | Some Scierie -> scierie_donne_prodution
   | None -> void_donne
 
-(* Somme la prodution dans un troncon *)
-let sum_troncon_production troncon =
-  let troncon_production = ref void_donne in
-  for i = 0 to taille_troncon - 1 do
-    for j = 0 to taille_troncon - 1 do
-      let tuile = (get_troncon_tuiles troncon).(i).(j) in
-      let tuile_production = get_production_from_tuile tuile in
-      troncon_production := sum_donne tuile_production !troncon_production
-    done
-  done;
-  !troncon_production
 
-(* Sums the production of the troncon contained in the list *)
+let rec mult_donne l n = 
+  match l with 
+  |[] -> []
+  |(a,b)::q -> (a,n*b) :: mult_donne q n 
+let rec mult_donne_ress l n r = 
+  match l with 
+  |[]-> []
+  |(a,b)::q when r = a -> (a,n*b) :: mult_donne_ress q n r
+  |(a,b)::q -> (a,b) :: mult_donne_ress q n r
+
+
+(* Somme la prodution dans un troncon *)
+let sum_troncon_list troncon =
+  let rec parc l bat = 
+    match l with
+    |[] -> (bat,1) :: []
+    |(a,b)::q when a = bat -> (a,(b+1)) :: q 
+    |e :: q -> e:: parc q bat
+  in
+  let rec sum_troncon troncon i j l = 
+    if j+1 = taille_troncon then ( 
+      if i+1 = taille_troncon then (
+        if let Tuile( a,_) =  troncon.(i).(j) in a != None then 
+        let bat = let Tuile( Some e,_)=  troncon.(i).(j) in e in 
+        parc l bat else l ) 
+      else(if let Tuile(a,_) =  troncon.(i).(j) in a != None then
+        let bat = let Tuile( Some e,_)=  troncon.(i).(j) in e in 
+        sum_troncon troncon (i+1) 0 (parc l bat) else sum_troncon troncon (i+1) 0 l )
+      )else
+        (if let Tuile( a,_) =  troncon.(i).(j) in a != None then
+      let bat = let Tuile( Some e,_)=  troncon.(i).(j) in e in 
+      sum_troncon troncon i (j+1) (parc l bat) else sum_troncon troncon i (j+1) l)
+    in 
+    sum_troncon troncon 0 0 []
+
+let rec taill l = match l with 
+  |[] -> 0
+  |_:: q -> 1 + taill q
+
+let ferme_modif b = 
+  let n = float_of_int b in 
+  [|1.;sqrt n;1.;1.;1.|]
+  
+let puit_modif b = 
+  match b with
+  |0 -> 1.
+  |1 -> 1.75
+  |2 -> 2.5
+  |3 -> 1.2
+  |4 -> 0.5
+  |_ -> 0.
+
+
+
+let modif affec orig nb = match affec,orig with 
+  |Ferme,Ferme -> ferme_modif nb
+  |_ -> void_modif
+
+
+let test_mod bat tab = let a,b = tab in 
+  modif bat a b 
+
+
+let produi tab2 tab1 = 
+  let tab = Array.make (Array.length tab2) 1. in 
+  for i=0 to (Array.length tab)-1 do
+    tab.(i) <- tab2.(i) *. tab1.(i)
+  done;
+  tab
+
+
+(* une liste qui contiennent les bat et leur nb *)
+let tabl_mod prod_list = 
+  let rec construction bat list = match list with
+    |[] -> void_modif 
+    |a::q -> produi (test_mod bat a) (construction bat q)
+  in
+  let (a,_)::_ = prod_list in 
+  let i = taill prod_list in 
+  let mat = Array.make i (a,void_modif) in
+  let rec aff l j = 
+    if j = i then ()
+    else let (a,_)::q = l in 
+      let n = mat.(j) in 
+      mat.(j) <- (a,construction a prod_list);
+      aff q (j+1)
+  in
+  aff prod_list 0 ; mat
+
+let produit_d_f don flo = 
+  let tab = Array.of_list don in 
+  for i = 0 to (Array.length tab)-1 do
+    let (o,p) = tab.(i) in 
+    tab.(i) <- o,int_of_float ((float_of_int (p )*. flo.(i)) )
+  done;
+  Array.to_list tab
+let get_modif tab a =
+    let rec parc i = 
+      let n = Array.length tab in 
+      if i =n then void_modif else 
+        if let (e,_) = tab.(i) in e = a then let (_,b) = tab.(i) in b 
+        else parc (i+1) 
+    in parc 0 
+ 
+let sum_troncon_production troncon = 
+  let Troncon(tab,_) = troncon in 
+  let lis = sum_troncon_list tab in
+  let tab = tabl_mod lis in
+  let rec recup lis = match lis with 
+    |(a,b)::q -> sum_donne (produit_d_f (mult_donne (get_production_from a) b) (get_modif tab a))  (recup q)
+    |[] -> void_donne
+  in 
+  recup lis
+
+
+
 let rec somme_troncon_list_production (troncon_list : position list)
     (carte : carte) =
   match troncon_list with
@@ -113,6 +161,9 @@ let rec recherche (donne : donne) ressource =
   | [] -> raise (Invalid_argument "Ressource not found in donne dict")
   | (e, x) :: _ when e = ressource -> x
   | _ :: q -> recherche q ressource
+
+
+
 
 (* Inititalisation d'un objet logistique *)
 let rec update_logistique (logistique : logistique) : logistique =
@@ -200,6 +251,8 @@ let update_all_logistique (logistique : logistique) position_list carte =
    resource main d'oeuvre devient négative je change la case en none
    et je recalcule la nouvelle table
 *)
+
+
 let destroy_batiment (logistique : logistique) (position_list : position list)
     (carte : carte) : logistique =
   let stoc, _ = logistique in

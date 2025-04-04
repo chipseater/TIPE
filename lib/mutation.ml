@@ -1,3 +1,4 @@
+open Type
 open Village
 open Mapgen
 
@@ -10,7 +11,7 @@ let ressource_of_int = function
 
 let batiment_of_int = function
   | 1 -> Carriere
-  | 2 -> Scierie
+  | 2 -> Scierie 
   | 3 -> Ferme
   | _ -> Maison
 
@@ -79,24 +80,6 @@ let change_rss_type condition =
       if ress_nb = 1 then InegaliteBrute (nouvel_ress, r2, ing, int)
       else InegaliteBrute (r1, nouvel_ress, ing, int)
 
-let change_preference_type prio =
-  match prio with
-  | Random -> Pref (int_to_biome (Random.int 5))
-  | Pref _ -> Random
-
-let change_preference_biome prio =
-  match prio with
-  | Pref _ -> Pref (int_to_biome (Random.int 5))
-  | Random -> Random
-
-let rand_change_prio prio =
-  let nouvel_prio =
-    match Random.int 2 with 1 -> change_preference_biome prio | _ -> prio
-  in
-  match nouvel_prio with
-  | Pref _ -> change_preference_type nouvel_prio
-  | Random -> change_preference_type nouvel_prio
-
 let change_threshold condition =
   match condition with
   | InegaliteEnPourcentage (r1, r2, ing, old_threshold) ->
@@ -104,23 +87,11 @@ let change_threshold condition =
   | InegaliteBrute (r1, r2, ing, old_threshold) ->
       InegaliteBrute (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
 
-let change_argument_of_action action =
-  let _, batiment, prio = action in
-  (argument_of_int (Random.int 2), batiment, prio)
+let change_batiment () =
+  batiment_of_int (Random.int 4)
 
-let change_batiment_of_action action =
-  let arg, _, prio = action in
-  (arg, batiment_of_int (Random.int 4), prio)
-
-let change_prio_of_action action =
-  let arg, batiment, prio = action in
-  (arg, batiment, rand_change_prio prio)
-
-let mutate_action action =
-  match Random.int 3 with
-  | 2 -> change_argument_of_action action
-  | 1 -> change_batiment_of_action action
-  | _ -> change_prio_of_action action
+let mutate_batiment () =
+  change_batiment ()
 
 let mutate_condition condition_type =
   match condition_type with
@@ -128,6 +99,10 @@ let mutate_condition condition_type =
   | 2 -> change_ing
   | 1 -> change_rss_type
   | _ -> rnd_increase_ress
+
+let mutation_list liste = 
+  let rec parc lis c = if c = 
+
 
 (* Mute la racine de l'arbre avec une probabilité de p0,
    puis mute ses fils avec une proba de p = p0 * exp(-d),
@@ -142,13 +117,27 @@ let mutate_tree root_tree p0 =
             ( mutation_function cond,
               tree_mutator l_tree (p *. 0.8),
               tree_mutator r_tree (p *. 0.8),
-              mutate_action action )
+              mutate_batiment () )
         else tree
     | Vide -> Vide
   in
   tree_mutator root_tree p0
 
-let mutate tree_array p0 =
+let mutate_treepos root_treepos p0 =
+  let rec treepos_mutator treepos p =
+    match treepos with
+    | Nodi (liste, child) ->
+        if Utils.rand_bool p then
+          Nodi
+            ( mutation_list liste ,
+              tree_mutator child (p *. 0.8))
+        else treepos
+    | Nil -> Nil
+  in
+  treepos_mutator root_treepos p0
+  
+
+  let mutate tree_array p0 =
   let n = Array.length tree_array in
   let mutated_trees = Array.make (5 * n) Vide in
   print_int n;

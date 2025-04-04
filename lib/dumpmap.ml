@@ -1,6 +1,5 @@
-open Mapgen
+open Type
 open Mapmanage
-open Village
 
 let tuile_to_json tuile =
   let z = get_tuile_z tuile in
@@ -42,13 +41,13 @@ let serialize_percent_ing inequality =
   | MorePercent -> `String "MorePercent"
   | LessPercent -> `String "LessPercent"
 
-let serialize_argument argument =
-  match argument with InCity -> `String "InCity" | OutCity -> `String "OutCity"
+  let serialize_int n = `Int n
 
-let serialize_prio prio =
-  match prio with
-  | Random -> `String "Random"
-  | Pref biome -> `String (biome_to_string biome)
+
+let serialize_bool boo = 
+  match boo with 
+  |true -> `String "true"
+  |false -> `String "false" 
 
 let serialize_batiment batiment =
   match batiment with
@@ -57,14 +56,6 @@ let serialize_batiment batiment =
   | Scierie -> `String "Scierie"
   | Ferme -> `String "Ferme"
 
-let serialize_action action =
-  let arg, batiment, prio = action in
-  `Assoc
-    [
-      ("argument", serialize_argument arg);
-      ("bat", serialize_batiment batiment);
-      ("prio", serialize_prio prio);
-    ]
 
 (* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed *)
 let serialize_ressource ressource =
@@ -101,16 +92,39 @@ let serialize_condition condition =
           ("int", `Int int);
         ]
 
+let serialize_couple_mod couple = 
+  let (b1,b2,x,boo) = couple in 
+  `Assoc[
+    ("bat_org",serialize_batiment b1);
+    ("bat_comp",serialize_batiment b2);
+    ("nb",serialize_int x);
+    ("bool", serialize_bool boo)
+  ]
+
+let rec serialize_mod_list liste = 
+  match liste with
+  | couple :: q -> serialize_couple_mod couple :: serialize_mod_list q
+  | [] -> []
+
+let rec serialize_treepos node = 
+  match node with
+  | Nil -> `String "V"
+  | Nodi (liste, child) -> 
+    `Assoc [
+      ("liste", `List (serialize_mod_list liste));
+      ("child", serialize_treepos child)
+    ]
+ 
 let rec serialize_tree node =
   match node with
   | Vide -> `String "V"
-  | Node (cndt, l_child, r_child, action) ->
+  | Node (cndt, l_child, r_child, bat) ->
       `Assoc
         [
           ("condition", serialize_condition cndt);
           ("l_child", serialize_tree l_child);
           ("r_child", serialize_tree r_child);
-          ("action", serialize_action action);
+          ("bat", serialize_batiment bat);
         ]
 
 let serialize_tree_array tree_array =
@@ -146,6 +160,7 @@ let serialize_village (village : village) =
     [
       ("id", `Int village.id);
       ("tree", serialize_tree village.tree);
+      ("treepos", serialize_treepos village.treepos);
       ("logistique", serialize_logistique village.logistique);
       ("position", serialize_pos village.root_position);
       ("pos_list", `List (serialize_pos_list village.position_list));
@@ -171,7 +186,6 @@ let serialize_game game =
   in
   `List (game_serializer game)
 
-let serialize_int n = `Int n
 
 let serialize_int_array_array int_array_array =
   matrix_to_json_list serialize_int int_array_array
@@ -187,4 +201,4 @@ let serialize_save generation =
       ("evaluation", serialize_int_array_array eval);
     ]
 
-let serialize_save_array tab = array_to_json_list serialize_save tab
+let serialize_save_array tab = array_to_json_list serialize_save tab 

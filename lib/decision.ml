@@ -1,12 +1,13 @@
 open Village
 open Mapmanage
 open Mapgen
+open Type
+
 
 exception Couille
 
 (* Vérifie si un noeud est vide *)
 let estVide = function Vide -> true | _ -> false
-
 (* Test si la ressource 1 suppérieur ou inférieur à la ressource 2 selon l'ingalité et si le pourcentage est inférieur à la diférence *)
 let inegaliteenpourcentage ressource1 ressource2 ing pourcentage donnee : bool =
   let nb_ressource1 = recherche donnee ressource1 in
@@ -68,56 +69,6 @@ let possibilite troncon =
   done;
   arr
 
-(* Place le batiment dans un des troncons  *)
-let batimenttuile (batiment : batiment) (carte : carte)
-    (table : (int * int) array) (village : village) =
-  Array.shuffle ~rand:Random.int table;
-  let x, y = table.(0) in
-  let temp = carte.(x).(y) in
-  village.position_list <- (x, y) :: village.position_list;
-  let arr = possibilite temp in
-  Array.shuffle ~rand:Random.int arr;
-  let rec choice arr c =
-    match arr.(c) with
-    | -1, -1 -> choice arr (c + 1)
-    | i, j ->
-        modifie_batiment_dans_troncon carte carte.(x).(y) (Some batiment) i j
-  in
-  choice arr 0
-
-let nul table carte =
-  let n = Array.length table in
-  let o = ref 0 in
-  try
-    for t = 0 to n - 1 do
-      o := t;
-      let x, y = table.(t) in
-      if test_troncon_pas_plein carte.(x).(y) then raise Exit
-    done;
-    raise Not_found
-  with
-  | Exit -> table.(!o)
-  | Not_found -> (-1, -1)
-
-(* Place le batiment dans un des troncons  *)
-let batiment_tuile_in (batiment : batiment) (carte : carte)
-    (table : (int * int) array) =
-  Array.shuffle ~rand:Random.int table;
-  let x, y = nul table carte in
-  (*A voir*)
-  if x = -1 then ()
-  else
-    let temp = carte.(x).(y) in
-    let arr = possibilite temp in
-    Array.shuffle ~rand:Random.int arr;
-    let rec choice arr c =
-      match arr.(c) with
-      | -1, -1 -> choice arr (c + 1)
-      | i, j ->
-          modifie_batiment_dans_troncon carte carte.(x).(y) (Some batiment) i j
-    in
-    choice arr 0
-
 (* Calcule la taille et la position en haut à gauche du tableau *)
 let pos_card (pos_list : position list) =
   match pos_list with
@@ -140,34 +91,63 @@ let pos_card (pos_list : position list) =
       in
       parc pos_list
 
-let rec proxi (arr : int array array) (pos_list : position list)
-    (world_limit : int) (corner : position) =
-  let pas_valid n i j = i < 0 || i >= n || j < 0 || j >= n in
-  let p, m = corner in
-  (* J'aurais pu mettre [| (-1, -1), (-1, 0), ..., (1, 1) |] *)
-  let range = Utils.arr_cartesian_square [| -1; 0; 1 |] in
-  match pos_list with
-  | [] -> ()
-  | (x, y) :: q ->
-      for i = 0 to 8 do
-        (* Prends successivement les 9 positions adjacentes à (0, 0) *)
-        let r_x, r_y = range.(i) in
-        if pas_valid world_limit (x + r_x) (y + r_y) then
-          arr.(x - p + r_x).(y - m + r_y) <- -100
-        else if (r_x, r_y) <> (0, 0) then
-          arr.(x + r_x - p).(y + r_y - m) <- arr.(x + r_x - p).(y + r_y - m) + 1
-        else arr.(x - p).(y - m) <- arr.(x - p).(y - m) - 10
-      done;
-      proxi arr q world_limit corner
+
+let matrice_score_troncon pos_list carte pos_cardi =
+  let corner, larg, haut = pos_cardi in
+  let mat_score = Array.make_matrix haut larg 0 in
+  let mat_bat_list = Array.make_matrix haut larg [] in
+  let world_limit = Array.length carte in
+  let limit mat world_limit corner larg haut = 
+    let (x,y) = corner in 
+    for i=0 to larg do 
+      for j=0 to haut do 
+         if x+i < 0 || x+i > world_limit -1 || y+j < 0 || j+y > world_limit -1 || (not (test_troncon_pas_plein carte.(x).(y))) then mat.(i).(j) <- -10000 
+        done
+      done
+  in limit mat_score world_limit corner larg haut ;
+  (mat_score,mat_bat_list)
+
+let remp_mat_bat_list matb mats pos_list carte pos_cardi =
+  let (x,y), larg, haut = pos_cardi in
+  for i=0 to larg do 
+    for j = 0 to haut do 
+      if mats.(x+i).(y+j) < 0 then 
+        matb.(x+i).(y+j) <- sum_troncon_list (let Troncon(a,_) = carte.(x+i).(y+j) in a)
+    done
+  done
+  
+let calcul_mat_score mats matb treepos bat_origine =
+  let rec trouve_bat bat list = match list with
+    |[] -> 0
+    |(a,b)::q when a = bat -> b
+    |_::q -> trouve_bat bat q 
+  in
+  let rec trouve_cond bat list = match list with 
+    |[] -> (bat,-1,false)
+    |(a,b,c,d)::q when a = bat -> (b,c,d)
+    |e::q -> trouve_cond bat q
+  in
+  let rec parcours_liane treepos mats matb bat_origine =
+    if treepos = Nil then () 
+    else let Nodi(list,suite) = treepos in   
+    let bat_cond,x,boo = trouve_cond bat_origine list in 
+    for i =0 to Array.length mats do 
+      for j=0 to Array.length mats.(0) do 
+        mats.(i).(j) <- mats.(i).(j) + if trouve_bat bat_cond (matb.(i).(j)) > x then (if boo then 1 else -1) else 0
+      done
+    done;
+    parcours_liane suite mats matb bat_origine
+  in parcours_liane treepos mats matb bat_origine
+
 
 (* Parcours la matrice pour lister les positions les plus probables *)
-let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int)
+let parc_mats_bat (arr : int array array) (corner : int * int)
     (carte : carte) =
   let a, b = corner in
   let c = ref 1 in
   let list = ref [] in
-  for i = 0 to h - 1 do
-    for j = 0 to l - 1 do
+  for i = 0 to (Array.length arr) - 1 do
+    for j = 0 to (Array.length arr.(0)) - 1 do
       if arr.(i).(j) > !c && test_troncon_pas_plein carte.(i + a).(j + b) then (
         list := [ (i + a, j + b) ];
         c := arr.(i).(j))
@@ -178,117 +158,57 @@ let parc_mat (arr : int array array) (h : int) (l : int) (corner : int * int)
   done;
   !list
 
-(* Construit le batiment à l'extérieur du village sans biome privilegié *)
-let r_batimentout (batiment : batiment) (carte : carte)
-    (pos_list : position list) (village : village) =
-  let coner, larg, haut = pos_card pos_list in
-  let mat = Array.make_matrix haut larg 0 in
-  let world_limit = Array.length carte in
-  proxi mat pos_list world_limit coner;
-  let list = parc_mat mat haut larg coner carte in
-  let arr = Array.of_list list in
-  batimenttuile batiment carte arr village
+let cons_bat carte x y troncon bat =
+  let Troncon(tronc,_) = troncon in   
+  for i=0 to taille_troncon - 1 do 
+    for j=0 to taille_troncon -1 do
+      if let Tuile(a,_) = (tronc.(i).(j)) in a = None 
+        then (modifie_batiment_dans_troncon carte carte.(x).(y) (Some bat) i j; 
+      raise Exit)
+    done
+  done;
+  raise Not_found
 
-(* Construit le batiment à l'intérieur du village sans biome privilegié *)
-let r_batimentin (batiment : batiment) (carte : carte)
-    (pos_list : position list) (village : village) : unit =
-  let rec empile (pos_list : position list) : (int * int) list =
-    match pos_list with
-    | [] -> []
-    | (x, y) :: q when test_troncon_pas_plein carte.(x).(y) = true -> empile q
-    | (x, y) :: q -> (x, y) :: empile q
+let position_bat pos_list carte treepos bat_org = 
+  let pos_cardi = pos_card pos_list in 
+  let (mats,matb) = matrice_score_troncon pos_list carte pos_cardi in 
+  remp_mat_bat_list matb mats pos_list carte pos_cardi;
+  calcul_mat_score mats matb treepos bat_org;
+  let (corner,_,_)=pos_cardi in 
+  let l = parc_mats_bat mats corner carte in 
+  let rec parc l = 
+    if l = [] then failwith "Pas de place"
+    else
+    let (x,y) ::q = l in 
+    try 
+      cons_bat carte x y carte.(x).(y) bat_org
+    with 
+    |Not_found -> parc q 
+    |Exit -> ()
   in
-  let temp = empile pos_list in
-  match temp with
-  | [] -> r_batimentout batiment carte pos_list village
-  | _ :: _ ->
-      let tab = Array.of_list temp in
-      batiment_tuile_in batiment carte tab
-
-(* Classe la liste en deux listes qui regroupe ceux du biome privilégier et les autres dans un autre *)
-let classif (list : (int * int) list) (carte : carte) (biome : biome) =
-  let rec parc l1 l2 l3 =
-    match l1 with
-    | (a, b) :: q
-      when get_troncon_biome carte.(a).(b) = biome
-           && test_troncon_pas_plein carte.(a).(b) ->
-        parc q ((a, b) :: l2) l3
-    | (a, b) :: q when test_troncon_pas_plein carte.(a).(b) ->
-        parc q l2 ((a, b) :: l3)
-    | _ :: q -> parc q l2 l3
-    | [] -> (l2, l3)
-  in
-  parc list [] []
-
-(* Construit le batiment à l'extérieur du village avec un biome privilegié *)
-let pref_batimentout (batiment : batiment) (carte : carte)
-    (pos_list : position list) (biome : biome) village : unit =
-  let corner, larg, haut = pos_card pos_list in
-  let world_limit = Array.length carte in
-  let mat = Array.make_matrix haut larg 0 in
-  proxi mat pos_list world_limit corner;
-  let list = parc_mat mat haut larg corner carte in
-  let pref, autre = classif list carte biome in
-  match pref with
-  | [] ->
-      let arr = Array.of_list autre in
-      batimenttuile batiment carte arr village
-  | _ ->
-      let arr = Array.of_list pref in
-      batimenttuile batiment carte arr village
-
-(* Construit le batiment à l'intérieur du village avec un biome privilegié *)
-let pref_batimentin (batiment : batiment) (carte : carte)
-    (pos_list : position list) (biome : biome) (village : village) =
-  let rec empile (pos_list : position list) : (int * int) list =
-    match pos_list with
-    | [] -> []
-    | (x, y) :: q when test_troncon_pas_plein carte.(x).(y) = true -> empile q
-    | (x, y) :: q -> (x, y) :: empile q
-  in
-  let temp = empile pos_list in
-  let pref, autre = classif temp carte biome in
-  match pref with
-  | [] -> (
-      match autre with
-      | [] -> pref_batimentout batiment carte pos_list biome village
-      | _ :: _ ->
-          let tab = Array.of_list autre in
-          batiment_tuile_in batiment carte tab)
-  | _ :: _ ->
-      let tab = Array.of_list pref in
-      batiment_tuile_in batiment carte tab
+  let tab = Array.of_list l in 
+  Array.shuffle ~rand:Random.int tab;
+  let l1 = Array.to_list tab in 
+  parc l1
 
 (* Effectue le type de construonction en fonction des paramètres *)
-let a_faire (action : action) (carte : carte) (pos_list : position list)
-    (village : village) : unit =
-  let arg, batiment, pref = action in
-  if pref = Random then
-    match arg with
-    | InCity -> r_batimentin batiment carte pos_list village
-    | OutCity -> r_batimentout batiment carte pos_list village
-  else
-    match pref with
-    | Pref a -> (
-        match arg with
-        | InCity -> pref_batimentin batiment carte pos_list a village
-        | OutCity -> pref_batimentout batiment carte pos_list a village)
-    | _ -> failwith "No other possibility"
+let a_faire (bat:batiment) (carte : carte) (village : village) : unit =
+  position_bat village.position_list carte village.treepos bat 
+
 
 (* Evalue un noeud et fait ce qu'il faut *)
 let rec eval_node (node : tree) (carte : carte) (village : village) (tester: bool ref) : unit =
   let ressource, _ = village.logistique in
-  let pos_list = village.position_list in
   assert (not !tester);
   if not !tester then
     match node with
     | Vide -> failwith "Empty node"
-    | Node (cond, sub_tree_left, sub_tree_right, action) ->
+    | Node (cond, sub_tree_left, sub_tree_right, bat) ->
         let test_v = test ressource cond in
         if estVide sub_tree_left && test_v then 
-          (a_faire action carte pos_list village; tester := true)
+          (a_faire bat carte village; tester := true)
         else if estVide sub_tree_right && not test_v then
-          (a_faire action carte pos_list village; tester := true)
+          (a_faire bat carte village; tester := true)
         else if test_v then eval_node sub_tree_left carte village tester
         else eval_node sub_tree_right carte village tester
   else

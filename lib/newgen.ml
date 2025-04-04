@@ -1,13 +1,12 @@
+open Type
 open Village
 open Mapgen
 open Random
 
-(* A generation binds a carte with the villages that live inside this carte *)
-type score = int array
-type evaluation = score array
-type generation = tree array * carte * position array * evaluation
-type save = tree array * position array * evaluation
-type game = save array
+let rnd_bool () =
+  match Random.int 2 with
+  |0 -> true
+  |_ -> false
 
 let rnd_ressource () =
   match Random.int 5 with
@@ -35,12 +34,6 @@ let gen_cond () =
   | 1 -> InegaliteEnPourcentage (ress1, ress2, ing_percent, threshold)
   | _ -> InegaliteBrute (ress1, ress2, ing_flat, threshold)
 
-let gen_placement () = match Random.int 2 with 1 -> InCity | _ -> OutCity
-
-let gen_prio () =
-  match Random.int 2 with
-  | 1 -> Pref (Random.int 3 |> int_to_biome)
-  | _ -> Random
 
 let gen_batiment () =
   match Random.int 4 with
@@ -49,8 +42,6 @@ let gen_batiment () =
   | 3 -> Ferme
   | _ -> Maison
 
-let gen_action () = (gen_placement (), gen_batiment (), gen_prio ())
-
 let gen_tree () =
   let rec tree_generator height =
     if height > 0 then
@@ -58,12 +49,34 @@ let gen_tree () =
         ( gen_cond (),
           tree_generator (height - 1),
           tree_generator (height - 1),
-          gen_action () )
+          gen_batiment () )
     else Vide
   in
   Utils.rand_normal 3. 1. |> ceil |> int_of_float |> tree_generator
 
 let gen_trees nb_of_trees = Array.init nb_of_trees (fun _ -> gen_tree ())
+
+let list_mod_generator height = 
+  let rec generate_list height = 
+    if height > 0 then ( 
+        gen_batiment (),
+        gen_batiment (),
+        Random.int 15,
+        rnd_bool()) :: generate_list (height-1)
+    else []
+  in 
+  generate_list height 
+
+let gen_treepos () =
+  let rec tree_generator height =
+    if height > 0 then
+      Nodi
+        ( list_mod_generator (height),
+          tree_generator (height - 1)
+        )
+    else Nil
+  in
+  Utils.rand_normal 3. 1. |> ceil |> int_of_float |> tree_generator
 
 let random_pos min max =
   let x_min, y_min = min in
@@ -89,4 +102,4 @@ let gen_village_roots n k =
     assert (x + quadrant_width <= n && y + quadrant_width <= n);
     roots.(i) <- random_pos (x, y) (x + quadrant_width, y + quadrant_width)
   done;
-  roots
+  roots 

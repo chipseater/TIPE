@@ -1,53 +1,67 @@
 (library
+ (name type)
+ (modules type))
+
+(library
  (name utils)
  (modules utils))
 
 (library
  (name mapgen)
  (modules mapgen)
- (libraries utils domainslib))
+ (libraries utils type domainslib))
 
 (library
  (name village)
  (modules village)
- (libraries mapgen mapmanage))
+ (libraries mapgen type mapmanage))
 
 (library
  (name decision)
  (modules decision)
- (libraries mapgen mapmanage village utils))
+ (libraries mapgen mapmanage type village utils))
 
 (library
  (name score)
  (modules score)
- (libraries village mapgen))
+ (libraries village type mapgen))
 
 (library
  (name game)
  (modules game)
- (libraries village mapgen newgen score yojson dumpmap decision mutation foret))
+ (libraries
+  village
+  mapgen
+  type
+  newgen
+  score
+  yojson
+  dumpmap
+  decision
+  mutation
+  foret))
 
 (library
  (name dumpmap)
  (modules dumpmap)
- (libraries mapgen mapmanage yojson village newgen))
+ (libraries mapgen mapmanage type yojson village newgen))
 
 (library
  (name mapmanage)
  (modules mapmanage)
- (libraries mapgen))
+ (libraries mapgen type))
 
 (library
  (name newgen)
  (modules newgen)
- (libraries village))
+ (libraries village type))
 
 (library
  (name mutation)
  (modules mutation)
- (libraries village utils mapgen))
+ (libraries village type utils mapgen))
 
 (library
  (name foret)
  (modules foret)
- (libraries yojson village mapgen ))
+ (libraries yojson type village mapgen))

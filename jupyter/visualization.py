@@ -288,12 +288,12 @@ def visualisation(data):
     l1=list_moyenne(l)
     l2=list_meilleur(l)
     l3=list_pire(l)
-    l5=list_moy_best(l)
+    #l5=list_moy_best(l)
     l4=range(len(data)-1)
     plt.plot(l4,l1,'bo')
     plt.plot(l4,l2,'ro')
     plt.plot(l4,l3,'go')
-    plt.plot(l4,l5,'yo')
+    #plt.plot(l4,l5,'yo')
 
 
 # %%
@@ -305,11 +305,13 @@ def reconstruction(data):
 
 
 # %%
+
+# %%
 f = open('../game.json', 'r')
 data = np.array(json.loads(f.read()))
-#tree = np.array(data[-1]['tree_array'])
+tree = np.array(data[-1]['tree_array'])
 #construction_fichier(tree)
-visualisation(data)
+#visualisation(data)
 #reconstruction(data)
 
 # %%

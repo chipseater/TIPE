@@ -1,19 +1,5 @@
 open Domainslib.Task
-
-let z_max = 100.
-let taille_troncon = 8
-
-type biome = Forest | Desert | Plains
-type batiment = Maison | Carriere | Scierie | Ferme
-
-(* A tuile is made out of the eventual batiment it contains associated with its elevation *)
-type tuile = Tuile of batiment option * int
-
-(* A troncon is a 4*4 tuile matrix associated with its biome *)
-type troncon = Troncon of tuile array array * biome
-
-(* A n*n carte is a n/4*n/4 troncon matrix *)
-type carte = troncon array array
+open Type
 
 (* Sets the balance between the diffrent biomes,
    here 8 plains for 1 desert and 1 tundra *)
