@@ -85,13 +85,14 @@ let createvillage (tree : tree) (pos : position) (carte : carte) (id : int) :
 
 let nombre_de_tours_par_simulation = 20
 
-let  evalvillage village carte : village =
+let evalvillage village carte : village =
   let test = ref false in
   try
     for _ = 0 to nombre_de_tours_par_simulation do
       test := false;
       evolution_par_tour village carte test
-    done; village
+    done;
+    village
   with
   | Couille ->
       {
@@ -179,12 +180,16 @@ let do_genertion tree_tab carte_de_base pos_array : tree array * evaluation =
     let evaluated_village = evalvillage nv_village carte in
     let scoretour = scoring evaluated_village carte in
     score_mat.(i).(j) <- scoretour
-  in let run_position i =
+  in
+  let run_position i =
     (fun () ->
-      parallel_for ~start:0 ~finish:(nb_arbres - 1) ~body:(run_tree_at_pos i) generation_pool)
+      parallel_for ~start:0 ~finish:(nb_arbres - 1) ~body:(run_tree_at_pos i)
+        generation_pool)
     |> run generation_pool
-  in (fun () ->
-    parallel_for ~start:0 ~finish:(nb_pos - 1) ~body:(run_position) generation_pool)
+  in
+  (fun () ->
+    parallel_for ~start:0 ~finish:(nb_pos - 1) ~body:run_position
+      generation_pool)
   |> run generation_pool;
   let best_trees_array = selection score_mat tree_tab in
   let mutated_best_trees = mutate best_trees_array 1. in
@@ -218,9 +223,4 @@ let game1 ?(nb_villages = 2) ?(nb_trees = 10) ?(taille_carte = 200) (n : int) =
 let game2 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   Yojson.to_file "test.json" (serialize_tree_array (const ()))
 
-let game i (n : int) = 
-  match i with 
-  |1 -> game1 n
-  |2 -> game2 n 
-  |_ -> ()
-
+let game i (n : int) = match i with 1 -> game1 n | 2 -> game2 n | _ -> ()

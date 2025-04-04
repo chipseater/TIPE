@@ -276,7 +276,8 @@ let a_faire (action : action) (carte : carte) (pos_list : position list)
     | _ -> failwith "No other possibility"
 
 (* Evalue un noeud et fait ce qu'il faut *)
-let rec eval_node (node : tree) (carte : carte) (village : village) (tester: bool ref) : unit =
+let rec eval_node (node : tree) (carte : carte) (village : village)
+    (tester : bool ref) : unit =
   let ressource, _ = village.logistique in
   let pos_list = village.position_list in
   assert (not !tester);
@@ -285,11 +286,12 @@ let rec eval_node (node : tree) (carte : carte) (village : village) (tester: boo
     | Vide -> failwith "Empty node"
     | Node (cond, sub_tree_left, sub_tree_right, action) ->
         let test_v = test ressource cond in
-        if estVide sub_tree_left && test_v then 
-          (a_faire action carte pos_list village; tester := true)
-        else if estVide sub_tree_right && not test_v then
-          (a_faire action carte pos_list village; tester := true)
+        if estVide sub_tree_left && test_v then (
+          a_faire action carte pos_list village;
+          tester := true)
+        else if estVide sub_tree_right && not test_v then (
+          a_faire action carte pos_list village;
+          tester := true)
         else if test_v then eval_node sub_tree_left carte village tester
         else eval_node sub_tree_right carte village tester
-  else
-    raise Couille
+  else raise Couille

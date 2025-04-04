@@ -1,3 +1,5 @@
+let print_bool b = if b then print_string "true" else print_string "false"
+
 let arr_cartesian_product arr1 arr2 =
   let n1 = Array.length arr1 in
   let n2 = Array.length arr2 in
@@ -61,3 +63,17 @@ let rand_normal mean std_deviation =
   let phi = 2.0 *. Float.pi *. Random.float 1.0 in
   let r = sqrt (-2. *. log (Random.float 1.0)) in
   mean +. (std_deviation *. r *. cos phi)
+
+let array_of_dict dict =
+  let n = Hashtbl.length dict in
+  (* Les éléments sont rangés dans le désordre avec leur clé à côté *)
+  let raw_array = Array.of_seq (Hashtbl.to_seq dict) in
+  let token_el, _ = raw_array.(0) in
+  (* Sert à initialiser le tableau *)
+  (* On les met dans l'ordre avec les clés à l'emplacement de leur indice *)
+  let ordered_array = Array.make n token_el in
+  for i = 0 to n - 1 do
+    let el, indice = raw_array.(i) in
+    ordered_array.(indice) <- el
+  done;
+  ordered_array

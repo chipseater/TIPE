@@ -43,7 +43,9 @@ let serialize_percent_ing inequality =
   | LessPercent -> `String "LessPercent"
 
 let serialize_argument argument =
-  match argument with InCity -> `String "InCity" | OutCity -> `String "OutCity"
+  match argument with
+  | InCity -> `String "InCity"
+  | OutCity -> `String "OutCity"
 
 let serialize_prio prio =
   match prio with

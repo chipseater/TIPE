@@ -2,7 +2,11 @@ open Mapgen
 
 (* Fonctions utilitaires pour gérer les objets de la carte *)
 let isNone = function Troncon (_, _) -> false
-let biome_to_string = function Forest -> "Forest" | Desert -> "Desert" | Plains -> "Plains"
+
+let biome_to_string = function
+  | Forest -> "Forest"
+  | Desert -> "Desert"
+  | Plains -> "Plains"
 
 let batiment_to_string = function
   | Maison -> "Maison"
@@ -79,8 +83,7 @@ let copier_troncon troncon =
   Troncon
     (Array.(map copy) (get_troncon_tuiles troncon), get_troncon_biome troncon)
 
-let copier_ligne_carte carte i =
-  Array.map copier_troncon carte.(i)
+let copier_ligne_carte carte i = Array.map copier_troncon carte.(i)
 
 let copier_carte carte =
   Array.mapi (fun i _ -> copier_ligne_carte carte i) carte

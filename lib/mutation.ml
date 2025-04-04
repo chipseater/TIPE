@@ -153,7 +153,7 @@ let mutate tree_array p0 =
   let mutated_trees = Array.make (5 * n) Vide in
   print_int n;
   print_int (Array.length mutated_trees);
-  for i = 0 to (n - 1) do
+  for i = 0 to n - 1 do
     print_int i;
     mutated_trees.(i) <- tree_array.(i)
   done;

@@ -25,7 +25,16 @@
 (library
  (name game)
  (modules game)
- (libraries village mapgen newgen score yojson dumpmap decision mutation foret))
+ (libraries
+  village
+  mapgen
+  newgen
+  score
+  yojson
+  dumpmap
+  decision
+  mutation
+  foret))
 
 (library
  (name dumpmap)
