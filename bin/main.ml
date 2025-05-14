@@ -1,7 +1,7 @@
 open Mapgen
 open Village
-
-(* let _ = game 2 1 *)
+open Game
+let _ = game 1 10
 
 (* let mock_chunk2 =
   Troncon

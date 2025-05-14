@@ -34,8 +34,6 @@ let switch_condition_type condition =
   | InegaliteBrute (r1, r2, _, int) ->
       InegaliteEnPourcentage (r1, r2, int_of_percent_ing (Random.int 2), int)
 
-let argument_of_int = function 1 -> OutCity | _ -> InCity
-
 let increase_r1_amount condition increment =
   match condition with
   | InegaliteEnPourcentage (r1, r2, ing, int) ->
@@ -93,6 +91,8 @@ let change_batiment () =
 let mutate_batiment () =
   change_batiment ()
 
+let mutate_nodint () = Random.int 16 
+
 let mutate_condition condition_type =
   match condition_type with
   | 3 -> switch_condition_type
@@ -100,8 +100,38 @@ let mutate_condition condition_type =
   | 1 -> change_rss_type
   | _ -> rnd_increase_ress
 
-let mutation_list liste = 
-  let rec parc lis c = if c = 
+exception Supr
+
+let mutatedes_nodi (b1,b2,x,boo) p0 = 
+  if Utils.rand_bool p0 then match (Random.int 5) with 
+  |4 -> (change_batiment (),b2,x,boo)
+  |3 -> (b1,change_batiment (),x,boo)
+  |2 -> (b1,b2,mutate_nodint () ,boo)
+  |1 -> (b1,b2,x,Utils.rand_bool 0.5 )
+  |_ -> raise Supr
+  else (b1,b2,x,boo)
+
+let mutate_nodi (b1,b2,x,boo) p0 = 
+  if Utils.rand_bool p0 then match (Random.int 4) with 
+  |3 -> (b1,change_batiment (),x,boo)
+  |2 -> (b1,b2,mutate_nodint () ,boo)
+  |1 -> (b1,b2,x,Utils.rand_bool 0.5 )
+  |_ -> (change_batiment (),b2,x,boo)
+  else (b1,b2,x,boo)
+  
+let mutation_list liste p0 =
+  let rec parcdes lis = try 
+    match lis with
+    |[] -> []
+    |e :: q -> (mutatedes_nodi e p0) :: parcdes q 
+    with |Supr ->( let e::q = liste in e :: parcdes q)
+  in
+  let rec parc lis c = if c = Array.length ressource_list then parcdes lis
+    else match lis with
+    |[] -> []
+    |e::q -> mutate_nodi e p0 :: parc q (c+1)
+  in
+  parc liste 0
 
 
 (* Mute la racine de l'arbre avec une probabilité de p0,
@@ -129,8 +159,8 @@ let mutate_treepos root_treepos p0 =
     | Nodi (liste, child) ->
         if Utils.rand_bool p then
           Nodi
-            ( mutation_list liste ,
-              tree_mutator child (p *. 0.8))
+            ( mutation_list liste p0 ,
+              treepos_mutator child (p *. 0.8))
         else treepos
     | Nil -> Nil
   in
@@ -151,3 +181,18 @@ let mutate_treepos root_treepos p0 =
     mutated_trees.(i) <- mutate_tree tree_array.(i mod n) p0
   done;
   mutated_trees
+
+let mutatepos treepos_array p0 =
+  let n = Array.length treepos_array in
+  let mutated_treespos = Array.make (5 * n) Nil in
+  print_int n;
+  print_int (Array.length mutated_treespos);
+  for i = 0 to (n - 1) do
+    print_int i;
+    mutated_treespos.(i) <- treepos_array.(i)
+  done;
+  print_char '\t';
+  for i = n to (5 * n) - 1 do
+    mutated_treespos.(i) <- mutate_treepos treepos_array.(i mod n) p0
+  done;
+  mutated_treespos

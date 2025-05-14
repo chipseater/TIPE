@@ -78,6 +78,10 @@ let gen_treepos () =
   in
   Utils.rand_normal 3. 1. |> ceil |> int_of_float |> tree_generator
 
+let gen_treespos nb_of_trees = Array.init nb_of_trees (fun _ -> gen_treepos ())
+
+
+
 let random_pos min max =
   let x_min, y_min = min in
   let x_max, y_max = max in

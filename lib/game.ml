@@ -170,7 +170,7 @@ let associer_generation (a : save) (carte : carte) : generation =
   let arbres, arbrespos, pos_array, evaluation = a in
   (arbres, arbrespos , carte, pos_array, evaluation)
 
-let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array * evaluation =
+let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array* treepos array * evaluation =
   let nb_pos = Array.length pos_array in
   let nb_arbres = Array.length tree_tab in
   (* Un tableau à deux entrées qui donne le score de l'arbre selon sa position *)
@@ -201,14 +201,14 @@ let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
     Array.make (n + 1)
       ( (* Arbres *)
         Array.make nb_trees Vide,
-        Array.make nb trees Nil,
+        Array.make nb_trees Nil,
         (* Tableau qui contient les positions des villages *)
         Array.make nb_villages (-1, -1),
         (* Scores *)
         Array.make_matrix nb_villages nb_trees (-1) )
   in
   (* La première case du tableau ne contient que des arbres aléatoires *)
-  game_array.(0) <- (gen_trees nb_trees, gen_treepos nb_trees ,[||], [||]);
+  game_array.(0) <- (gen_trees nb_trees, gen_treespos nb_trees ,[||], [||]);
   for i = 1 to n do
     let trees,treepos , _, _ = game_array.(i - 1) in
     let carte, pos_arr = nv_generation taille_carte nb_villages in
@@ -220,7 +220,7 @@ let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
     (* Yojson.to_file (Utils.ormat_carte_name i) ("dossier/" ^ serialize_carte carte) *)
   done;
   Yojson.to_file "game.json" (serialize_save_array game_array)
-
+(* 
 let game2 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
@@ -236,13 +236,13 @@ let game2 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
     let evolved_tree_tab, evolved_treepos_tab ,tree_scores = do_genertion trees treepos carte pos_arr in
     game_array.(i) <- (evolved_tree_tab, evolved_treepos_tab ,pos_arr, tree_scores)
   done;
-  Yojson.to_file "game.json" (serialize_save_array game_array)
+  Yojson.to_file "game.json" (serialize_save_array game_array) *)
 
 
 
 let game i (n : int) = 
   match i with 
   |1 -> game1 n
-  |2 -> game2 n 
+  (* |2 -> game2 n  *)
   |_ -> ()
 
