@@ -52,12 +52,12 @@ let get_troncon_z troncon =
   done;
   troncon_z
 
-let modifie_batiment_dans_troncon carte troncon batiment i j =
+let modifie_batiment_dans_troncon carte troncon batiment i j x y =
   let tuile_z = get_tuile_z (get_troncon_tuiles troncon).(i).(j) in
   let troncon_biome = get_troncon_biome troncon in
   let nouvel_tuiles = get_troncon_tuiles troncon in
   nouvel_tuiles.(i).(j) <- Tuile (batiment, tuile_z);
-  carte.(i).(j) <- Troncon (nouvel_tuiles, troncon_biome)
+  carte.(x).(y) <- Troncon (nouvel_tuiles, troncon_biome)
 
 let reset_troncon troncon =
   for i = 0 to taille_troncon - 1 do

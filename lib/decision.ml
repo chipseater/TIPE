@@ -2,6 +2,7 @@ open Village
 open Mapmanage
 open Mapgen
 open Type
+open Variable
 
 
 exception Couille
@@ -72,7 +73,7 @@ let possibilite troncon =
 (* Calcule la taille et la position en haut à gauche du tableau *)
 let pos_card (pos_list : position list) =
   match pos_list with
-  | [] -> failwith "No Troncon"
+  | [] -> raise Bloque
   | a :: _ ->
       let x, y = a in
       let top, left, right, bot = (ref x, ref y, ref y, ref x) in
@@ -99,22 +100,38 @@ let matrice_score_troncon pos_list carte pos_cardi =
   let world_limit = Array.length carte in
   let limit mat world_limit corner larg haut = 
     let (x,y) = corner in 
-    for i=0 to larg do 
-      for j=0 to haut do 
-         if x+i < 0 || x+i > world_limit -1 || y+j < 0 || j+y > world_limit -1 || (not (test_troncon_pas_plein carte.(x).(y))) then mat.(i).(j) <- -10000 
+    assert (x != world_limit && y != world_limit);
+    for i=0 to larg -1 do 
+      for j=0 to haut -1 do 
+         if x+i < 0 || x+i > world_limit -1 || y+j < 0 || j+y > world_limit -1 || (not (test_troncon_pas_plein carte.(x+i).(y+j))) then mat.(i).(j) <- -10000 
         done
       done
-  in limit mat_score world_limit corner larg haut ;
+  in 
+  (* print_char '%';  *)
+  limit mat_score world_limit corner larg haut ;
+  (* print_char '%'; *)
   (mat_score,mat_bat_list)
-
+(*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*)
 let remp_mat_bat_list matb mats pos_list carte pos_cardi =
+  let world_limit = Array.length carte in
   let (x,y), larg, haut = pos_cardi in
-  for i=0 to larg do 
-    for j = 0 to haut do 
-      if mats.(x+i).(y+j) < 0 then 
-        matb.(x+i).(y+j) <- sum_troncon_list (let Troncon(a,_) = carte.(x+i).(y+j) in a)
+    (* print_char '\n'; *)
+  for i=0 to larg -1 do 
+    begin 
+    (* print_int i;print_char '/';print_int larg;print_char ' '; *)
+    for j = 0 to haut -1 do 
+      begin
+      (* print_int j;print_char '/'; print_int haut; print_char ' '; *)
+      if mats.(i).(j) != -10000 && x+i < world_limit && y+j < world_limit then 
+        (* print_char 'a'; *)
+        matb.(i).(j) <- sum_troncon_list (let Troncon(a,_) = carte.(x+i).(y+j) in a)
+      end
     done
+  end 
   done
+  (* ;  print_char '$' *)
+(*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*)
+
   
 let calcul_mat_score mats matb treepos bat_origine =
   let rec trouve_bat bat list = match list with
@@ -131,20 +148,20 @@ let calcul_mat_score mats matb treepos bat_origine =
     if treepos = Nil then () 
     else let Nodi(list,suite) = treepos in   
     let bat_cond,x,boo = trouve_cond bat_origine list in 
-    for i =0 to Array.length mats do 
-      for j=0 to Array.length mats.(0) do 
+    for i =0 to Array.length mats -1 do 
+      for j=0 to Array.length mats.(0) -1 do 
         mats.(i).(j) <- mats.(i).(j) + if trouve_bat bat_cond (matb.(i).(j)) > x then (if boo then 1 else -1) else 0
       done
     done;
     parcours_liane suite mats matb bat_origine
   in parcours_liane treepos mats matb bat_origine
 
-
+(*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*)
 (* Parcours la matrice pour lister les positions les plus probables *)
 let parc_mats_bat (arr : int array array) (corner : int * int)
     (carte : carte) =
   let a, b = corner in
-  let c = ref 1 in
+  let c = ref (-9999) in
   let list = ref [] in
   for i = 0 to (Array.length arr) - 1 do
     for j = 0 to (Array.length arr.(0)) - 1 do
@@ -157,26 +174,35 @@ let parc_mats_bat (arr : int array array) (corner : int * int)
     done
   done;
   !list
-
+(*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*)
 let cons_bat carte x y troncon bat =
   let Troncon(tronc,_) = troncon in   
   for i=0 to taille_troncon - 1 do 
     for j=0 to taille_troncon -1 do
       if let Tuile(a,_) = (tronc.(i).(j)) in a = None 
-        then (modifie_batiment_dans_troncon carte carte.(x).(y) (Some bat) i j; 
+        then (modifie_batiment_dans_troncon carte carte.(x).(y) (Some bat) i j x y; 
+      (* print_char 'b'; *)
       raise Exit)
     done
   done;
   raise Not_found
 
 let position_bat pos_list carte treepos bat_org = 
+  (* print_char '\n'; print_string "404"; *)
   let pos_cardi = pos_card pos_list in 
+  (* print_char '1'; *)
   let (mats,matb) = matrice_score_troncon pos_list carte pos_cardi in 
-  remp_mat_bat_list matb mats pos_list carte pos_cardi;
+  (* print_char '2'; *)
+  remp_mat_bat_list matb mats pos_list carte pos_cardi;(**)
+  (* print_char '3'; *)
   calcul_mat_score mats matb treepos bat_org;
+(*   print_char '4'; *)
   let (corner,_,_)=pos_cardi in 
+  (* print_char '5'; *)
   let l = parc_mats_bat mats corner carte in 
+  (* print_char '6'; *)
   let rec parc l = 
+    (* print_int (List.length l); *)
     if l = [] then failwith "Pas de place"
     else
     let (x,y) ::q = l in 
@@ -185,31 +211,38 @@ let position_bat pos_list carte treepos bat_org =
     with 
     |Not_found -> parc q 
     |Exit -> ()
+    |_ -> failwith "ici" 
   in
+  (* print_char '7'; *)
   let tab = Array.of_list l in 
+  (* print_char '8'; *)
   Array.shuffle ~rand:Random.int tab;
+  (* print_char '9'; *)
   let l1 = Array.to_list tab in 
   parc l1
 
 (* Effectue le type de construonction en fonction des paramètres *)
 let a_faire (bat:batiment) (carte : carte) (village : village) : unit =
+  (* print_string "fo0"; *)
+  if cout bat village then 
   position_bat village.position_list carte village.treepos bat 
+  (* ;print_string "fo-1" *)
 
 
 (* Evalue un noeud et fait ce qu'il faut *)
-let rec eval_node (node : tree) (carte : carte) (village : village) (tester: bool ref) : unit =
+let rec eval_node (node : tree) (carte : carte) (village : village) (tester: bool ref) : unit = 
   let ressource, _ = village.logistique in
   assert (not !tester);
   if not !tester then
     match node with
     | Vide -> failwith "Empty node"
     | Node (cond, sub_tree_left, sub_tree_right, bat) ->
-        let test_v = test ressource cond in
+        let test_v = test ressource cond in 
         if estVide sub_tree_left && test_v then 
-          (a_faire bat carte village; tester := true)
+        (a_faire bat carte village; tester := true)
         else if estVide sub_tree_right && not test_v then
           (a_faire bat carte village; tester := true)
-        else if test_v then eval_node sub_tree_left carte village tester
-        else eval_node sub_tree_right carte village tester
-  else
-    raise Couille
+        else if test_v then (eval_node sub_tree_left carte village tester)
+        else (eval_node sub_tree_right carte village tester)
+      else 
+        raise Couille 

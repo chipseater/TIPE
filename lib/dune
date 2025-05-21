@@ -3,6 +3,12 @@
  (modules type))
 
 (library
+ (name variable)
+ (modules variable)
+ (libraries type))
+
+
+(library
  (name utils)
  (modules utils))
 
@@ -14,12 +20,12 @@
 (library
  (name village)
  (modules village)
- (libraries mapgen type mapmanage))
+ (libraries mapgen type mapmanage variable))
 
 (library
  (name decision)
  (modules decision)
- (libraries mapgen mapmanage type village utils))
+ (libraries mapgen mapmanage type village utils variable))
 
 (library
  (name score)
@@ -39,6 +45,7 @@
   dumpmap
   decision
   mutation
+  variable
   foret))
 
 (library

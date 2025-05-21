@@ -9,8 +9,10 @@ open Decision
 open Mutation
 open Domainslib.Task
 open Foret
+open Variable
 
 exception Couille
+
 
 let nv_generation taille_carte nb_villages =
   let carte = gen_carte taille_carte in
@@ -18,18 +20,32 @@ let nv_generation taille_carte nb_villages =
   (carte, roots)
 
 (* Make all action in one turn *)
-let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
-  let nb_batiment_debut = List.length (get_village_batiments village carte) in
-  eval_node village.tree carte village test;
+let evolution_par_tour (village : village) (carte : carte) (test : bool ref) = 
+  let nb_batiment_debut = List.length (get_village_batiments village carte) in (
+    (* print_char 'c'; *)
+  eval_node village.tree carte village test; (*print_char 'p'*));
   let temp_logistique =
     update_all_logistique village.logistique village.position_list carte
   in
-  let nv_logistique =
-    lack_of_main_d_oeuvre temp_logistique village.logistique
-      village.position_list carte
+  (* print_char 'u'; *)
+  let rec aff = function
+    | [] -> print_char '\n'
+    | (a, b) :: q ->
+      print_int a;
+      print_char ' ';
+      print_int b;
+      print_char '\t';
+      aff q
   in
+  (* aff village.position_list; *)
+  try
+  let nv_logistique =
+    lack_of_main_d_oeuvre temp_logistique (village.logistique) (village.position_list) carte village
+  in
+  (* print_char 'r'; *)
+  
   let nv_logistique = update_main_d_oeuvre nv_logistique in
-
+  (* print_char 'e'; *)
   (* let rec aff = function
        | [] -> print_char '\n'
        | (a, b) :: q ->
@@ -54,10 +70,14 @@ let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
          print_char ' ')
        (get_village_batiments village carte);
      print_char '\n'; *)
-  let nb_batiment_fin = List.length (get_village_batiments village carte) in
-  Printf.printf "Id %d: %d %d\n" village.id nb_batiment_debut nb_batiment_fin;
-  if nb_batiment_fin > nb_batiment_debut + 1 then raise Couille;
-  village.logistique <- nv_logistique
+  
+     let nb_batiment_fin = List.length (get_village_batiments village carte) in
+  (* Printf.printf "Id %d: %d %d\n" village.id nb_batiment_debut nb_batiment_fin; *)
+  if nb_batiment_fin > nb_batiment_debut + 1 then raise Couille else
+  village.logistique <- nv_logistique 
+  with
+  |_ -> failwith "paf" 
+
 
 let init_logistique () =
   ( [ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 0); (Wood, 0) ],
@@ -69,17 +89,21 @@ let logistique_pete () =
 
 let starter_pack (carte : carte) (pos : position) =
   let x, y = pos in
-  modifie_batiment_dans_troncon carte carte.(x).(y) (Some Ferme) 0 0;
-  modifie_batiment_dans_troncon carte carte.(x).(y) (Some Maison) 0 1
-
+  (* print_char 'l'; print_int x;print_char ' ';print_int (Array.length carte);print_char ' '; print_int y;print_char ' ';print_int (Array.length carte.(x)); *)
+  modifie_batiment_dans_troncon carte carte.(x).(y) (Some Ferme) 0 0 x y ;
+  (* print_char 'o'; *)
+  modifie_batiment_dans_troncon carte carte.(x).(y) (Some Maison) 0 1 x y
+  (* print_char 'l' *)
 let createvillage (tree : tree) (treepos:treepos) (pos : position) (carte : carte) (id : int) :
     village =
   (* init le village *)
+  (* print_char 't'; *)
   starter_pack carte pos;
+  (* print_char 't'; *)
   {
-    id;
-    tree;
-    treepos;
+    id = id;
+    tree = tree;
+    treepos = treepos;
     logistique = init_logistique ();
     root_position = pos;
     position_list = [ pos ];
@@ -88,12 +112,13 @@ let createvillage (tree : tree) (treepos:treepos) (pos : position) (carte : cart
 let  evalvillage village carte : village =
   let test = ref false in
   try
+    (* print_int 402; *)
     for _ = 0 to nombre_de_tours_par_simulation do
       test := false;
       evolution_par_tour village carte test
-    done; village
+    done; (*print_int 502;*) village
   with
-  | Couille ->
+  | Couille ->print_char 'f';
       {
         id = village.id;
         tree = village.tree;
@@ -102,7 +127,7 @@ let  evalvillage village carte : village =
         root_position = village.root_position;
         position_list = village.position_list;
       }
-  | _ -> village
+  | Bloque -> village
 
 let rank n m mat =
   let rg = Array.make m [] in
@@ -170,33 +195,63 @@ let associer_generation (a : save) (carte : carte) : generation =
   let arbres, arbrespos, pos_array, evaluation = a in
   (arbres, arbrespos , carte, pos_array, evaluation)
 
-let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array* treepos array * evaluation =
+let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array* treepos array * evaluation = 
   let nb_pos = Array.length pos_array in
   let nb_arbres = Array.length tree_tab in
+  assert(Array.length tree_tab = Array.length treepos_tab);
   (* Un tableau à deux entrées qui donne le score de l'arbre selon sa position *)
   let score_mat = Array.make_matrix nb_pos nb_arbres 0 in
-  let generation_pool = setup_pool ~name:"generation_pool" ~num_domains:5 () in
-  let run_tree_at_pos i j =
+  (* print_int (-1); *)
+  (**)
+  
+  
+  let generation_pool = setup_pool ~name:"generation_pool" ~num_domains:4 () in
+  let run_tree_at_pos i j = 
+    (* print_int (-1); *)
     let carte = copier_carte carte_de_base in
+    (* print_int (-2); *)
+    (* print_char '\n'; print_int (nb_arbres - j); print_char '_'; print_int (nb_pos - i);print_char ' '; *)
     let nv_village = createvillage tree_tab.(j) treepos_tab.(j) pos_array.(i) carte j in
+    (* print_int (-3); *)
     let evaluated_village = evalvillage nv_village carte in
+    (* print_int (-4); *)
     let scoretour = scoring evaluated_village carte in
+    (* print_char '\n';  *)
+    (* print_int (Array.length score_mat.(i)); print_char '!'; print_int j; print_char '='; print_int (Array.length score_mat); print_char '!'; print_int i;print_char ' '; *)
     score_mat.(i).(j) <- scoretour
-  in let run_position i =
+    (* ;print_string "non"; print_char '\t' *)
+  in  
+
+
+  let run_position i =
+    begin  
+    try    
     (fun () ->
       parallel_for ~start:0 ~finish:(nb_arbres - 1) ~body:(run_tree_at_pos i) generation_pool)
     |> run generation_pool
-  in (fun () ->
+  with |_-> () 
+  end
+  in 
+  
+  (fun () ->
     parallel_for ~start:0 ~finish:(nb_pos - 1) ~body:(run_position) generation_pool)
   |> run generation_pool;
-  let (best_trees_array,best_treespos_array) = selection score_mat tree_tab treepos_tab in
-  let mutated_best_trees = mutate best_trees_array 1. in
-  let mutated_best_treespos = mutatepos best_treespos_array 1. in 
+  (**)
   teardown_pool generation_pool;
+  try
+  (* print_int (-5); *)
+  let (best_trees_array,best_treespos_array) = selection score_mat tree_tab treepos_tab in 
+  (* print_int (-6); *)
+  let mutated_best_trees = mutate best_trees_array 1. in
+  (* print_int (-7); *)
+  let mutated_best_treespos = mutatepos best_treespos_array 1. in 
+  (* print_int (-8); *)
   (mutated_best_trees,mutated_best_treespos, score_mat)
+  with
+  |_ -> failwith "Multi"
 
 (* nb_trees doit être multiple de 5 *)
-let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
+let game1 ?(nb_villages = 5) ?(nb_trees = 50) ?(taille_carte = 800) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
@@ -210,9 +265,13 @@ let game1 ?(nb_villages = 2) ?(nb_trees = 20) ?(taille_carte = 200) (n : int) =
   (* La première case du tableau ne contient que des arbres aléatoires *)
   game_array.(0) <- (gen_trees nb_trees, gen_treespos nb_trees ,[||], [||]);
   for i = 1 to n do
+    print_int i; print_char '\n';
     let trees,treepos , _, _ = game_array.(i - 1) in
+    assert(Array.length trees = Array.length treepos);
     let carte, pos_arr = nv_generation taille_carte nb_villages in
+    (* print_int (-1); *)
     let evolved_tree_tab,evolved_treepos_tab, tree_scores = do_genertion trees treepos carte pos_arr in
+    (* print_int (-1); print_char '\t'; *)
     (* Stocke les arbres après évolution, là où ils ont évolués
        et les scores qu'on obtenu ces arbres *)
     game_array.(i) <- (evolved_tree_tab, evolved_treepos_tab ,pos_arr, tree_scores)

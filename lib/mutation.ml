@@ -91,7 +91,7 @@ let change_batiment () =
 let mutate_batiment () =
   change_batiment ()
 
-let mutate_nodint () = Random.int 16 
+let mutate_nodint () = Random.int taille_troncon*taille_troncon
 
 let mutate_condition condition_type =
   match condition_type with
@@ -170,13 +170,9 @@ let mutate_treepos root_treepos p0 =
   let mutate tree_array p0 =
   let n = Array.length tree_array in
   let mutated_trees = Array.make (5 * n) Vide in
-  print_int n;
-  print_int (Array.length mutated_trees);
   for i = 0 to (n - 1) do
-    print_int i;
     mutated_trees.(i) <- tree_array.(i)
   done;
-  print_char '\t';
   for i = n to (5 * n) - 1 do
     mutated_trees.(i) <- mutate_tree tree_array.(i mod n) p0
   done;
@@ -185,13 +181,9 @@ let mutate_treepos root_treepos p0 =
 let mutatepos treepos_array p0 =
   let n = Array.length treepos_array in
   let mutated_treespos = Array.make (5 * n) Nil in
-  print_int n;
-  print_int (Array.length mutated_treespos);
   for i = 0 to (n - 1) do
-    print_int i;
     mutated_treespos.(i) <- treepos_array.(i)
   done;
-  print_char '\t';
   for i = n to (5 * n) - 1 do
     mutated_treespos.(i) <- mutate_treepos treepos_array.(i mod n) p0
   done;

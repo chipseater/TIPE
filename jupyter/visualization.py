@@ -135,10 +135,8 @@ def ecrire_arbre(dict, nom,fi):
     r2 = dict['condition']['ressource2']
     ing = dict['condition']['ing']
     x = dict['condition']['int']
-    act = dict['action']['argument']
-    bat = dict['action']['bat']
-    prio = dict['action']['prio']
-    fi.write(typ + '<br>' + r1+ ' ' + r2+ ' ' + ing+ ' '+str(x)+'<br>'+act+' '+bat+' '+prio) 
+    bat = dict['bat']
+    fi.write(typ + '<br>' + r1+ ' ' + r2+ ' ' + ing+ ' '+str(x)+'<br>'+bat) 
     fi.write(']')
     fi.write(' ')
     if dict['l_child'] != 'V' and dict['r_child'] != 'V'  :
@@ -160,32 +158,41 @@ def ecrire_arbre(dict, nom,fi):
 
 
 # %%
+def ecrire_arbrepos(dict, nom,fi):
+    fi.write(nom)
+    fi.write('[')
+    l= dict['liste']
+    for i in range(len(l)):
+        b1 =l[i]['bat_org']
+        b2 =l[i]['bat_comp']
+        x  = l[i]['nb']
+        boo=l[i]['bool']
+        fi.write(b1 +' '+ b2 +' '+ str(x) +' '+ boo +'<br>') 
+    fi.write(']')
+    fi.write(' ')
+    if dict['child'] != 'V' :
+        fi.write('--> ') 
+        fi.write(nom+'0;\n')
+        ecrire_arbrepos(dict['child'],nom+'0',fi)
+    else :
+        fi.write(';\n')
+
+
+# %%
 def increment_excel_style(column_label: str) -> str:
-    """
-    Incrémente une colonne dans le style Excel.
-    Exemple : 'A' -> 'B', 'Z' -> 'AA', 'AZ' -> 'BA'.
-    """
     # Convertir la colonne en un numéro (base 26)
     column_number = 0
     for char in column_label:
         column_number = column_number * 26 + (ord(char.upper()) - ord('A') + 1)
-    
     # Incrémenter le numéro
     column_number += 1
-    
     # Convertir le numéro en colonne
     new_label = ""
     while column_number > 0:
         column_number -= 1
         new_label = chr(column_number % 26 + ord('A')) + new_label
         column_number //= 26
-    
     return new_label
-
-# Exemple d'utilisation
-current_label = "Z"
-next_label = increment_excel_style(current_label)
-print(f"Après {current_label}, vient {next_label}")
 
 
 # %%
@@ -194,7 +201,6 @@ def construction_fichier(tree):
     fi.write('# Arbres \n')
     fi.write('```mermaid \n')
     fi.write('graph LR; \n')
-    
     n = len(tree)
     cl='A'
     for i in range(n):
@@ -202,6 +208,20 @@ def construction_fichier(tree):
         cl = increment_excel_style(cl)    
     fi.write('```')
 
+
+
+# %%
+def construction_fichier_treepos(tree):
+    fi = open('../arbres/arbrespos.md','w')
+    fi.write('# Arbres \n')
+    fi.write('```mermaid \n')
+    fi.write('graph LR; \n')
+    n = len(tree)
+    cl='A'
+    for i in range(n):
+        ecrire_arbrepos(tree[i],cl,fi)
+        cl = increment_excel_style(cl)    
+    fi.write('```')
 
 
 # %%
@@ -288,12 +308,12 @@ def visualisation(data):
     l1=list_moyenne(l)
     l2=list_meilleur(l)
     l3=list_pire(l)
-    #l5=list_moy_best(l)
+    l5=list_moy_best(l)
     l4=range(len(data)-1)
-    plt.plot(l4,l1,'bo')
-    plt.plot(l4,l2,'ro')
-    plt.plot(l4,l3,'go')
-    #plt.plot(l4,l5,'yo')
+    plt.plot(l4,l1,'b-')
+    plt.plot(l4,l2,'rx')
+    plt.plot(l4,l3,'g*')
+    plt.plot(l4,l5,'y+')
 
 
 # %%
@@ -305,13 +325,13 @@ def reconstruction(data):
 
 
 # %%
-
-# %%
 f = open('../game.json', 'r')
 data = np.array(json.loads(f.read()))
-tree = np.array(data[-1]['tree_array'])
+#tree = np.array(data[0]['tree_array'])
 #construction_fichier(tree)
-#visualisation(data)
+#treepos = np.array(data[-1]['treepos_array'])
+#construction_fichier_treepos(treepos)
+visualisation(data)
 #reconstruction(data)
 
 # %%
