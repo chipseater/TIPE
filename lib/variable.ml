@@ -44,7 +44,7 @@ let puit_donne : donne =
   [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ]
 
 let statue_donne : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ]
+  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -10); (Pierre, 0); (Wood, 0) ]
 
 let auberge_donne : donne =
   [ (Bed, 10); (Nouriture, -20); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ]

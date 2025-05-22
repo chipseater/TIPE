@@ -89,6 +89,8 @@ let rec taill l = match l with
 
 let modif affec orig nb = match affec,orig with 
   |Ferme,Ferme -> ferme_modif nb
+  |Puit,Ferme -> puit_modif nb
+
   |_ -> void_modif
 
 
