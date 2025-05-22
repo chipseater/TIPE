@@ -2,6 +2,8 @@ open Type
 open Village
 open Mapgen
 open Random
+open Variable
+
 
 let rnd_bool () =
   match Random.int 2 with
@@ -61,7 +63,7 @@ let list_mod_generator height =
     if height > 0 then ( 
         gen_batiment (),
         gen_batiment (),
-        Random.int 15,
+        Random.int taille_troncon * taille_troncon,
         rnd_bool()) :: generate_list (height-1)
     else []
   in 
@@ -71,7 +73,7 @@ let gen_treepos () =
   let rec tree_generator height =
     if height > 0 then
       Nodi
-        ( list_mod_generator (height),
+        ( list_mod_generator (Array.length batiment_list),
           tree_generator (height - 1)
         )
     else Nil

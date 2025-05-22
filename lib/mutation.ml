@@ -1,20 +1,27 @@
 open Type
-open Village
-open Mapgen
+open Variable
+(* open Village *)
+(* open Mapgen *)
+open Newgen
 
-let ressource_of_int = function
+(* let ressource_of_int = function
   | 1 -> Nouriture
   | 2 -> Main_d_oeuvre
   | 3 -> Pierre
   | 4 -> Wood
-  | _ -> Bed
+  | _ -> Bed *)
 
-let batiment_of_int = function
+let ressource_of_int i = ressource_list.(i)
+
+
+(* let batiment_of_int = function
   | 1 -> Carriere
   | 2 -> Scierie 
   | 3 -> Ferme
-  | _ -> Maison
+  | _ -> Maison *)
 
+let batiment_of_int i = batiment_list.(i)
+  
 let int_of_condition_type = function
   | InegaliteEnPourcentage (_, _, _, _) -> 0
   | InegaliteBrute (_, _, _, _) -> 1
@@ -68,7 +75,7 @@ let change_ing condition =
       InegaliteBrute (r1, r2, nouvel_inegalite_brut, int)
 
 let change_rss_type condition =
-  let nouvel_ress = ressource_of_int (Random.int 5) in
+  let nouvel_ress = ressource_of_int (Random.int ((Array.length ressource_list)-1)) in
   let ress_nb = Random.int 2 in
   match condition with
   | InegaliteEnPourcentage (r1, r2, ing, int) ->
@@ -86,7 +93,7 @@ let change_threshold condition =
       InegaliteBrute (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
 
 let change_batiment () =
-  batiment_of_int (Random.int 4)
+  batiment_of_int (Random.int ((Array.length batiment_list)-1))
 
 let mutate_batiment () =
   change_batiment ()
@@ -124,7 +131,7 @@ let mutation_list liste p0 =
     match lis with
     |[] -> []
     |e :: q -> (mutatedes_nodi e p0) :: parcdes q 
-    with |Supr ->( let e::q = liste in e :: parcdes q)
+    with |Supr ->( if liste = [] then [] else let e::q = liste in e :: parcdes q)
   in
   let rec parc lis c = if c = Array.length ressource_list then parcdes lis
     else match lis with
@@ -140,16 +147,18 @@ let mutation_list liste p0 =
 let mutate_tree root_tree p0 =
   let rec tree_mutator tree p =
     match tree with
-    | Node (cond, l_tree, r_tree, action) ->
+    | Node (cond, l_tree, r_tree, _) ->
         if Utils.rand_bool p then
           let mutation_function = mutate_condition (Random.int 4) in
           Node
             ( mutation_function cond,
-              tree_mutator l_tree (p *. 0.8),
-              tree_mutator r_tree (p *. 0.8),
+              tree_mutator l_tree (p *. p1),
+              tree_mutator r_tree (p *. p1),
               mutate_batiment () )
         else tree
-    | Vide -> Vide
+    | Vide -> if Utils.rand_bool p then Node
+        ( gen_cond (), Vide, Vide,gen_batiment () )
+    else Vide
   in
   tree_mutator root_tree p0
 
@@ -160,31 +169,33 @@ let mutate_treepos root_treepos p0 =
         if Utils.rand_bool p then
           Nodi
             ( mutation_list liste p0 ,
-              treepos_mutator child (p *. 0.8))
+              treepos_mutator child (p *. p1))
         else treepos
-    | Nil -> Nil
+    | Nil -> if Utils.rand_bool p then Nodi
+        ( list_mod_generator (Array.length batiment_list), Nil)      
+      else Nil
   in
   treepos_mutator root_treepos p0
   
 
   let mutate tree_array p0 =
   let n = Array.length tree_array in
-  let mutated_trees = Array.make (5 * n) Vide in
+  let mutated_trees = Array.make (nombre_survivant * n) Vide in
   for i = 0 to (n - 1) do
     mutated_trees.(i) <- tree_array.(i)
   done;
-  for i = n to (5 * n) - 1 do
+  for i = n to (nombre_survivant * n) - 1 do
     mutated_trees.(i) <- mutate_tree tree_array.(i mod n) p0
   done;
   mutated_trees
 
 let mutatepos treepos_array p0 =
   let n = Array.length treepos_array in
-  let mutated_treespos = Array.make (5 * n) Nil in
+  let mutated_treespos = Array.make (nombre_survivant * n) Nil in
   for i = 0 to (n - 1) do
     mutated_treespos.(i) <- treepos_array.(i)
   done;
-  for i = n to (5 * n) - 1 do
+  for i = n to (nombre_survivant * n) - 1 do
     mutated_treespos.(i) <- mutate_treepos treepos_array.(i mod n) p0
   done;
   mutated_treespos

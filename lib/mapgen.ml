@@ -1,5 +1,6 @@
 open Domainslib.Task
 open Type
+open Variable
 
 (* Sets the balance between the diffrent biomes,
    here 8 plains for 1 desert and 1 tundra *)

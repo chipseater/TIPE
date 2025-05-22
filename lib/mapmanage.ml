@@ -1,5 +1,6 @@
 open Mapgen
 open Type
+open Variable
 (* Fonctions utilitaires pour gérer les objets de la carte *)
 let isNone = function Troncon (_, _) -> false
 let biome_to_string = function Forest -> "Forest" | Desert -> "Desert" | Plains -> "Plains"
