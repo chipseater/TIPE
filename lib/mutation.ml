@@ -1,4 +1,5 @@
 open Type
+open Variable
 open Village
 open Mapgen
 
@@ -145,8 +146,8 @@ let mutate_tree root_tree p0 =
           let mutation_function = mutate_condition (Random.int 4) in
           Node
             ( mutation_function cond,
-              tree_mutator l_tree (p *. 0.8),
-              tree_mutator r_tree (p *. 0.8),
+              tree_mutator l_tree (p *. p1),
+              tree_mutator r_tree (p *. p1),
               mutate_batiment () )
         else tree
     | Vide -> Vide
@@ -169,22 +170,22 @@ let mutate_treepos root_treepos p0 =
 
   let mutate tree_array p0 =
   let n = Array.length tree_array in
-  let mutated_trees = Array.make (5 * n) Vide in
+  let mutated_trees = Array.make (ratio * n) Vide in
   for i = 0 to (n - 1) do
     mutated_trees.(i) <- tree_array.(i)
   done;
-  for i = n to (5 * n) - 1 do
+  for i = n to (ratio * n) - 1 do
     mutated_trees.(i) <- mutate_tree tree_array.(i mod n) p0
   done;
   mutated_trees
 
 let mutatepos treepos_array p0 =
   let n = Array.length treepos_array in
-  let mutated_treespos = Array.make (5 * n) Nil in
+  let mutated_treespos = Array.make (ratio * n) Nil in
   for i = 0 to (n - 1) do
     mutated_treespos.(i) <- treepos_array.(i)
   done;
-  for i = n to (5 * n) - 1 do
+  for i = n to (ratio * n) - 1 do
     mutated_treespos.(i) <- mutate_treepos treepos_array.(i mod n) p0
   done;
   mutated_treespos

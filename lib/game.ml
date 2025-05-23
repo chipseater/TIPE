@@ -8,7 +8,7 @@ open Mapmanage
 open Decision
 open Mutation
 open Domainslib.Task
-open Foret
+(* open Foret *)
 open Variable
 
 exception Couille
@@ -178,9 +178,9 @@ let selection score tree_tab treepos_tab =
   done;
   let () = Array.stable_sort compare_last scores_a_trier in
   (* Retrouve les arbres après tri *)
-  let arbres_tries = Array.make (nb_arbres / 5) Vide in
-  let arbrespos_tries = Array.make (nb_arbres/5) Nil in 
-  for i = 0 to (nb_arbres / 5) - 1 do
+  let arbres_tries = Array.make (nb_arbres / ratio) Vide in
+  let arbrespos_tries = Array.make (nb_arbres/ratio) Nil in 
+  for i = 0 to (nb_arbres / ratio) - 1 do
     let indice_arbre, _ = scores_a_trier.(i) in
     arbres_tries.(i) <- tree_tab.(indice_arbre);
     arbrespos_tries.(i) <- treepos_tab.(indice_arbre)
@@ -242,16 +242,16 @@ let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array* tree
   (* print_int (-5); *)
   let (best_trees_array,best_treespos_array) = selection score_mat tree_tab treepos_tab in 
   (* print_int (-6); *)
-  let mutated_best_trees = mutate best_trees_array 1. in
+  let mutated_best_trees = mutate best_trees_array p0 in
   (* print_int (-7); *)
-  let mutated_best_treespos = mutatepos best_treespos_array 1. in 
+  let mutated_best_treespos = mutatepos best_treespos_array p0 in 
   (* print_int (-8); *)
   (mutated_best_trees,mutated_best_treespos, score_mat)
   with
   |_ -> failwith "Multi"
 
 (* nb_trees doit être multiple de 5 *)
-let game1 ?(nb_villages = 5) ?(nb_trees = 50) ?(taille_carte = 800) (n : int) =
+let game1 ?(nb_villages = 2) ?(nb_trees = 8) ?(taille_carte = 400) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
@@ -265,7 +265,7 @@ let game1 ?(nb_villages = 5) ?(nb_trees = 50) ?(taille_carte = 800) (n : int) =
   (* La première case du tableau ne contient que des arbres aléatoires *)
   game_array.(0) <- (gen_trees nb_trees, gen_treespos nb_trees ,[||], [||]);
   for i = 1 to n do
-    print_int i; print_char '\n';
+    print_int i; print_char '\n';flush stdout;
     let trees,treepos , _, _ = game_array.(i - 1) in
     assert(Array.length trees = Array.length treepos);
     let carte, pos_arr = nv_generation taille_carte nb_villages in

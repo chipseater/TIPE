@@ -1,4 +1,11 @@
 open Type
+
+let z_max = 100.
+let taille_troncon = 8
+let ratio = 2 
+let p0 = 1.
+let p1 = 0.8
+
 let cout_maison = [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -5); (Pierre, -15); (Wood, -20) ]
 
 let cout_carriere = [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, -40) ]
@@ -31,7 +38,7 @@ let void_modif = [|1.;1.;1.;1.;1.|]
   
   
 
-let nombre_de_tours_par_simulation = 100
+let nombre_de_tours_par_simulation = 10
 
 
 

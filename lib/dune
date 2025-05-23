@@ -15,7 +15,7 @@
 (library
  (name mapgen)
  (modules mapgen)
- (libraries utils type domainslib))
+ (libraries utils type domainslib variable))
 
 (library
  (name village)
@@ -30,7 +30,7 @@
 (library
  (name score)
  (modules score)
- (libraries village type mapgen))
+ (libraries village type mapgen variable))
 
 (library
  (name game)
@@ -56,12 +56,12 @@
 (library
  (name mapmanage)
  (modules mapmanage)
- (libraries mapgen type))
+ (libraries mapgen type variable))
 
 (library
  (name newgen)
  (modules newgen)
- (libraries village type))
+ (libraries village type variable))
 
 (library
  (name mutation)

@@ -1,5 +1,4 @@
-let z_max = 100.
-let taille_troncon = 16
+
 exception Bloque
 type biome = Forest | Desert | Plains
 type batiment = Maison | Carriere | Scierie | Ferme
