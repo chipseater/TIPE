@@ -38,5 +38,6 @@ let get_statue village carte =
 
 let calcul_score (village : village) (carte : carte) : int =
   (* Évite le warning de variable non utilisée *)
-  let _ = carte in
+  (* let _ = carte in *)
   (* get_popuplation village *)
+  get_statue village carte
