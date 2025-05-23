@@ -80,7 +80,7 @@ let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
 
 
 let init_logistique () =
-  ( [ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 0); (Wood, 0) ],
+  ( [ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 100); (Wood, 100) ],
     void_donne )
 
 let logistique_pete () =
@@ -250,8 +250,8 @@ let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array* tree
   with
   |_ -> failwith "Multi"
 
-(* nb_trees doit être multiple de 5 *)
-let game1 ?(nb_villages = 2) ?(nb_trees = 8) ?(taille_carte = 400) (n : int) =
+
+let game1 ?(nb_villages = 2) ?(nb_trees = 50) ?(taille_carte = 400) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)
