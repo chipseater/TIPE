@@ -1,8 +1,8 @@
 
 exception Bloque
 type biome = Forest | Desert | Plains
-type batiment = Maison | Carriere | Scierie | Ferme
-
+type batiment = Maison | Carriere | Scierie | Ferme | Puit | Auberge | Statue
+let batiment_list = [|Maison;Carriere;Scierie;Ferme;Puit;Auberge;Statue|]
 (* A tuile is made out of the eventual batiment it contains associated with its elevation *)
 type tuile = Tuile of batiment option * int
 

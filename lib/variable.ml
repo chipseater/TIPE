@@ -60,8 +60,10 @@ let puit_modif b =  let t = ( match b with |0 -> 1. |1 -> 1.75 |2 -> 2.5 |3 -> 1
   [|1.;t;1.;1.;1.|] 
 
 let void_modif = [|1.;1.;1.;1.;1.|] 
-  
-  
+
+let nb_ress = Array.length ressource_list
+let nb_bat = Array.length batiment_list
+
 
 let nombre_de_tours_par_simulation = 10
 

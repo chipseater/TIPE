@@ -17,11 +17,20 @@ let rec sum_donne (l1 : donne) (l2 : donne) : donne =
   |(b,x)::q,(a,y)::r when a=b -> if (-y) > x then false else need q r  
   |_ -> raise (Invalid_argument "Not the same size")
 
+
+
+(* ////////////////////////////////////////////////////////////////////////////////// *)
+
+
+
 let cout bat village = match bat with 
   | Maison -> begin if need cout_maison (let (x,_) = village.logistique in x)     then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_maison),y); true) else false end
   | Carriere -> begin if need cout_carriere (let (x,_) = village.logistique in x) then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_carriere),y); true) else false end
   | Scierie -> begin if need cout_scierie (let (x,_) = village.logistique in x)   then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_scierie),y); true) else false end
   | Ferme -> begin if need cout_ferme (let (x,_) = village.logistique in x)       then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_ferme),y); true) else false end
+  | Puit -> begin if need cout_puit (let (x,_) = village.logistique in x)       then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_puit),y); true) else false end
+  | Auberge -> begin if need cout_auberge (let (x,_) = village.logistique in x)       then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_auberge),y); true) else false end
+  | Statue-> begin if need cout_statue (let (x,_) = village.logistique in x)       then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_statue),y); true) else false end
   |_ -> false
 
 (* Renvoie la production de la tuile d'après le batiment qu'il contient *)
@@ -31,17 +40,17 @@ let get_production_from bat : donne =
   | Carriere -> carriere_donne_prodution
   | Ferme -> ferme_donne_prodution
   | Scierie -> scierie_donne_prodution
+  | Puit -> puit_donne
+  | Auberge -> auberge_donne
+  | Statue -> statue_donne
   | _ -> void_donne
 
-
+(* ///////////////////////////////////////////////////////////////////////////////// *)
 (* Renvoie la production de la tuile d'après le batiment qu'il contient *)
 let get_production_from_tuile (tuile : tuile) : donne =
   match get_tuile_batiment tuile with
-  | Some Maison -> maison_donne_prodution
-  | Some Carriere -> carriere_donne_prodution
-  | Some Ferme -> ferme_donne_prodution
-  | Some Scierie -> scierie_donne_prodution
   | None -> void_donne
+  | Some x -> get_production_from x
 
 
 let rec mult_donne l n = 
@@ -83,23 +92,10 @@ let rec taill l = match l with
   |[] -> 0
   |_:: q -> 1 + taill q
 
-let ferme_modif b = 
-  let n = float_of_int b in 
-  [|1.;sqrt n;1.;1.;1.|]
-  
-let puit_modif b = 
-  match b with
-  |0 -> 1.
-  |1 -> 1.75
-  |2 -> 2.5
-  |3 -> 1.2
-  |4 -> 0.5
-  |_ -> 0.
-
-
 
 let modif affec orig nb = match affec,orig with 
   |Ferme,Ferme -> ferme_modif nb
+  |Ferme,Puit -> puit_modif nb 
   |_ -> void_modif
 
 

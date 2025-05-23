@@ -55,6 +55,9 @@ let serialize_batiment batiment =
   | Carriere -> `String "Carriere"
   | Scierie -> `String "Scierie"
   | Ferme -> `String "Ferme"
+  | Puit -> `String "Puit"
+  | Auberge -> `String "Auberge"
+  | Statue -> `String "Statue"
 
 
 (* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed *)

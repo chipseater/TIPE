@@ -3,7 +3,7 @@ open Variable
 open Village
 open Mapgen
 
-let ressource_of_int = function
+(* let ressource_of_int = function
   | 1 -> Nouriture
   | 2 -> Main_d_oeuvre
   | 3 -> Pierre
@@ -14,7 +14,11 @@ let batiment_of_int = function
   | 1 -> Carriere
   | 2 -> Scierie 
   | 3 -> Ferme
-  | _ -> Maison
+  | _ -> Maison *)
+
+let ressource_of_int i = ressource_list.(i)
+let batiment_of_int i = batiment_list.(i)
+
 
 let int_of_condition_type = function
   | InegaliteEnPourcentage (_, _, _, _) -> 0
@@ -69,7 +73,7 @@ let change_ing condition =
       InegaliteBrute (r1, r2, nouvel_inegalite_brut, int)
 
 let change_rss_type condition =
-  let nouvel_ress = ressource_of_int (Random.int 5) in
+  let nouvel_ress = ressource_of_int (Random.int (nb_ress -1) ) in
   let ress_nb = Random.int 2 in
   match condition with
   | InegaliteEnPourcentage (r1, r2, ing, int) ->
@@ -87,7 +91,7 @@ let change_threshold condition =
       InegaliteBrute (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
 
 let change_batiment () =
-  batiment_of_int (Random.int 4)
+  batiment_of_int (Random.int (nb_bat -1))
 
 let mutate_batiment () =
   change_batiment ()
