@@ -25,12 +25,12 @@
 (library
  (name decision)
  (modules decision)
- (libraries mapgen mapmanage type village utils variable))
+ (libraries mapgen mapmanage type village utils variable ))
 
 (library
  (name score)
  (modules score)
- (libraries village type mapgen variable))
+ (libraries village type mapgen variable decision))
 
 (library
  (name game)
