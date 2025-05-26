@@ -1,9 +1,9 @@
-open Mapgen
-open Village
+(* open Mapgen *)
+(* open Village *)
 open Game
 
 
 let _ = let x = Unix.time () in
-  game 1 200 ;
+  game 1 20 ;
   print_char '\n';
   print_int ( int_of_float (Unix.time ()) - int_of_float x)

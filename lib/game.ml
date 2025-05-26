@@ -28,7 +28,8 @@ let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
     update_all_logistique village.logistique village.position_list carte
   in
   (* print_char 'u'; *)
-  let rec aff = function
+
+  (* let rec aff = function
     | [] -> print_char '\n'
     | (a, b) :: q ->
       print_int a;
@@ -36,7 +37,7 @@ let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
       print_int b;
       print_char '\t';
       aff q
-  in
+  in *)
   (* aff village.position_list; *)
   try
   let nv_logistique =
@@ -78,14 +79,6 @@ let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
   with
   |_ -> failwith "paf" 
 
-
-let init_logistique () =
-  ( [ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 100); (Wood, 100) ],
-    void_donne )
-
-let logistique_pete () =
-  ( [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -1); (Pierre, 0); (Wood, 0) ],
-    void_donne )
 
 let starter_pack (carte : carte) (pos : position) =
   let x, y = pos in
@@ -202,10 +195,10 @@ let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array* tree
   (* Un tableau à deux entrées qui donne le score de l'arbre selon sa position *)
   let score_mat = Array.make_matrix nb_pos nb_arbres 0 in
   (* print_int (-1); *)
-  (**)
+  (* *)
   
   
-  let generation_pool = setup_pool ~name:"generation_pool" ~num_domains:4 () in
+  let generation_pool = setup_pool ~name:"generation_pool" ~num_domains:3 () in
   let run_tree_at_pos i j = 
     (* print_int (-1); *)
     let carte = copier_carte carte_de_base in
@@ -229,14 +222,15 @@ let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array* tree
     (fun () ->
       parallel_for ~start:0 ~finish:(nb_arbres - 1) ~body:(run_tree_at_pos i) generation_pool)
     |> run generation_pool
-  with |_-> () 
+  with |Invalid_argument(x) -> print_string x ; print_char '\n'
+  |_-> () 
   end
   in 
   
   (fun () ->
     parallel_for ~start:0 ~finish:(nb_pos - 1) ~body:(run_position) generation_pool)
   |> run generation_pool;
-  (**)
+  (* *)
   teardown_pool generation_pool;
   try
   (* print_int (-5); *)
@@ -245,13 +239,14 @@ let do_genertion tree_tab treepos_tab carte_de_base pos_array : tree array* tree
   let mutated_best_trees = mutate best_trees_array p0 in
   (* print_int (-7); *)
   let mutated_best_treespos = mutatepos best_treespos_array p0 in 
+  
   (* print_int (-8); *)
   (mutated_best_trees,mutated_best_treespos, score_mat)
   with
   |_ -> failwith "Multi"
 
 
-let game1 ?(nb_villages = 2) ?(nb_trees = 50) ?(taille_carte = 400) (n : int) =
+let game1 ?(nb_villages = 2) ?(nb_trees = 128) ?(taille_carte = 400) (n : int) =
   let (game_array : save array) =
     Array.make (n + 1)
       ( (* Arbres *)

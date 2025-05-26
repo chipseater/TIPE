@@ -68,6 +68,7 @@ let serialize_ressource ressource =
   | Pierre -> `String "Pierre"
   | Wood -> `String "Wood"
   | Bed -> `String "Bed"
+  | Bonheur -> `String "Bonheur"
 
 (* Fonction bien stupide qui renvoie le type de la condition sous forme de string *)
 let condition_type_to_string = function

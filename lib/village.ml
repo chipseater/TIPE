@@ -24,13 +24,13 @@ let rec sum_donne (l1 : donne) (l2 : donne) : donne =
 
 
 let cout bat village = match bat with 
-  | Maison -> begin if need cout_maison (let (x,_) = village.logistique in x)     then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_maison),y); true) else false end
+  | Maison -> if need cout_maison (let (x,_) = village.logistique in x)     then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_maison),y); true) else false
   | Carriere -> begin if need cout_carriere (let (x,_) = village.logistique in x) then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_carriere),y); true) else false end
   | Scierie -> begin if need cout_scierie (let (x,_) = village.logistique in x)   then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_scierie),y); true) else false end
   | Ferme -> begin if need cout_ferme (let (x,_) = village.logistique in x)       then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_ferme),y); true) else false end
-  | Puit -> begin if need cout_puit (let (x,_) = village.logistique in x)       then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_puit),y); true) else false end
-  | Auberge -> begin if need cout_auberge (let (x,_) = village.logistique in x)       then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_auberge),y); true) else false end
-  | Statue-> begin if need cout_statue (let (x,_) = village.logistique in x)       then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_statue),y); true) else false end
+  | Puit -> begin if need cout_puit (let (x,_) = village.logistique in x)         then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_puit),y); true) else false end
+  | Auberge -> begin if need cout_auberge (let (x,_) = village.logistique in x)   then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_auberge),y); true) else false end
+  | Statue-> begin if need cout_statue (let (x,_) = village.logistique in x)      then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_statue),y); true) else false end
   |_ -> false
 
 (* Renvoie la production de la tuile d'après le batiment qu'il contient *)
@@ -198,7 +198,8 @@ let calcul_of_main_d_oeuvre donne =
           (Nouriture, -nouriture);
           (Main_d_oeuvre, -main_d_oeuvre + (nouriture * 10));
           (Pierre, 0);
-          (Wood, 0);
+          (Wood, 0)
+          ; (Bonheur,0)
         ]
     else
       sum_donne donne
@@ -207,7 +208,7 @@ let calcul_of_main_d_oeuvre donne =
           (Nouriture, -bed);
           (Main_d_oeuvre, -main_d_oeuvre + (bed * 10));
           (Pierre, 0);
-          (Wood, 0);
+          (Wood, 0); (Bonheur,0)
         ]
   else if main_d_oeuvre > nouriture * 10 then
     sum_donne donne
@@ -216,7 +217,7 @@ let calcul_of_main_d_oeuvre donne =
         (Nouriture, -nouriture);
         (Main_d_oeuvre, -main_d_oeuvre + (nouriture * 10));
         (Pierre, 0);
-        (Wood, 0);
+        (Wood, 0); (Bonheur,0)
       ]
   else
     let remaining_nouriture = nouriture - (main_d_oeuvre / 10) in
@@ -231,7 +232,7 @@ let calcul_of_main_d_oeuvre donne =
             -main_d_oeuvre + last_gen_main_d_oeuvre
             + (remaining_nouriture / 2 * 10) );
           (Pierre, 0);
-          (Wood, 0);
+          (Wood, 0); (Bonheur,0)
         ]
     else
       sum_donne donne
@@ -242,7 +243,7 @@ let calcul_of_main_d_oeuvre donne =
             -main_d_oeuvre + last_gen_main_d_oeuvre + (2 * remaining_beds * 10)
           );
           (Pierre, 0);
-          (Wood, 0);
+          (Wood, 0); (Bonheur,0)
         ]
 
 let update_main_d_oeuvre (logistique : logistique) : logistique =

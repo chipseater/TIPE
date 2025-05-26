@@ -12,8 +12,8 @@ type troncon = Troncon of tuile array array * biome
 (* A n*n carte is a n/4*n/4 troncon matrix *)
 type carte = troncon array array
 
-type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed
-let ressource_list = [|Nouriture;Main_d_oeuvre;Pierre;Wood;Bed|]
+type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed | Bonheur
+let ressource_list = [|Nouriture;Main_d_oeuvre;Pierre;Wood;Bed;Bonheur|]
 (* Dictionnaire contenant des ressources et leur quantités *)
 type donne = (ressource * int) list
 

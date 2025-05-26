@@ -2,6 +2,7 @@ open Type
 open Variable
 open Village
 open Mapgen
+open Newgen
 
 (* let ressource_of_int = function
   | 1 -> Nouriture
@@ -133,7 +134,7 @@ let mutation_list liste p0 =
   in
   let rec parc lis c = if c = Array.length ressource_list then parcdes lis
     else match lis with
-    |[] -> []
+    |[] -> (if Utils.rand_bool p0 then [(change_batiment (), change_batiment (), mutate_nodint (), Utils.rand_bool 0.5)] else [])
     |e::q -> mutate_nodi e p0 :: parc q (c+1)
   in
   parc liste 0
@@ -154,7 +155,12 @@ let mutate_tree root_tree p0 =
               tree_mutator r_tree (p *. p1),
               mutate_batiment () )
         else tree
-    | Vide -> Vide
+    | Vide ->  
+      if Utils.rand_bool p then
+        Node
+        ( gen_cond (), Vide, Vide,
+          gen_batiment () )
+      else Vide
   in
   tree_mutator root_tree p0
 
@@ -165,9 +171,15 @@ let mutate_treepos root_treepos p0 =
         if Utils.rand_bool p then
           Nodi
             ( mutation_list liste p0 ,
-              treepos_mutator child (p *. 0.8))
+              treepos_mutator child (p *. p1))
         else treepos
-    | Nil -> Nil
+    | Nil -> if Utils.rand_bool p then
+        Nodi
+        ( list_mod_generator ( 5),
+          Nil
+        )
+      else Nil
+
   in
   treepos_mutator root_treepos p0
   

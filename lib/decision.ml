@@ -140,7 +140,7 @@ let calcul_mat_score mats matb treepos bat_origine =
     |_::q -> trouve_bat bat q 
   in
   let rec trouve_cond bat list = match list with 
-    |[] -> (bat,-1,false)
+    |[] -> (bat,taille_troncon*taille_troncon,false)
     |(a,b,c,d)::q when a = bat -> (b,c,d)
     |e::q -> trouve_cond bat q
   in

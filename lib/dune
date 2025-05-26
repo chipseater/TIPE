@@ -61,12 +61,12 @@
 (library
  (name newgen)
  (modules newgen)
- (libraries village type variable))
+ (libraries village type variable ))
 
 (library
  (name mutation)
  (modules mutation)
- (libraries village type utils mapgen))
+ (libraries village type utils mapgen variable newgen))
 
 (library
  (name foret)
