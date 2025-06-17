@@ -4,23 +4,23 @@ open Mapmanage
 open Decision
 open Type
 
-let get_popuplation village =
+let recup_popuplation village =
   let stock, _ = village.logistique in
   recherche stock Main_d_oeuvre
 
-let get_bonheur village =
+let recup_bonheur village =
   let stock, _ = village.logistique in
   recherche stock Bonheur
 
-let get_village_batiments (village : village) (carte : troncon array array) =
+let recup_village_batiments (village : village) (carte : troncon array array) =
   let rec make_village_list list =
     match list with
     | [] -> []
-    | (i, j) :: q -> get_troncon_batiments carte.(i).(j) @ make_village_list q
+    | (i, j) :: q -> recup_troncon_batiments carte.(i).(j) @ make_village_list q
   in
   make_village_list village.position_list
 
-let get_statue village carte = 
+let recup_statue village carte = 
   let pos_list = village.position_list in 
   let rec trouve_bat bat list = match list with
     |[] -> 0
@@ -41,7 +41,7 @@ let get_statue village carte =
   !c
 
 let taille_lianne village = 
-  let t = village.treepos in 
+  let t = village.arbrepos in 
   let rec taille tr = match tr with 
     |Nil -> 0 
     |Nodi(_,tre) -> taille tre + 1
@@ -55,7 +55,7 @@ let taille_lianne village =
 let calcul_score (village : village) (carte : carte) : int =
   (* Évite le warning de variable non utilisée *)
   (* let _ = carte in *)
-  get_popuplation village
-  (* get_statue village carte *)
+  recup_popuplation village
+  (* recup_statue village carte *)
   (* taille_lianne village *)
-  (* get_bonheur village *)
+  (* recup_bonheur village *)

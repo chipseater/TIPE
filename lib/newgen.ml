@@ -43,19 +43,19 @@ let gen_batiment () =
   | 3 -> Ferme
   | _ -> Maison
 
-let gen_tree () =
-  let rec tree_generator height =
+let gen_arbre () =
+  let rec arbre_generator height =
     if height > 0 then
       Node
         ( gen_cond (),
-          tree_generator (height - 1),
-          tree_generator (height - 1),
+          arbre_generator (height - 1),
+          arbre_generator (height - 1),
           gen_batiment () )
     else Vide
   in
-  Utils.rand_normal 3. 1. |> ceil |> int_of_float |> tree_generator
+  Utils.rand_normal 3. 1. |> ceil |> int_of_float |> arbre_generator
 
-let gen_trees nb_of_trees = Array.init nb_of_trees (fun _ -> gen_tree ())
+let gen_arbres nb_of_arbres = Array.init nb_of_arbres (fun _ -> gen_arbre ())
 
 let list_mod_generator h = 
   let rec generate_list height = 
@@ -68,18 +68,18 @@ let list_mod_generator h =
   in 
   generate_list h
 
-let gen_treepos () =
-  let rec tree_generator height =
+let gen_arbrepos () =
+  let rec arbre_generator height =
     if height > 0 then
       Nodi
         ( list_mod_generator (Random.int (Array.length ressource_list)), (* ///////\\\\\\\\*)
-          tree_generator (height - 1)
+          arbre_generator (height - 1)
         )
     else Nil
   in
-  Utils.rand_normal 3. 1. |> ceil |> int_of_float |> tree_generator
+  Utils.rand_normal 3. 1. |> ceil |> int_of_float |> arbre_generator
 
-let gen_treespos nb_of_trees = Array.init nb_of_trees (fun _ -> gen_treepos ())
+let gen_arbrespos nb_of_arbres = Array.init nb_of_arbres (fun _ -> gen_arbrepos ())
 
 
 
@@ -90,12 +90,12 @@ let random_pos min max =
 
 (* Génère k positions racines de villages parmi une grille en nxn troncons
    divisée en secteurs de taille n / k *)
-let gen_village_roots n k =
+let gen_village_positions n k =
   let () = self_init () in
   let quadrants_per_side = float_of_int k |> sqrt |> ceil |> int_of_float in
   let quadrant_width = n / quadrants_per_side in
-  let roots = Array.make k (0, 0) in
-  (* Ajoute à roots une coordonée de racine aléatoire
+  let positions = Array.make k (0, 0) in
+  (* Ajoute à positions une coordonée de racine aléatoire
      pour chaque secteur de carte *)
   for i = 0 to k - 1 do
     (* x, y sont les coordonées du coin haut-gauche
@@ -106,6 +106,6 @@ let gen_village_roots n k =
     in
     assert (x + quadrant_width < n); 
     assert (y + quadrant_width < n);
-    roots.(i) <- random_pos (x, y) (x + quadrant_width, y + quadrant_width)
+    positions.(i) <- random_pos (x, y) (x + quadrant_width, y + quadrant_width)
   done;
-  roots 
+  positions 

@@ -33,25 +33,25 @@ type condition =
    à gauche si la condition est remplie, à droite sinon. Si la condition
    du noeud est vérifié, alors l'action de ce noeud sera exécutée.
 *)
-type tree = Vide | Node of condition * tree * tree * batiment
+type arbre = Vide | Node of condition * arbre * arbre * batiment
 
 (* Le premier batiment  *)
-type treepos = Nil | Nodi of (batiment * batiment * int * bool) list * treepos  
+type arbrepos = Nil | Nodi of (batiment * batiment * int * bool) list * arbrepos  
 
-(* type village = int * tree * logistique * position * position list *)
+(* type village = int * arbre * logistique * position * position list *)
 type village = {
   id : int;
-  tree : tree;
-  treepos : treepos;
+  arbre : arbre;
+  arbrepos : arbrepos;
   mutable logistique : logistique;
-  root_position : position;
+  position_position : position;
   mutable position_list : position list;
 }
 (* A generation binds a carte with the villages that live inside this carte *)
 type score = int array
 type evaluation = score array
-type generation = tree array * treepos array * carte * position array * evaluation
-type save = tree array * treepos array * position array * evaluation
+type generation = arbre array * arbrepos array * carte * position array * evaluation
+type save = arbre array * arbrepos array * position array * evaluation
 type game = save array
 
 

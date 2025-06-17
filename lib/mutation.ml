@@ -143,18 +143,18 @@ let mutation_list liste p0 =
 (* Mute la racine de l'arbre avec une probabilité de p0,
    puis mute ses fils avec une proba de p = p0 * exp(-d),
    avec d la profondeur du noeud *)
-let mutate_tree root_tree p0 =
-  let rec tree_mutator tree p =
-    match tree with
-    | Node (cond, l_tree, r_tree, action) ->
+let mutate_arbre position_arbre p0 =
+  let rec arbre_mutator arbre p =
+    match arbre with
+    | Node (cond, l_arbre, r_arbre, action) ->
         if Utils.rand_bool p then
           let mutation_function = mutate_condition (Random.int 4) in
           Node
             ( mutation_function cond,
-              tree_mutator l_tree (p *. p1),
-              tree_mutator r_tree (p *. p1),
+              arbre_mutator l_arbre (p *. p1),
+              arbre_mutator r_arbre (p *. p1),
               mutate_batiment () )
-        else tree
+        else arbre
     | Vide ->  
       if Utils.rand_bool p then
         Node
@@ -162,17 +162,17 @@ let mutate_tree root_tree p0 =
           gen_batiment () )
       else Vide
   in
-  tree_mutator root_tree p0
+  arbre_mutator position_arbre p0
 
-let mutate_treepos root_treepos p0 =
-  let rec treepos_mutator treepos p =
-    match treepos with
+let mutate_arbrepos position_arbrepos p0 =
+  let rec arbrepos_mutator arbrepos p =
+    match arbrepos with
     | Nodi (liste, child) ->
         if Utils.rand_bool p then
           Nodi
             ( mutation_list liste p0 ,
-              treepos_mutator child (p *. p1))
-        else treepos
+              arbrepos_mutator child (p *. p1))
+        else arbrepos
     | Nil -> if Utils.rand_bool p then
         Nodi
         ( list_mod_generator ( 5),
@@ -181,27 +181,27 @@ let mutate_treepos root_treepos p0 =
       else Nil
 
   in
-  treepos_mutator root_treepos p0
+  arbrepos_mutator position_arbrepos p0
   
 
-  let mutate tree_array p0 =
-  let n = Array.length tree_array in
-  let mutated_trees = Array.make (ratio * n) Vide in
+  let mutate arbre_array p0 =
+  let n = Array.length arbre_array in
+  let mutated_arbres = Array.make (ratio * n) Vide in
   for i = 0 to (n - 1) do
-    mutated_trees.(i) <- tree_array.(i)
+    mutated_arbres.(i) <- arbre_array.(i)
   done;
   for i = n to (ratio * n) - 1 do
-    mutated_trees.(i) <- mutate_tree tree_array.(i mod n) p0
+    mutated_arbres.(i) <- mutate_arbre arbre_array.(i mod n) p0
   done;
-  mutated_trees
+  mutated_arbres
 
-let mutatepos treepos_array p0 =
-  let n = Array.length treepos_array in
-  let mutated_treespos = Array.make (ratio * n) Nil in
+let mutatepos arbrepos_array p0 =
+  let n = Array.length arbrepos_array in
+  let mutated_arbrespos = Array.make (ratio * n) Nil in
   for i = 0 to (n - 1) do
-    mutated_treespos.(i) <- treepos_array.(i)
+    mutated_arbrespos.(i) <- arbrepos_array.(i)
   done;
   for i = n to (ratio * n) - 1 do
-    mutated_treespos.(i) <- mutate_treepos treepos_array.(i mod n) p0
+    mutated_arbrespos.(i) <- mutate_arbrepos arbrepos_array.(i mod n) p0
   done;
-  mutated_treespos
+  mutated_arbrespos

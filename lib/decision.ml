@@ -48,7 +48,7 @@ let test (donnee : donne) (condition : condition) : bool =
 
 (* Teste s' il y a une tuile du troncon qui est vide *)
 let test_troncon_pas_plein (troncon : troncon) : bool =
-  let troncon_tuiles = get_troncon_tuiles troncon in
+  let troncon_tuiles = recup_troncon_tuiles troncon in
   let t = ref false in
   for i = 0 to taille_troncon - 1 do
     for j = 0 to taille_troncon - 1 do
@@ -61,7 +61,7 @@ let test_troncon_pas_plein (troncon : troncon) : bool =
 (* Ajoute dans un tableau toutes les cases qui sont constructibles *)
 let possibilite troncon =
   let arr = Array.make (taille_troncon * taille_troncon) (-1, -1) in
-  let tab = get_troncon_tuiles troncon in
+  let tab = recup_troncon_tuiles troncon in
   for i = 0 to taille_troncon - 1 do
     for j = 0 to taille_troncon - 1 do
       let (Tuile (b, _)) = tab.(i).(j) in
@@ -94,12 +94,12 @@ let pos_card (pos_list : position list) =
 
 
 let matrice_score_troncon pos_list carte pos_cardi =
-  let corner, larg, haut = pos_cardi in
+  let coin, larg, haut = pos_cardi in
   let mat_score = Array.make_matrix haut larg 0 in
   let mat_bat_list = Array.make_matrix haut larg [] in
   let world_limit = Array.length carte in
-  let limit mat world_limit corner larg haut = 
-    let (x,y) = corner in 
+  let limit mat world_limit coin larg haut = 
+    let (x,y) = coin in 
     assert (x != world_limit && y != world_limit);
     for i=0 to larg -1 do 
       for j=0 to haut -1 do 
@@ -107,7 +107,7 @@ let matrice_score_troncon pos_list carte pos_cardi =
         done
       done
   in 
-  limit mat_score world_limit corner larg haut ;
+  limit mat_score world_limit coin larg haut ;
   (mat_score,mat_bat_list)
 
 let remp_mat_bat_list matb mats pos_list carte pos_cardi =
@@ -124,7 +124,7 @@ let remp_mat_bat_list matb mats pos_list carte pos_cardi =
   end 
   done
   
-let calcul_mat_score mats matb treepos bat_origine =
+let calcul_mat_score mats matb arbrepos bat_origine =
   let rec trouve_bat bat list = match list with
     |[] -> 0
     |(a,b)::q when a = bat -> b
@@ -135,9 +135,9 @@ let calcul_mat_score mats matb treepos bat_origine =
     |(a,b,c,d)::q when a = bat -> (b,c,d)
     |e::q -> trouve_cond bat q
   in
-  let rec parcours_liane treepos mats matb bat_origine =
-    if treepos = Nil then () 
-    else let Nodi(list,suite) = treepos in   
+  let rec parcours_liane arbrepos mats matb bat_origine =
+    if arbrepos = Nil then () 
+    else let Nodi(list,suite) = arbrepos in   
     let bat_cond,x,boo = trouve_cond bat_origine list in 
     for i =0 to Array.length mats -1 do 
       for j=0 to Array.length mats.(0) -1 do 
@@ -145,12 +145,12 @@ let calcul_mat_score mats matb treepos bat_origine =
       done
     done;
     parcours_liane suite mats matb bat_origine
-  in parcours_liane treepos mats matb bat_origine
+  in parcours_liane arbrepos mats matb bat_origine
 
 (* Parcours la matrice pour lister les positions les plus probables *)
-let parc_mats_bat (arr : int array array) (corner : int * int)
+let parc_mats_bat (arr : int array array) (coin : int * int)
     (carte : carte) =
-  let a, b = corner in
+  let a, b = coin in
   let c = ref (-9999) in
   let list = ref [] in
   for i = 0 to (Array.length arr) - 1 do
@@ -176,13 +176,13 @@ let cons_bat carte x y troncon bat =
   done;
   raise Not_found
 
-let position_bat pos_list carte treepos bat_org = 
+let position_bat pos_list carte arbrepos bat_org = 
   let pos_cardi = pos_card pos_list in 
   let (mats,matb) = matrice_score_troncon pos_list carte pos_cardi in 
   remp_mat_bat_list matb mats pos_list carte pos_cardi;
-  calcul_mat_score mats matb treepos bat_org;
-  let (corner,_,_)=pos_cardi in 
-  let l = parc_mats_bat mats corner carte in 
+  calcul_mat_score mats matb arbrepos bat_org;
+  let (coin,_,_)=pos_cardi in 
+  let l = parc_mats_bat mats coin carte in 
   let rec parc l = 
     if l = [] then failwith "Pas de place"
     else
@@ -202,11 +202,11 @@ let position_bat pos_list carte treepos bat_org =
 (* Effectue le type de construonction en fonction des paramètres *)
 let a_faire (bat:batiment) (carte : carte) (village : village) : unit =
   if cout bat village then 
-  position_bat village.position_list carte village.treepos bat 
+  position_bat village.position_list carte village.arbrepos bat 
 
 
 (* Evalue un noeud et fait ce qu'il faut *)
-let rec eval_noeud (node : tree) (carte : carte) (village : village) (tester: bool ref) : unit = 
+let rec eval_noeud (node : arbre) (carte : carte) (village : village) (tester: bool ref) : unit = 
   let ressource, _ = village.logistique in
   assert (not !tester);
   if not !tester then

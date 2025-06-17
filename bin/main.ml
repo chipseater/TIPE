@@ -1,5 +1,3 @@
-(* open Mapgen *)
-(* open Village *)
 open Game
 
 

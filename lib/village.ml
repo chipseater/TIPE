@@ -29,7 +29,7 @@ let cout bat village = match bat with
   |_ -> false
 
 (* Renvoie la production de la tuile d'après le batiment qu'il contient *)
-let get_production_from bat : donne =
+let recup_production_from bat : donne =
   match bat with
   | Maison -> maison_donne_prodution
   | Carriere -> carriere_donne_prodution
@@ -41,10 +41,10 @@ let get_production_from bat : donne =
   | _ -> void_donne
 
 (* Renvoie la production de la tuile d'après le batiment qu'il contient *)
-let get_production_from_tuile (tuile : tuile) : donne =
-  match get_tuile_batiment tuile with
+let recup_production_from_tuile (tuile : tuile) : donne =
+  match recup_tuile_batiment tuile with
   | None -> void_donne
-  | Some x -> get_production_from x
+  | Some x -> recup_production_from x
 
 
 let rec mult_donne l n = 
@@ -131,7 +131,7 @@ let produit_d_f don flo =
     tab.(i) <- o,int_of_float ((float_of_int (p )*. flo.(i)) )
   done;
   Array.to_list tab
-let get_modif tab a =
+let recup_modif tab a =
     let rec parc i = 
       let n = Array.length tab in 
       if i =n then void_modif else 
@@ -144,7 +144,7 @@ let sum_troncon_production troncon =
   let lis = sum_troncon_list tab in
   let tab = tabl_mod lis in
   let rec recup lis = match lis with 
-    |(a,b)::q -> sum_donne (produit_d_f (mult_donne (get_production_from a) b) (get_modif tab a))  (recup q)
+    |(a,b)::q -> sum_donne (produit_d_f (mult_donne (recup_production_from a) b) (recup_modif tab a))  (recup q)
     |[] -> void_donne
   in 
   recup lis
@@ -172,13 +172,13 @@ let rec recherche (donne : donne) ressource =
 (* Inititalisation d'un objet logistique *)
 let rec update_logistique (logistique : logistique) : logistique =
   match logistique with
-  | [], _ :: _ | _ :: _, [] -> failwith "2.Lack ressource"
+  | [], _ :: _ | _ :: _, [] -> failwith "2.manque ressource"
   | (e, _) :: _, (r, _) :: _ when e <> r -> failwith "3.Not the same ressource"
   | [], [] -> ([], [])
   | (e, d) :: q, (_, f) :: s ->
-      let nouvel_stock, prod = ((e, d + f), (e, 0)) in
+      let nouvel_stoc, prod = ((e, d + f), (e, 0)) in
       let a, b = update_logistique (q, s) in
-      (nouvel_stock :: a, prod :: b)
+      (nouvel_stoc :: a, prod :: b)
 
 let calcul_of_main_d_oeuvre donne =
   let nouriture = recherche donne Nouriture in
@@ -242,10 +242,10 @@ let calcul_of_main_d_oeuvre donne =
 
 let update_main_d_oeuvre (logistique : logistique) : logistique =
   match logistique with
-  | stock, prod -> ((calcul_of_main_d_oeuvre stock : donne), prod)
+  | stoc, prod -> ((calcul_of_main_d_oeuvre stoc : donne), prod)
 
 (* Calcul la nouvelle table de donne *)
-let update_all_logistique (logistique : logistique) position_list carte =
+let mise_a_jour_logistique (logistique : logistique) position_list carte =
   if position_list = [] then raise Bloque else
   let a, _ = logistique in
   let b = somme_troncon_list_production position_list carte in
@@ -277,40 +277,38 @@ let modif_pos_list village pos_list carte =
 
 
 
-
-
-let destroy_batiment (logistique : logistique) (position_list : position list) (carte : carte) village : logistique =
+let detruire_batiment (logistique : logistique) (position_list : position list) (carte : carte) village : logistique =
   let stoc, _ = logistique in
-  let parcours_troncon (troncon : troncon) (stock : donne) x y  =
-    let main_d_oeuvre = ref (recherche stock Main_d_oeuvre) in
-    let temp_stock = ref stock in
+  let parcours_troncon (troncon : troncon) (stoc : donne) x y  =
+    let main_d_oeuvre = ref (recherche stoc Main_d_oeuvre) in
+    let temp_stoc = ref stoc in
     for i = 1 to taille_troncon do
       for j = 1 to taille_troncon do
         let tuile_donne =
-          get_production_from_tuile (get_troncon_tuiles troncon).(taille_troncon - i).(taille_troncon - j)
+          recup_production_from_tuile (recup_troncon_tuiles troncon).(taille_troncon - i).(taille_troncon - j)
         in
         let main_d_oeuvre_need = recherche tuile_donne Main_d_oeuvre in
         if !main_d_oeuvre > -main_d_oeuvre_need then (
           main_d_oeuvre := !main_d_oeuvre - main_d_oeuvre_need;
-          temp_stock := sum_donne !temp_stock tuile_donne)
+          temp_stoc := sum_donne !temp_stoc tuile_donne)
         else modifie_batiment_dans_troncon carte troncon None (taille_troncon-i) (taille_troncon-j) x y ; modif_pos_list village position_list carte
       done
     done;
-    !temp_stock
+    !temp_stoc
   in
-  let rec parcours_list (l : position list) (stock : donne) =
+  let rec parcours_list (l : position list) (stoc : donne) =
     match l with
     | [] -> raise Bloque
-    | (x, y) :: [] -> parcours_troncon carte.(x).(y) (stock : donne) x y 
+    | (x, y) :: [] -> parcours_troncon carte.(x).(y) (stoc : donne) x y 
     | (x, y) :: q ->
-        parcours_list q (parcours_troncon carte.(x).(y) (stock : donne) x y)
+        parcours_list q (parcours_troncon carte.(x).(y) (stoc : donne) x y)
   in
   let nouvel_prod = parcours_list position_list stoc in
-  update_all_logistique (stoc, nouvel_prod) position_list carte
+  mise_a_jour_logistique (stoc, nouvel_prod) position_list carte
 
-let lack_of_main_d_oeuvre (logistique : logistique) (old_logistique : logistique) (troncon_list : position list) (carte : carte) village =
+let manque_of_main_d_oeuvre (logistique : logistique) (prec_logistique : logistique) (troncon_list : position list) (carte : carte) village =
   if troncon_list = [] then raise Bloque else
   let donne, _ = logistique in
   if recherche donne Main_d_oeuvre < 0 then
-    destroy_batiment old_logistique troncon_list carte village
+    detruire_batiment prec_logistique troncon_list carte village
   else logistique
