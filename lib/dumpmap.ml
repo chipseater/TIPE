@@ -32,7 +32,7 @@ let serialize_troncon (troncon : troncon) =
 let serialize_inegalite_brut inegalite =
   match inegalite with
   | PlusBrut -> `String "PlusBrut"
-  | MoinBrut -> `String "MoinBrut"
+  | MoinsBrut -> `String "MoinsBrut"
   | EquivalentBrut -> `String "EquivalentBrut"
 
 let serialize_percent_ing inegalite =
@@ -55,13 +55,13 @@ let serialize_batiment batiment =
   | Auberge -> `String "Auberge"
   | Statue -> `String "Statue"
 
-(* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed *)
+(* type ressource = Nouriture | Main_d_oeuvre | Pierre | Bois | Bed *)
 let serialize_ressource ressource =
   match ressource with
   | Nouriture -> `String "Nouriture"
   | Main_d_oeuvre -> `String "Main_d_oeuvre"
   | Pierre -> `String "Pierre"
-  | Wood -> `String "Wood"
+  | Bois -> `String "Bois"
   | Bed -> `String "Bed"
   | Bonheur -> `String "Bonheur"
 

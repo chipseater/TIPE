@@ -12,7 +12,7 @@ let cout_maison =
     (Nouriture, 0);
     (Main_d_oeuvre, -5);
     (Pierre, -15);
-    (Wood, -20);
+    (Bois, -20);
     (Bonheur, 0);
   ]
 
@@ -22,7 +22,7 @@ let cout_carriere =
     (Nouriture, 0);
     (Main_d_oeuvre, 0);
     (Pierre, 0);
-    (Wood, -40);
+    (Bois, -40);
     (Bonheur, 0);
   ]
 
@@ -32,7 +32,7 @@ let cout_scierie =
     (Nouriture, 0);
     (Main_d_oeuvre, 0);
     (Pierre, -20);
-    (Wood, -10);
+    (Bois, -10);
     (Bonheur, 0);
   ]
 
@@ -42,7 +42,7 @@ let cout_ferme =
     (Nouriture, 0);
     (Main_d_oeuvre, -10);
     (Pierre, 0);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -52,7 +52,7 @@ let cout_statue =
     (Nouriture, 0);
     (Main_d_oeuvre, -20);
     (Pierre, -100);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -62,7 +62,7 @@ let cout_auberge =
     (Nouriture, 0);
     (Main_d_oeuvre, 0);
     (Pierre, 0);
-    (Wood, -100);
+    (Bois, -100);
     (Bonheur, 0);
   ]
 
@@ -72,7 +72,7 @@ let cout_puit =
     (Nouriture, 0);
     (Main_d_oeuvre, 0);
     (Pierre, -50);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -82,7 +82,7 @@ let cout_vide =
     (Nouriture, 0);
     (Main_d_oeuvre, 0);
     (Pierre, 0);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -93,7 +93,7 @@ let void_donne : donne =
     (Nouriture, 0);
     (Main_d_oeuvre, 0);
     (Pierre, 0);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -104,7 +104,7 @@ let maison_donne_prodution : donne =
     (Nouriture, 0);
     (Main_d_oeuvre, -1);
     (Pierre, 0);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -114,7 +114,7 @@ let carriere_donne_prodution : donne =
     (Nouriture, 0);
     (Main_d_oeuvre, -20);
     (Pierre, 100);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -124,7 +124,7 @@ let ferme_donne_prodution : donne =
     (Nouriture, 10);
     (Main_d_oeuvre, -25);
     (Pierre, 0);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -134,7 +134,7 @@ let scierie_donne_prodution : donne =
     (Nouriture, 0);
     (Main_d_oeuvre, -10);
     (Pierre, 0);
-    (Wood, 50);
+    (Bois, 50);
     (Bonheur, 0);
   ]
 
@@ -144,7 +144,7 @@ let puit_donne : donne =
     (Nouriture, 0);
     (Main_d_oeuvre, 0);
     (Pierre, 0);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 0);
   ]
 
@@ -154,7 +154,7 @@ let statue_donne : donne =
     (Nouriture, 0);
     (Main_d_oeuvre, -10);
     (Pierre, 0);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 10);
   ]
 
@@ -164,7 +164,7 @@ let auberge_donne : donne =
     (Nouriture, -20);
     (Main_d_oeuvre, -10);
     (Pierre, 0);
-    (Wood, 0);
+    (Bois, 0);
     (Bonheur, 1);
   ]
 
@@ -174,7 +174,7 @@ let init_logistique () =
       (Nouriture, 20);
       (Main_d_oeuvre, 50);
       (Pierre, 100);
-      (Wood, 100);
+      (Bois, 100);
       (Bonheur, 0);
     ],
     void_donne )
@@ -185,7 +185,7 @@ let logistique_pete () =
       (Nouriture, 0);
       (Main_d_oeuvre, -1);
       (Pierre, 0);
-      (Wood, 0);
+      (Bois, 0);
       (Bonheur, 0);
     ],
     void_donne )

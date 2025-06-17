@@ -44,7 +44,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Main_d_oeuvre",
             "ressource2": "Wood",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 8
           },
           "l_child": "V",
@@ -66,7 +66,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Wood",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -90,7 +90,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -284,7 +284,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Wood",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -308,7 +308,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -480,7 +480,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Main_d_oeuvre",
             "ressource2": "Wood",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 8
           },
           "l_child": "V",
@@ -502,7 +502,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Pierre",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -526,7 +526,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -658,7 +658,7 @@
         "type": "InegaliteBrute",
         "ressource1": "Pierre",
         "ressource2": "Wood",
-        "ing": "MoinBrut",
+        "ing": "MoinsBrut",
         "int": 11
       },
       "l_child": {
@@ -712,7 +712,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Wood",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -736,7 +736,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -768,7 +768,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Pierre",
           "ressource2": "Wood",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -904,7 +904,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Main_d_oeuvre",
             "ressource2": "Wood",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 8
           },
           "l_child": "V",
@@ -926,7 +926,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Wood",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -950,7 +950,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -1148,7 +1148,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Wood",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -1172,7 +1172,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -1340,7 +1340,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Main_d_oeuvre",
             "ressource2": "Wood",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 8
           },
           "l_child": "V",
@@ -1362,7 +1362,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Wood",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -1386,7 +1386,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -1422,7 +1422,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Pierre",
           "ressource2": "Wood",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -1604,7 +1604,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -1736,7 +1736,7 @@
       "type": "InegaliteBrute",
       "ressource1": "Bed",
       "ressource2": "Main_d_oeuvre",
-      "ing": "MoinBrut",
+      "ing": "MoinsBrut",
       "int": 5
     },
     "l_child": {
@@ -1776,7 +1776,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Main_d_oeuvre",
             "ressource2": "Wood",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 8
           },
           "l_child": "V",
@@ -1798,7 +1798,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Wood",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -1822,7 +1822,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",
@@ -2016,7 +2016,7 @@
           "type": "InegaliteBrute",
           "ressource1": "Wood",
           "ressource2": "Main_d_oeuvre",
-          "ing": "MoinBrut",
+          "ing": "MoinsBrut",
           "int": 4
         },
         "l_child": {
@@ -2040,7 +2040,7 @@
             "type": "InegaliteBrute",
             "ressource1": "Pierre",
             "ressource2": "Nouriture",
-            "ing": "MoinBrut",
+            "ing": "MoinsBrut",
             "int": 6
           },
           "l_child": "V",

@@ -281,7 +281,7 @@ let calcul_of_main_d_oeuvre donne =
           (Nouriture, -nouriture);
           (Main_d_oeuvre, -main_d_oeuvre + (nouriture * 10));
           (Pierre, 0);
-          (Wood, 0);
+          (Bois, 0);
           (Bonheur, 0);
         ]
     else
@@ -291,7 +291,7 @@ let calcul_of_main_d_oeuvre donne =
           (Nouriture, -bed);
           (Main_d_oeuvre, -main_d_oeuvre + (bed * 10));
           (Pierre, 0);
-          (Wood, 0);
+          (Bois, 0);
           (Bonheur, 0);
         ]
   else if main_d_oeuvre > nouriture * 10 then
@@ -301,7 +301,7 @@ let calcul_of_main_d_oeuvre donne =
         (Nouriture, -nouriture);
         (Main_d_oeuvre, -main_d_oeuvre + (nouriture * 10));
         (Pierre, 0);
-        (Wood, 0);
+        (Bois, 0);
         (Bonheur, 0);
       ]
   else
@@ -317,7 +317,7 @@ let calcul_of_main_d_oeuvre donne =
             -main_d_oeuvre + last_gen_main_d_oeuvre
             + (remaining_nouriture / 2 * 10) );
           (Pierre, 0);
-          (Wood, 0);
+          (Bois, 0);
           (Bonheur, 0);
         ]
     else
@@ -329,7 +329,7 @@ let calcul_of_main_d_oeuvre donne =
             -main_d_oeuvre + last_gen_main_d_oeuvre + (2 * remaining_beds * 10)
           );
           (Pierre, 0);
-          (Wood, 0);
+          (Bois, 0);
           (Bonheur, 0);
         ]
 

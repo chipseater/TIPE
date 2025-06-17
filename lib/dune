@@ -1,3 +1,5 @@
+; Le fichier qui va faire le lien entre les différents modules
+
 (library
  (name type)
  (modules type))

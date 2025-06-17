@@ -15,6 +15,9 @@ let batiment_a_string = function
   | Carriere -> "Carriere"
   | Scierie -> "Scierie"
   | Ferme -> "Ferme"
+  | Puit -> "Puit"
+  | Auberge -> "Auberge"
+  | Statue -> "Statue"
 
 let option_batiment_a_string = function
   | Some batiment -> batiment_a_string batiment
@@ -61,9 +64,9 @@ let recup_troncon_z troncon =
 let modifie_batiment_dans_troncon carte troncon batiment i j x y =
   let tuile_z = recup_tuile_z (recup_troncon_tuiles troncon).(i).(j) in
   let troncon_biome = recup_troncon_biome troncon in
-  let nouvel_tuiles = recup_troncon_tuiles troncon in
-  nouvel_tuiles.(i).(j) <- Tuile (batiment, tuile_z);
-  carte.(x).(y) <- Troncon (nouvel_tuiles, troncon_biome)
+  let nouvelles_tuiles = recup_troncon_tuiles troncon in
+  nouvelles_tuiles.(i).(j) <- Tuile (batiment, tuile_z);
+  carte.(x).(y) <- Troncon (nouvelles_tuiles, troncon_biome)
 
 let reset_troncon troncon =
   for i = 0 to taille_troncon - 1 do

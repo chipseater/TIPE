@@ -14,7 +14,7 @@ let int_of_condition_type = function
 let int_of_inegalite_brut = function
   | 2 -> PlusBrut
   | 1 -> EquivalentBrut
-  | _ -> MoinBrut
+  | _ -> MoinsBrut
 
 let int_of_percent_ing = function 1 -> MorePercent | _ -> LessPercent
 

@@ -24,7 +24,7 @@ let evolution_par_tour (village : village) (carte : carte) (test : bool ref) =
   let nb_batiment_debut = List.length (recup_village_batiments village carte) in
   eval_noeud village.arbre carte village test;
   let temp_logistique =
-    update_all_logistique village.logistique village.position_list carte
+    mise_a_jour_logistique village.logistique village.position_list carte
   in
   try
     let nv_logistique =

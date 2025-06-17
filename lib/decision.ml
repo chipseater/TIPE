@@ -33,7 +33,7 @@ let inegalitebrut ressource1 ressource2 ing min donnee : bool =
   | PlusBrut ->
       let dif = nb_ressource1 - nb_ressource2 in
       if nb_ressource1 > nb_ressource2 then dif > min else false
-  | MoinBrut ->
+  | MoinsBrut ->
       let dif = nb_ressource1 - nb_ressource2 in
       if nb_ressource1 < nb_ressource2 then -dif > min else false
   | EquivalentBrut -> abs (nb_ressource2 - nb_ressource1) < min
