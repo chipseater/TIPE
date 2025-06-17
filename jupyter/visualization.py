@@ -242,14 +242,14 @@ def meilleur_score(liste):
     c=0 
     for i in range(len(liste)):
         for j in range(len(liste[i])):
-            if c < liste[i][j]:
+            if c < liste[i][j] and liste[i][j] < 2000  :
                 c= liste[i][j]
     return c
 def pire_score(liste):
     c=liste[1][1]
     for i in range(len(liste)):
          for j in range(len(liste[i])):
-            if c > liste[i][j]:
+            if c > liste[i][j] and liste[i][j] >= 0 :
                 c= liste[i][j]
     return c
 
@@ -279,8 +279,8 @@ def moy_best(liste):
 
 def list_moy_best(liste):
     l=[]
-    for i in range(len(liste)):
-        l.append(moy_best(liste[i]))
+    for i in range(len(liste)): 
+            l.append(moy_best(liste[i]))
     return l
 
 
@@ -314,6 +314,8 @@ def visualisation(data):
     plt.plot(l4,l2,'rx')
     plt.plot(l4,l3,'g*')
     plt.plot(l4,l5,'y+')
+    plt.xlabel("Generation")
+    plt.ylabel("Score")
 
 
 # %%

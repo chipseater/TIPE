@@ -2,9 +2,9 @@ open Type
 
 let z_max = 100.
 let taille_troncon = 8
-let ratio = 2 
+let ratio = 4
 let p0 = 1.
-let p1 = 0.2
+let p1 = 0.9
 
 let cout_maison = [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -5); (Pierre, -15); (Wood, -20); (Bonheur,0) ]
 
@@ -43,14 +43,10 @@ let puit_donne : donne =
   [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ; (Bonheur,0)]
 
 let statue_donne : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -10); (Pierre, 0); (Wood, 0) ; (Bonheur,1)]
+  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, -10); (Pierre, 0); (Wood, 0) ; (Bonheur,10)]
 
 let auberge_donne : donne =
-  [ (Bed, 10); (Nouriture, -20); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ; (Bonheur,0)]
-
-let void_donne : donne =
-  [ (Bed, 0); (Nouriture, 0); (Main_d_oeuvre, 0); (Pierre, 0); (Wood, 0) ; (Bonheur,0)]
-    
+  [ (Bed, 10); (Nouriture, -20); (Main_d_oeuvre, -10); (Pierre, 0); (Wood, 0) ; (Bonheur,1)]
   
 let init_logistique () =
   ( [ (Bed, 5); (Nouriture, 20); (Main_d_oeuvre, 50); (Pierre, 100); (Wood, 100) ; (Bonheur,0) ],

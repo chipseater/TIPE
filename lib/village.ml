@@ -18,11 +18,6 @@ let rec sum_donne (l1 : donne) (l2 : donne) : donne =
   |_ -> raise (Invalid_argument "Not the same size")
 
 
-
-(* ////////////////////////////////////////////////////////////////////////////////// *)
-
-
-
 let cout bat village = match bat with 
   | Maison -> if need cout_maison (let (x,_) = village.logistique in x)     then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_maison),y); true) else false
   | Carriere -> begin if need cout_carriere (let (x,_) = village.logistique in x) then (let (x,y) = village.logistique in village.logistique <- ((sum_donne x cout_carriere),y); true) else false end
@@ -45,7 +40,6 @@ let get_production_from bat : donne =
   | Statue -> statue_donne
   | _ -> void_donne
 
-(* ///////////////////////////////////////////////////////////////////////////////// *)
 (* Renvoie la production de la tuile d'après le batiment qu'il contient *)
 let get_production_from_tuile (tuile : tuile) : donne =
   match get_tuile_batiment tuile with

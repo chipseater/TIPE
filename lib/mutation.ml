@@ -97,7 +97,7 @@ let change_batiment () =
 let mutate_batiment () =
   change_batiment ()
 
-let mutate_nodint () = Random.int taille_troncon*taille_troncon
+let mutate_nodint () = Random.int (taille_troncon*taille_troncon)
 
 let mutate_condition condition_type =
   match condition_type with
