@@ -4,22 +4,8 @@ open Village
 open Mapgen
 open Newgen
 
-(* let ressource_of_int = function
-  | 1 -> Nouriture
-  | 2 -> Main_d_oeuvre
-  | 3 -> Pierre
-  | 4 -> Wood
-  | _ -> Bed
-
-let batiment_of_int = function
-  | 1 -> Carriere
-  | 2 -> Scierie 
-  | 3 -> Ferme
-  | _ -> Maison *)
-
 let ressource_of_int i = ressource_list.(i)
 let batiment_of_int i = batiment_list.(i)
-
 
 let int_of_condition_type = function
   | InegaliteEnPourcentage (_, _, _, _) -> 0
@@ -74,7 +60,7 @@ let change_ing condition =
       InegaliteBrute (r1, r2, nouvel_inegalite_brut, int)
 
 let change_rss_type condition =
-  let nouvel_ress = ressource_of_int (Random.int (nb_ress -1) ) in
+  let nouvel_ress = ressource_of_int (Random.int (nb_ress - 1)) in
   let ress_nb = Random.int 2 in
   match condition with
   | InegaliteEnPourcentage (r1, r2, ing, int) ->
@@ -91,13 +77,9 @@ let change_threshold condition =
   | InegaliteBrute (r1, r2, ing, old_threshold) ->
       InegaliteBrute (r1, r2, ing, Utils.int_rand_normal old_threshold 5)
 
-let change_batiment () =
-  batiment_of_int (Random.int (nb_bat -1))
-
-let mutate_batiment () =
-  change_batiment ()
-
-let mutate_nodint () = Random.int (taille_troncon*taille_troncon)
+let change_batiment () = batiment_of_int (Random.int (nb_bat - 1))
+let mutate_batiment () = change_batiment ()
+let mutate_nodint () = Random.int (taille_troncon * taille_troncon)
 
 let mutate_condition condition_type =
   match condition_type with
@@ -108,37 +90,48 @@ let mutate_condition condition_type =
 
 exception Supr
 
-let mutatedes_nodi (b1,b2,x,boo) p0 = 
-  if Utils.rand_bool p0 then match (Random.int 5) with 
-  |4 -> (change_batiment (),b2,x,boo)
-  |3 -> (b1,change_batiment (),x,boo)
-  |2 -> (b1,b2,mutate_nodint () ,boo)
-  |1 -> (b1,b2,x,Utils.rand_bool 0.5 )
-  |_ -> raise Supr
-  else (b1,b2,x,boo)
+let mutatedes_nodi (b1, b2, x, boo) p0 =
+  if Utils.rand_bool p0 then
+    match Random.int 5 with
+    | 4 -> (change_batiment (), b2, x, boo)
+    | 3 -> (b1, change_batiment (), x, boo)
+    | 2 -> (b1, b2, mutate_nodint (), boo)
+    | 1 -> (b1, b2, x, Utils.rand_bool 0.5)
+    | _ -> raise Supr
+  else (b1, b2, x, boo)
 
-let mutate_nodi (b1,b2,x,boo) p0 = 
-  if Utils.rand_bool p0 then match (Random.int 4) with 
-  |3 -> (b1,change_batiment (),x,boo)
-  |2 -> (b1,b2,mutate_nodint () ,boo)
-  |1 -> (b1,b2,x,Utils.rand_bool 0.5 )
-  |_ -> (change_batiment (),b2,x,boo)
-  else (b1,b2,x,boo)
-  
+let mutate_nodi (b1, b2, x, boo) p0 =
+  if Utils.rand_bool p0 then
+    match Random.int 4 with
+    | 3 -> (b1, change_batiment (), x, boo)
+    | 2 -> (b1, b2, mutate_nodint (), boo)
+    | 1 -> (b1, b2, x, Utils.rand_bool 0.5)
+    | _ -> (change_batiment (), b2, x, boo)
+  else (b1, b2, x, boo)
+
 let mutation_list liste p0 =
-  let rec parcdes lis = try 
-    match lis with
-    |[] -> []
-    |e :: q -> (mutatedes_nodi e p0) :: parcdes q 
-    with |Supr ->( let e::q = liste in e :: parcdes q)
+  let rec parcdes lis =
+    try match lis with [] -> [] | e :: q -> mutatedes_nodi e p0 :: parcdes q
+    with Supr ->
+      let (e :: q) = liste in
+      e :: parcdes q
   in
-  let rec parc lis c = if c = Array.length ressource_list then parcdes lis
-    else match lis with
-    |[] -> (if Utils.rand_bool p0 then [(change_batiment (), change_batiment (), mutate_nodint (), Utils.rand_bool 0.5)] else [])
-    |e::q -> mutate_nodi e p0 :: parc q (c+1)
+  let rec parc lis c =
+    if c = Array.length ressource_list then parcdes lis
+    else
+      match lis with
+      | [] ->
+          if Utils.rand_bool p0 then
+            [
+              ( change_batiment (),
+                change_batiment (),
+                mutate_nodint (),
+                Utils.rand_bool 0.5 );
+            ]
+          else []
+      | e :: q -> mutate_nodi e p0 :: parc q (c + 1)
   in
   parc liste 0
-
 
 (* Mute la racine de l'arbre avec une probabilité de p0,
    puis mute ses fils avec une proba de p = p0 * exp(-d),
@@ -155,12 +148,9 @@ let mutate_arbre position_arbre p0 =
               arbre_mutator r_arbre (p *. p1),
               mutate_batiment () )
         else arbre
-    | Vide ->  
-      if Utils.rand_bool p then
-        Node
-        ( gen_cond (), Vide, Vide,
-          gen_batiment () )
-      else Vide
+    | Vide ->
+        if Utils.rand_bool p then Node (gen_cond (), Vide, Vide, gen_batiment ())
+        else Vide
   in
   arbre_mutator position_arbre p0
 
@@ -169,25 +159,17 @@ let mutate_arbrepos position_arbrepos p0 =
     match arbrepos with
     | Nodi (liste, child) ->
         if Utils.rand_bool p then
-          Nodi
-            ( mutation_list liste p0 ,
-              arbrepos_mutator child (p *. p1))
+          Nodi (mutation_list liste p0, arbrepos_mutator child (p *. p1))
         else arbrepos
-    | Nil -> if Utils.rand_bool p then
-        Nodi
-        ( list_mod_generator ( 5),
-          Nil
-        )
-      else Nil
-
+    | Nil -> if Utils.rand_bool p then Nodi (list_mod_generator 5, Nil) else Nil
   in
-  arbrepos_mutator position_arbrepos p0
-  
 
-  let mutate arbre_array p0 =
+  arbrepos_mutator position_arbrepos p0
+
+let mutate arbre_array p0 =
   let n = Array.length arbre_array in
   let mutated_arbres = Array.make (ratio * n) Vide in
-  for i = 0 to (n - 1) do
+  for i = 0 to n - 1 do
     mutated_arbres.(i) <- arbre_array.(i)
   done;
   for i = n to (ratio * n) - 1 do
@@ -198,7 +180,7 @@ let mutate_arbrepos position_arbrepos p0 =
 let mutatepos arbrepos_array p0 =
   let n = Array.length arbrepos_array in
   let mutated_arbrespos = Array.make (ratio * n) Nil in
-  for i = 0 to (n - 1) do
+  for i = 0 to n - 1 do
     mutated_arbrespos.(i) <- arbrepos_array.(i)
   done;
   for i = n to (ratio * n) - 1 do

@@ -2,7 +2,6 @@ open Domainslib.Task
 open Type
 open Variable
 
-
 (* Sets the balance between the diffrent biomes,
    here 8 plains for 1 desert and 1 tundra *)
 let int_a_biome b =
@@ -89,7 +88,7 @@ let perlin_layer (carte : float array array) n grid_taille factor =
 
 (* Converts a float matrice taille valeur ranging from 0 to 1
    to a int matrice with valeur ranging from 0 to the factor *)
-let upscale_matrix_a_int factor (matrix : float array array) =
+let upscale_matrix_a_int factor (matrice : float array array) =
   let n = Array.length matrice in
   let nouvel_matrice = Array.make_matrix n n 0 in
   for i = 0 to n - 1 do
@@ -160,7 +159,9 @@ let gen_carte ?(biome_taille = 20) ?(z_taille = 100) ?(octaves = 6) n =
   let z_carte = gen_z n z_taille octaves in
   let gen_troncon i j =
     let z_valeur =
-      sousmatrice z_carte (i * taille_troncon, j * taille_troncon) taille_troncon
+      sousmatrice z_carte
+        (i * taille_troncon, j * taille_troncon)
+        taille_troncon
     in
     gen_empty_troncon z_valeur biomes.(i).(j)
   in

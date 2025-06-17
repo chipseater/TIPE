@@ -4,7 +4,11 @@ open Variable
 
 (* Fonctions utilitaires pour gérer les objets de la carte *)
 let isNone = function Troncon (_, _) -> false
-let biome_a_string = function Forest -> "Forest" | Desert -> "Desert" | Plains -> "Plains"
+
+let biome_a_string = function
+  | Forest -> "Forest"
+  | Desert -> "Desert"
+  | Plains -> "Plains"
 
 let batiment_a_string = function
   | Maison -> "Maison"
@@ -79,10 +83,10 @@ let reset_carte carte =
 
 let copier_troncon troncon =
   Troncon
-    (Array.(map copy) (recup_troncon_tuiles troncon), recup_troncon_biome troncon)
+    ( Array.(map copy) (recup_troncon_tuiles troncon),
+      recup_troncon_biome troncon )
 
-let copier_ligne_carte carte i =
-  Array.map copier_troncon carte.(i)
+let copier_ligne_carte carte i = Array.map copier_troncon carte.(i)
 
 let copier_carte carte =
   Array.mapi (fun i _ -> copier_ligne_carte carte i) carte

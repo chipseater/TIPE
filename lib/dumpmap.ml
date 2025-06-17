@@ -4,8 +4,7 @@ open Mapmanage
 let tuile_a_json tuile =
   let z = recup_tuile_z tuile in
   let batiment = recup_tuile_batiment tuile in
-  `Assoc
-    [ ("z", `Int z); ("bat", `String (option_batiment_a_string batiment)) ]
+  `Assoc [ ("z", `Int z); ("bat", `String (option_batiment_a_string batiment)) ]
 
 (* Convertit un tableau en objet json *)
 (* to_json est une fonction qui convertit vers le type json souhaité *)
@@ -41,13 +40,10 @@ let serialize_percent_ing inegalite =
   | MorePercent -> `String "MorePercent"
   | LessPercent -> `String "LessPercent"
 
-  let serialize_int n = `Int n
+let serialize_int n = `Int n
 
-
-let serialize_bool boo = 
-  match boo with 
-  |true -> `String "true"
-  |false -> `String "false" 
+let serialize_bool boo =
+  match boo with true -> `String "true" | false -> `String "false"
 
 let serialize_batiment batiment =
   match batiment with
@@ -58,7 +54,6 @@ let serialize_batiment batiment =
   | Puit -> `String "Puit"
   | Auberge -> `String "Auberge"
   | Statue -> `String "Statue"
-
 
 (* type ressource = Nouriture | Main_d_oeuvre | Pierre | Wood | Bed *)
 let serialize_ressource ressource =
@@ -96,29 +91,31 @@ let serialize_condition condition =
           ("int", `Int int);
         ]
 
-let serialize_couple_mod couple = 
-  let (b1,b2,x,boo) = couple in 
-  `Assoc[
-    ("bat_org",serialize_batiment b1);
-    ("bat_comp",serialize_batiment b2);
-    ("nb",serialize_int x);
-    ("bool", serialize_bool boo)
-  ]
+let serialize_couple_mod couple =
+  let b1, b2, x, boo = couple in
+  `Assoc
+    [
+      ("bat_org", serialize_batiment b1);
+      ("bat_comp", serialize_batiment b2);
+      ("nb", serialize_int x);
+      ("bool", serialize_bool boo);
+    ]
 
-let rec serialize_mod_list liste = 
+let rec serialize_mod_list liste =
   match liste with
   | couple :: q -> serialize_couple_mod couple :: serialize_mod_list q
   | [] -> []
 
-let rec serialize_arbrepos node = 
+let rec serialize_arbrepos node =
   match node with
   | Nil -> `String "V"
-  | Nodi (liste, child) -> 
-    `Assoc [
-      ("liste", `List (serialize_mod_list liste));
-      ("child", serialize_arbrepos child)
-    ]
- 
+  | Nodi (liste, child) ->
+      `Assoc
+        [
+          ("liste", `List (serialize_mod_list liste));
+          ("child", serialize_arbrepos child);
+        ]
+
 let rec serialize_arbre node =
   match node with
   | Vide -> `String "V"
@@ -136,7 +133,6 @@ let serialize_arbre_array arbre_array =
 
 let serialize_arbrepos_array arbre_array =
   array_a_json_list serialize_arbrepos arbre_array
-  
 
 let serialize_pos position =
   let x, y = position in
@@ -194,7 +190,6 @@ let serialize_game game =
   in
   `List (game_serializer game)
 
-
 let serialize_int_array_array int_array_array =
   matrice_a_json_list serialize_int int_array_array
 
@@ -205,9 +200,9 @@ let serialize_save generation =
   `Assoc
     [
       ("arbre_array", serialize_arbre_array arbre_array);
-      ("arbrepos_array",serialize_arbrepos_array arbrepos_array);
+      ("arbrepos_array", serialize_arbrepos_array arbrepos_array);
       ("pos_list", serialize_pos_array pos_array);
       ("evaluation", serialize_int_array_array eval);
     ]
 
-let serialize_save_array tab = array_a_json_list serialize_save tab 
+let serialize_save_array tab = array_a_json_list serialize_save tab

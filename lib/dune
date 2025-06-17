@@ -7,7 +7,6 @@
  (modules variable)
  (libraries type))
 
-
 (library
  (name utils)
  (modules utils))
@@ -25,7 +24,7 @@
 (library
  (name decision)
  (modules decision)
- (libraries mapgen mapmanage type village utils variable ))
+ (libraries mapgen mapmanage type village utils variable))
 
 (library
  (name score)
@@ -61,7 +60,7 @@
 (library
  (name newgen)
  (modules newgen)
- (libraries village type variable ))
+ (libraries village type variable))
 
 (library
  (name mutation)

@@ -1,13 +1,11 @@
 open Type
+
 (* open Village *)
 (* open Mapgen *)
 open Random
 (* open Variable *)
 
-let rnd_bool () =
-  match Random.int 2 with
-  |0 -> true
-  |_ -> false
+let rnd_bool () = match Random.int 2 with 0 -> true | _ -> false
 
 let rnd_ressource () =
   match Random.int 5 with
@@ -35,7 +33,6 @@ let gen_cond () =
   | 1 -> InegaliteEnPourcentage (ress1, ress2, ing_percent, threshold)
   | _ -> InegaliteBrute (ress1, ress2, ing_flat, threshold)
 
-
 let gen_batiment () =
   match Random.int 4 with
   | 1 -> Carriere
@@ -57,31 +54,28 @@ let gen_arbre () =
 
 let gen_arbres nb_of_arbres = Array.init nb_of_arbres (fun _ -> gen_arbre ())
 
-let list_mod_generator h = 
-  let rec generate_list height = 
-    if height > 0 then ( 
-        gen_batiment (),
-        gen_batiment (),
-        Random.int 15,
-        rnd_bool()) :: generate_list (height-1)
+let list_mod_generator h =
+  let rec generate_list height =
+    if height > 0 then
+      (gen_batiment (), gen_batiment (), Random.int 15, rnd_bool ())
+      :: generate_list (height - 1)
     else []
-  in 
+  in
   generate_list h
 
 let gen_arbrepos () =
   let rec arbre_generator height =
     if height > 0 then
       Nodi
-        ( list_mod_generator (Random.int (Array.length ressource_list)), (* ///////\\\\\\\\*)
-          arbre_generator (height - 1)
-        )
+        ( list_mod_generator (Random.int (Array.length ressource_list)),
+          (* ///////\\\\\\\\*)
+          arbre_generator (height - 1) )
     else Nil
   in
   Utils.rand_normal 3. 1. |> ceil |> int_of_float |> arbre_generator
 
-let gen_arbrespos nb_of_arbres = Array.init nb_of_arbres (fun _ -> gen_arbrepos ())
-
-
+let gen_arbrespos nb_of_arbres =
+  Array.init nb_of_arbres (fun _ -> gen_arbrepos ())
 
 let random_pos min max =
   let x_min, y_min = min in
@@ -101,11 +95,10 @@ let gen_village_positions n k =
     (* x, y sont les coordonées du coin haut-gauche
        du quadrant en cours *)
     let x, y =
-      ( i * quadrant_width mod (n - quadrant_width),
-        (quadrant_width * i / n) )
+      (i * quadrant_width mod (n - quadrant_width), quadrant_width * i / n)
     in
-    assert (x + quadrant_width < n); 
+    assert (x + quadrant_width < n);
     assert (y + quadrant_width < n);
     positions.(i) <- random_pos (x, y) (x + quadrant_width, y + quadrant_width)
   done;
-  positions 
+  positions
