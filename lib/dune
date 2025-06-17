@@ -68,8 +68,3 @@
  (name mutation)
  (modules mutation)
  (libraries village type utils mapgen variable newgen))
-
-(library
- (name foret)
- (modules foret)
- (libraries yojson type village mapgen))
