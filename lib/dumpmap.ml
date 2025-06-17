@@ -119,12 +119,12 @@ let rec serialize_arbrepos node =
 let rec serialize_arbre node =
   match node with
   | Vide -> `String "V"
-  | Node (cndt, l_child, r_child, bat) ->
+  | Node (cndt, fils_g, fils_d, bat) ->
       `Assoc
         [
           ("condition", serialize_condition cndt);
-          ("l_child", serialize_arbre l_child);
-          ("r_child", serialize_arbre r_child);
+          ("fils_g", serialize_arbre fils_g);
+          ("fils_d", serialize_arbre fils_d);
           ("bat", serialize_batiment bat);
         ]
 

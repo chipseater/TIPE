@@ -78,7 +78,7 @@ def tree_height(tree):
     if tree == 'V':
         return 0
     else:
-        return 1 + max(tree_height(tree['l_child']), tree_height(tree['r_child']))
+        return 1 + max(tree_height(tree['fils_g']), tree_height(tree['fils_d']))
 
 
 # %%
@@ -99,10 +99,10 @@ def get_lines(tree : dict):
         lines[depth] += node_to_symbol(root) + ','
         if root == 'V':
             continue
-        l_child = root["l_child"]
-        r_child = root["r_child"]
-        stack.append((l_child, depth + 1))
-        stack.append((r_child, depth + 1))
+        fils_g = root["fils_g"]
+        fils_d = root["fils_d"]
+        stack.append((fils_g, depth + 1))
+        stack.append((fils_d, depth + 1))
     # Convertit les chaînes en listes
     return list(map(lambda x: x[:-1].split(','), lines))
 
@@ -139,20 +139,20 @@ def ecrire_arbre(dict, nom,fi):
     fi.write(typ + '<br>' + r1+ ' ' + r2+ ' ' + ing+ ' '+str(x)+'<br>'+bat) 
     fi.write(']')
     fi.write(' ')
-    if dict['l_child'] != 'V' and dict['r_child'] != 'V'  :
+    if dict['fils_g'] != 'V' and dict['fils_d'] != 'V'  :
         fi.write('--> ') 
         fi.write(nom+'0;\n')
         fi.write(nom+' --> '+nom+'1;\n')
-        ecrire_arbre(dict['l_child'],nom+'0',fi)
-        ecrire_arbre(dict['r_child'],nom+'1',fi)
-    elif dict['l_child'] != 'V' :
+        ecrire_arbre(dict['fils_g'],nom+'0',fi)
+        ecrire_arbre(dict['fils_d'],nom+'1',fi)
+    elif dict['fils_g'] != 'V' :
         fi.write('--> ') 
         fi.write(nom+'0;\n')
-        ecrire_arbre(dict['l_child'],nom+'0',fi)
-    elif dict['r_child'] != 'V' :
+        ecrire_arbre(dict['fils_g'],nom+'0',fi)
+    elif dict['fils_d'] != 'V' :
         fi.write('--> ') 
         fi.write(nom+'1;\n')
-        ecrire_arbre(dict['r_child'],nom+'1',fi)
+        ecrire_arbre(dict['fils_d'],nom+'1',fi)
     else :
         fi.write(';\n')
 
